@@ -1,0 +1,23 @@
+// views/nuevo_proveedor.pug
+doctype html
+html
+  head
+    title Nuevo Proveedor
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Agregar Proveedor
+
+    form#form-nuevo-proveedor
+      div
+        label(for="nombre") Nombre:
+        input(type="text" name="nombre" required)
+      div
+        label(for="contacto") Contacto:
+        input(type="text" name="contacto" required)
+      div
+        button(type="submit") Guardar
+    br
+
+    a.button(href="/inicio") Volver al inicio
+
+    script(src="/js/nuevo_proveedor.js")

@@ -1,0 +1,22 @@
+// views/editar_proveedor.pug
+doctype html
+html
+  head
+    title Editar Proveedor
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Editar Proveedor
+
+    form#form-editar-proveedor
+      input(type="hidden" id="proveedor-id")
+      div
+        label(for="nombre") Nombre:
+        input(type="text" name="nombre" id="nombre" required)
+      div
+        label(for="contacto") Contacto:
+        input(type="text" name="contacto" id="contacto" required)
+      div
+        button(type="submit") Guardar Cambios
+
+    a.button(href="/inicio") Volver al inicio
+    script(src="/js/editar_proveedor.js")

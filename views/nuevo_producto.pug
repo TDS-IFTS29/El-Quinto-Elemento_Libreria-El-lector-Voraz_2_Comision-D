@@ -1,0 +1,26 @@
+// views/nuevo_producto.pug
+doctype html
+html
+  head
+    title Nuevo Producto
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Agregar Producto
+
+    form#form-nuevo-producto
+      div
+        label(for="nombre") Nombre:
+        input(type="text" name="nombre" required)
+      div
+        label(for="autor") Autor:
+        input(type="text" name="autor" required)
+      div
+        label(for="precio") Precio:
+        input(type="number" name="precio" step="0.01" required)
+      div
+        button(type="submit") Guardar
+      br
+
+    a.button(href="/inicio") Volver al inicio
+
+    script(src="/js/nuevo_producto.js")

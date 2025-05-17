@@ -1,0 +1,24 @@
+// views/catalogo.pug
+doctype html
+html
+  head
+    title Catálogo de Productos
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Catálogo de El Lector Voraz
+
+    a.button(href="/productos/nuevo") Agregar nuevo producto
+
+    table
+      thead
+        tr
+          th Nombre
+          th Autor
+          th Precio
+          th Acciones
+      tbody#tabla-productos
+        tr
+          td(colspan="4") Cargando productos...
+
+    a.button(href="/inicio") Volver al inicio
+    script(src="/js/catalogo.js")

@@ -1,0 +1,27 @@
+// views/catalogo_ventas.pug
+doctype html
+html
+  head
+    title Lista de Ventas
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Historial de Ventas
+
+    table(border="1")
+      thead
+        tr
+          th Fecha
+          th Producto
+          th Cantidad
+      tbody#tabla-ventas
+        tr
+          td(colspan="3") Cargando ventas...
+
+    div
+      a.button(href="/ventas/nueva") Registrar nueva venta
+    div
+      a.button(href="/ventas/reportes") Ver reportes de ventas
+    div
+      a.button(href="/inicio") Volver al inicio
+
+    script(src="/js/catalogo_ventas.js")

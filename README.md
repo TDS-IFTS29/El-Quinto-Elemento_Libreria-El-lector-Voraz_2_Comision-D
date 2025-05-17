@@ -1,0 +1,143 @@
+# El Lector Voraz – Backend (Entrega Final)
+
+Este proyecto fue desarrollado como parte del trabajo integrador de la materia Desarrollo Web Backend – Tecnicatura en Desarrollo de Software (IFTS 29).
+
+## Objetivo del Proyecto
+
+Desarrollar una API backend con Node.js y Express para digitalizar la gestión de una librería, incluyendo productos, ventas y proveedores. El almacenamiento se realiza en archivos JSON y se utiliza Pug para generar vistas desacopladas que consumen la API RESTful mediante JavaScript.
+
+## Tecnologías Utilizadas
+
+- Node.js
+- Express.js
+- Pug
+- JSON
+- Fetch API
+- Thunder Client / Postman
+- Git y GitHub
+
+## Funcionalidades Implementadas
+
+- CRUD completo de productos, proveedores y ventas
+- Reportes dinámicos:
+  - Productos más vendidos
+  - Ventas por semana
+- Interfaz desacoplada usando `fetch`
+- Vistas Pug dinámicas con render del lado del cliente
+- Código modular y organizado por MVC
+- Uso de programación orientada a objetos
+
+## Estructura del Proyecto
+
+```bash
+/el-lector-voraz/
+├── app.js
+├── package.json
+├── data/
+│   ├── productos.json
+│   ├── proveedores.json
+│   └── ventas.json
+├── controllers/
+│   ├── productosController.js
+│   ├── proveedoresController.js
+│   ├── ventasController.js
+│   ├── homeController.js
+│   └── catalogoController.js
+├── models/
+│   ├── Producto.js
+│   ├── Proveedor.js
+│   └── Venta.js
+├── routes/
+│   ├── productos.js
+│   ├── proveedores.js
+│   ├── ventas.js
+│   ├── home.js
+│   ├── catalogo.js
+│   └── api/
+│       ├── productos.js
+│       ├── proveedores.js
+│       └── ventas.js
+├── public/
+│   └── js/
+│       ├── catalogo.js
+│       ├── catalogo_proveedores.js
+│       ├── catalogo_ventas.js
+│       ├── editar_producto.js
+│       ├── editar_proveedor.js
+│       └── reportes_ventas.js
+├── views/
+│   ├── index.pug
+│   ├── catalogo.pug
+│   ├── nuevo_producto.pug
+│   ├── editar_producto.pug
+│   ├── catalogo_proveedores.pug
+│   ├── nuevo_proveedor.pug
+│   ├── editar_proveedor.pug
+│   ├── catalogo_ventas.pug
+│   ├── nueva_venta.pug
+│   └── reportes_ventas.pug
+```
+
+## Cómo Ejecutar el Proyecto
+
+1. Instalar dependencias:
+
+   ```bash
+   npm install
+   ```
+
+2. Iniciar el servidor:
+
+   ```bash
+   npm start
+   ```
+
+3. Acceder en el navegador:
+
+   ```
+   http://localhost:3000
+   ```
+
+## Rutas Principales
+
+Método | Ruta                             | Descripción
+-------|----------------------------------|-------------------------------
+GET    | /                                | Página principal
+GET    | /catalogo                        | Vista de catálogo de productos (Pug)
+GET    | /productos/catalogo              | Vista con tabla de productos y acciones
+GET    | /productos/nuevo                 | Formulario nuevo producto
+GET    | /productos/editar/:id            | Formulario de edición
+GET    | /proveedores/catalogo            | Vista de proveedores con acciones
+GET    | /proveedores/nuevo               | Formulario nuevo proveedor
+GET    | /proveedores/editar/:id          | Formulario de edición proveedor
+GET    | /ventas/catalogo                 | Historial de ventas
+GET    | /ventas/nueva                    | Formulario registrar venta
+GET    | /ventas/reportes                 | Vista con reportes dinámicos
+GET    | /api/productos                   | Listar productos (JSON)
+GET    | /api/productos/:id               | Obtener un producto
+POST   | /api/productos                   | Crear producto
+PATCH  | /api/productos/:id               | Actualizar producto
+DELETE | /api/productos/:id               | Eliminar producto
+GET    | /api/proveedores                 | Listar proveedores (JSON)
+GET    | /api/proveedores/:id             | Obtener proveedor
+POST   | /api/proveedores                 | Crear proveedor
+PATCH  | /api/proveedores/:id             | Actualizar proveedor
+DELETE | /api/proveedores/:id             | Eliminar proveedor
+GET    | /api/ventas                      | Listar ventas (JSON)
+POST   | /api/ventas                      | Registrar nueva venta
+GET    | /api/ventas/mas-vendidos         | JSON con los productos más vendidos
+GET    | /api/ventas/ventas-semana        | JSON con ventas de la última semana
+
+## Roles del Equipo
+
+Integrante                    | Rol
+------------------------------|--------------------------------------------------
+Clausi Damián Andrés          | CRUD de productos y modularización del backend
+Descosido Cristian            | Gestión de proveedores y vistas dinámicas
+César Antonio Gill            | Registro de ventas, reportes y consumo de API con fetch
+
+## Documentación Complementaria
+
+- Repositorio: https://github.com/TDS-IFTS29/grupo1_BackEnd_El_Lector_Voraz.git
+- Video explicativo: (agregar enlace)
+- Link a Google Docs (si aplica):

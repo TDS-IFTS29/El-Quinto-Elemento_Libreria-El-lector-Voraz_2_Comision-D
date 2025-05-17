@@ -1,0 +1,25 @@
+// views/editar_producto.pug
+doctype html
+html
+  head
+    title Editar Producto
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Editar Producto
+
+    form#form-editar-producto
+      input(type="hidden" id="producto-id")
+      div
+        label(for="nombre") Nombre:
+        input(type="text" name="nombre" id="nombre" required)
+      div
+        label(for="autor") Autor:
+        input(type="text" name="autor" id="autor" required)
+      div
+        label(for="precio") Precio:
+        input(type="number" name="precio" id="precio" step="0.01" required)
+      div
+        button(type="submit") Guardar Cambios
+
+    a.button(href="/inicio") Volver al inicio
+    script(src="/js/editar_producto.js")

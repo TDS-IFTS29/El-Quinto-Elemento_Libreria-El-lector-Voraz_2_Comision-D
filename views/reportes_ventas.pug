@@ -1,0 +1,19 @@
+// views/reportes_ventas.pug
+doctype html
+html
+  head
+    title Reportes de Ventas
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Reportes de Ventas
+
+    h2 Productos más vendidos
+    ul#mas-vendidos
+      li Cargando...
+
+    h2 Ventas de la última semana
+    ul#ventas-semana
+      li Cargando...
+
+    a.button(href="/inicio") Volver al inicio
+    script(src="/js/reportes_ventas.js")

@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title Catálogo de Proveedores
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Lista de Proveedores
+
+    a.button(href="/proveedores/nuevo") Agregar nuevo proveedor
+
+    table
+      thead
+        tr
+          th Nombre
+          th Contacto
+          th Acciones
+      tbody#tabla-proveedores
+        tr
+          td(colspan="3") Cargando proveedores...
+
+    a.button(href="/inicio") Volver al inicio
+    script(src="/js/catalogo_proveedores.js")

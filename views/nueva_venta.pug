@@ -1,0 +1,21 @@
+// views/nueva_venta.pug
+doctype html
+html
+  head
+    title Nueva Venta
+    link(rel="stylesheet", href="/css/estilos.css")
+  body
+    h1 Registrar Nueva Venta
+
+    form#form-nueva-venta
+      div
+        label(for="producto") Producto:
+        input(type="text" name="producto" id="producto" required)
+      div
+        label(for="cantidad") Cantidad:
+        input(type="number" name="cantidad" id="cantidad" min="1" required)
+      div
+        button(type="submit") Registrar
+
+    a.button(href="/inicio") Volver al inicio
+    script(src="/js/nueva_venta.js")

@@ -1,0 +1,191 @@
+doctype html
+html
+  head
+    title Documentación de la API
+    style.
+      body { font-family: sans-serif; line-height: 1.6; margin: 20px; }
+      h1, h2, h3 { color: #333; }
+      pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+      code { font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; }
+      .endpoint { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+      .method { font-weight: bold; margin-right: 10px; }
+      .get { color: green; }
+      .post { color: blue; }
+      .patch { color: orange; }
+      .delete { color: red; }
+
+  body
+    h1 Documentación de la API
+
+    .endpoint
+      h2 Productos API
+
+      h3
+        span.method.get GET
+        | /api/productos
+      p Obtiene una lista de todos los productos.
+      pre
+        code.
+          GET /api/productos
+
+    .endpoint
+      h3
+        span.method.post POST
+        | /api/productos
+      p Crea un nuevo producto.
+      pre
+        code.
+          POST /api/productos
+          Content-Type: application/json
+
+          {
+            "nombre": "string",
+            "autor": "string",
+            "precio": number
+          }
+
+    .endpoint
+      h3
+        span.method.get GET
+        | /api/productos/:id
+      p Obtiene los detalles de un producto específico por su ID.
+      pre
+        code.
+          GET /api/productos/:id
+
+    .endpoint
+      h3
+        span.method.patch PATCH
+        | /api/productos/:id
+      p Actualiza parcialmente un producto existente por su ID.
+      pre
+        code.
+          PATCH /api/productos/:id
+          Content-Type: application/json
+
+          {
+            "nombre": "string",
+            "autor": "string",
+            "precio": number
+          }
+
+    .endpoint
+      h3
+        span.method.delete DELETE
+        | /api/productos/:id
+      p Elimina un producto existente por su ID.
+      pre
+        code.
+          DELETE /api/productos/:id
+
+    .endpoint
+      h2 Proveedores API
+
+      h3
+        span.method.get GET
+        | /api/proveedores
+      p Obtiene una lista de todos los proveedores.
+      pre
+        code.
+          GET /api/proveedores
+
+    .endpoint
+      h3
+        span.method.post POST
+        | /api/proveedores
+      p Crea un nuevo proveedor.
+      pre
+        code.
+          POST /api/proveedores
+          Content-Type: application/json
+
+          {
+            "nombre": "string",
+            "contacto": "string"
+          }
+
+    .endpoint
+      h3
+        span.method.get GET
+        | /api/proveedores/:id
+      p Obtiene los detalles de un proveedor específico por su ID.
+      pre
+        code.
+          GET /api/proveedores/:id
+
+    .endpoint
+      h3
+        span.method.patch PATCH
+        | /api/proveedores/:id
+      p Actualiza parcialmente un proveedor existente por su ID.
+      pre
+        code.
+          PATCH /api/proveedores/:id
+          Content-Type: application/json
+
+          {
+            "nombre": "string",
+            "contacto": "string"
+          }
+
+    .endpoint
+      h3
+        span.method.delete DELETE
+        | /api/proveedores/:id
+      p Elimina un proveedor existente por su ID.
+      pre
+        code.
+          DELETE /api/proveedores/:id
+
+    .endpoint
+      h2 Ventas API
+
+      h3
+        span.method.get GET
+        | /api/ventas
+      p Obtiene una lista de todas las ventas.
+      pre
+        code.
+          GET /api/ventas
+
+    .endpoint
+      h3
+        span.method.post POST
+        | /api/ventas
+      p Registra una nueva venta.
+      pre
+        code.
+          POST /api/ventas
+          Content-Type: application/json
+
+          {
+            "producto": "string", // ID o nombre del producto
+            "cantidad": number
+          }
+
+    .endpoint
+      h3
+        span.method.get GET
+        | /api/ventas/mas-vendidos
+      p Obtiene una lista de los productos más vendidos.
+      pre
+        code.
+          GET /api/ventas/mas-vendidos
+
+    .endpoint
+      h3
+        span.method.get GET
+        | /api/ventas/semana
+      p Obtiene una lista de las ventas de la última semana.
+      pre
+        code.
+          GET /api/ventas/semana
+
+    .endpoint
+      h3
+        span.method.get GET
+        | /api/ventas/:id
+      p Obtiene los detalles de una venta específica por su ID.
+      pre
+        code.
+          GET /api/ventas/:id

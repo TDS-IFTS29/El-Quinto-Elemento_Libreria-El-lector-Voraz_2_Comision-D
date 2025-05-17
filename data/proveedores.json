@@ -258,5 +258,20 @@
     "id": 1747508055511,
     "nombre": "Proveedor para Actualizar",
     "contacto": "Nuevo Contacto"
+  },
+  {
+    "id": 1747510671015,
+    "nombre": "Nuevo Proveedor de Prueba",
+    "contacto": "Contacto de Prueba"
+  },
+  {
+    "id": 1747510671026,
+    "nombre": "Proveedor para Obtener",
+    "contacto": "Contacto Obtener"
+  },
+  {
+    "id": 1747510671038,
+    "nombre": "Proveedor para Actualizar",
+    "contacto": "Nuevo Contacto"
   }
 ]

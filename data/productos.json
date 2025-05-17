@@ -316,5 +316,23 @@
     "nombre": "Libro para Actualizar",
     "autor": "Autor Actualizar",
     "precio": 35.75
+  },
+  {
+    "id": 1747510671016,
+    "nombre": "Nuevo Libro de Prueba",
+    "autor": "Autor de Prueba",
+    "precio": 19.99
+  },
+  {
+    "id": 1747510671024,
+    "nombre": "Libro para Obtener",
+    "autor": "Autor Obtener",
+    "precio": 25.5
+  },
+  {
+    "id": 1747510671038,
+    "nombre": "Libro para Actualizar",
+    "autor": "Autor Actualizar",
+    "precio": 35.75
   }
 ]

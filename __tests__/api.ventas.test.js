@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Asegúrate de que app.js exporta la instancia de Express
+const app = require('../app');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -22,13 +22,12 @@ describe('API de Ventas', () => {
     const res = await request(app).get('/api/ventas');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    // Puedes añadir más aserciones sobre la estructura de los objetos Venta si es necesario
   });
 
   // Test para POST /api/ventas (registrar)
   test('POST /api/ventas debería registrar una nueva venta de un producto existente', async () => {
     const nuevaVenta = {
-      producto: 'Rayuela', // Usar un producto existente
+      producto: 'Rayuela',
       cantidad: 10
     };
     const res = await request(app)
@@ -52,7 +51,6 @@ describe('API de Ventas', () => {
     expect(res.body[0]).toHaveProperty('total', 74);
     expect(res.body[1]).toHaveProperty('producto', '2001');
     expect(res.body[1]).toHaveProperty('total', 35);
-    // Puedes añadir más asserts para otros productos si es necesario
   });
 
   // Test para GET /api/ventas/semana
@@ -60,8 +58,6 @@ describe('API de Ventas', () => {
     const res = await request(app).get('/api/ventas/ventas-semana');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    // Aserciones basadas en los datos proporcionados y la fecha actual
-    // Hay 4 ventas en la última semana según los datos y la fecha actual
     expect(res.body.length).toBe(19);
     const sieteDiasAtras = Date.now() - 7 * 24 * 60 * 60 * 1000;
     res.body.forEach(venta => {

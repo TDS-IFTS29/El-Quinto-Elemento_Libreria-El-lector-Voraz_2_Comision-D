@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Asegúrate de que app.js exporta la instancia de Express
+const app = require('../app');
 
 describe('API de Productos', () => {
   // Test para GET /api/productos
@@ -7,7 +7,6 @@ describe('API de Productos', () => {
     const res = await request(app).get('/api/productos');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    // Puedes añadir más aserciones sobre la estructura de los objetos Producto si es necesario
   });
 
   // Test para POST /api/productos
@@ -29,7 +28,6 @@ describe('API de Productos', () => {
 
  
   test('GET /api/productos/:id debería retornar un producto específico', async () => {
-    // Primero, crea un producto para asegurarte de que existe uno para obtener
     const productoParaObtener = {
       nombre: 'Libro para Obtener',
       autor: 'Autor Obtener',
@@ -48,7 +46,6 @@ describe('API de Productos', () => {
 
   // Test para PATCH /api/productos/:id
   test('PATCH /api/productos/:id debería actualizar un producto existente', async () => {
-    // Primero, crea un producto para actualizar
     const productoParaActualizar = {
       nombre: 'Libro para Actualizar',
       autor: 'Autor Actualizar',
@@ -72,7 +69,6 @@ describe('API de Productos', () => {
 
   // Test para DELETE /api/productos/:id
   test('DELETE /api/productos/:id debería eliminar un producto', async () => {
-    // Primero, crea un producto para eliminar
     const productoParaEliminar = {
       nombre: 'Libro para Eliminar',
       autor: 'Autor Eliminar',

@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../app'); // Asegúrate de que app.js exporta la instancia de Express
+const app = require('../app'); 
 
 describe('API de Proveedores', () => {
   // Test para GET /api/proveedores
@@ -7,7 +7,6 @@ describe('API de Proveedores', () => {
     const res = await request(app).get('/api/proveedores');
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
-    // Puedes añadir más aserciones sobre la estructura de los objetos Proveedor si es necesario
   });
 
   // Test para POST /api/proveedores
@@ -27,7 +26,6 @@ describe('API de Proveedores', () => {
 
   // Test para GET /api/proveedores/:id
   test('GET /api/proveedores/:id debería retornar un proveedor específico', async () => {
-    // Primero, crea un proveedor para asegurarte de que existe uno para obtener
     const proveedorParaObtener = {
       nombre: 'Proveedor para Obtener',
       contacto: 'Contacto Obtener'
@@ -45,7 +43,6 @@ describe('API de Proveedores', () => {
 
   // Test para PATCH /api/proveedores/:id
   test('PATCH /api/proveedores/:id debería actualizar un proveedor existente', async () => {
-    // Primero, crea un proveedor para actualizar
     const proveedorParaActualizar = {
       nombre: 'Proveedor para Actualizar',
       contacto: 'Contacto Actualizar'
@@ -68,7 +65,6 @@ describe('API de Proveedores', () => {
 
   // Test para DELETE /api/proveedores/:id
   test('DELETE /api/proveedores/:id debería eliminar un proveedor', async () => {
-    // Primero, crea un proveedor para eliminar
     const proveedorParaEliminar = {
       nombre: 'Proveedor para Eliminar',
       contacto: 'Contacto Eliminar'

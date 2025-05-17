@@ -31,50 +31,69 @@ Desarrollar una API backend con Node.js y Express para digitalizar la gestión d
 
 ```bash
 /el-lector-voraz/
+├── .gitignore
 ├── app.js
+├── package-lock.json
 ├── package.json
+├── README.md
+├── __tests__/
+│   ├── api.productos.test.js
+│   ├── api.proveedores.test.js
+│   └── api.ventas.test.js
 ├── data/
 │   ├── productos.json
 │   ├── proveedores.json
+│   ├── usuarios.json
 │   └── ventas.json
 ├── controllers/
+│   ├── catalogoController.js
+│   ├── homeController.js
 │   ├── productosController.js
 │   ├── proveedoresController.js
-│   ├── ventasController.js
-│   ├── homeController.js
-│   └── catalogoController.js
+│   ├── usuariosController.js
+│   └── ventasController.js
 ├── models/
 │   ├── Producto.js
 │   ├── Proveedor.js
 │   └── Venta.js
-├── routes/
-│   ├── productos.js
-│   ├── proveedores.js
-│   ├── ventas.js
-│   ├── home.js
-│   ├── catalogo.js
-│   └── api/
-│       ├── productos.js
-│       ├── proveedores.js
-│       └── ventas.js
 ├── public/
+│   └── css/
+│       └── estilos.css
 │   └── js/
 │       ├── catalogo.js
 │       ├── catalogo_proveedores.js
 │       ├── catalogo_ventas.js
 │       ├── editar_producto.js
 │       ├── editar_proveedor.js
+│       ├── login.js
+│       ├── nueva_venta.js
+│       ├── nuevo_producto.js
+│       ├── nuevo_proveedor.js
 │       └── reportes_ventas.js
+├── routes/
+│   ├── apiDocs.js
+│   ├── catalogo.js
+│   ├── home.js
+│   ├── productos.js
+│   ├── proveedores.js
+│   ├── usuarios.js
+│   ├── ventas.js
+│   └── api/
+│       ├── productos.js
+│       ├── proveedores.js
+│       └── ventas.js
 ├── views/
-│   ├── index.pug
+│   ├── api_docs.pug
 │   ├── catalogo.pug
-│   ├── nuevo_producto.pug
-│   ├── editar_producto.pug
 │   ├── catalogo_proveedores.pug
-│   ├── nuevo_proveedor.pug
-│   ├── editar_proveedor.pug
 │   ├── catalogo_ventas.pug
+│   ├── editar_producto.pug
+│   ├── editar_proveedor.pug
+│   ├── index.pug
+│   ├── login.pug
 │   ├── nueva_venta.pug
+│   ├── nuevo_producto.pug
+│   ├── nuevo_proveedor.pug
 │   └── reportes_ventas.pug
 ```
 

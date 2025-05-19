@@ -147,7 +147,7 @@ POST   | /api/ventas                      | Registrar nueva venta
 GET    | /api/ventas/mas-vendidos         | JSON con los productos más vendidos
 GET    | /api/ventas/ventas-semana        | JSON con ventas de la última semana
 
-## Roles del Equipo
+## Grupo "El Quinto Elemento" - Roles del Equipo
 
 Integrante                    | Rol
 ------------------------------|--------------------------------------------------
@@ -157,6 +157,4 @@ César Antonio Gill            | Registro de ventas, reportes y consumo de API c
 
 ## Documentación Complementaria
 
-- Repositorio: https://github.com/TDS-IFTS29/grupo1_BackEnd_El_Lector_Voraz.git
-- Video explicativo: (agregar enlace)
-- Link a Google Docs (si aplica):
+- Google drive: https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs

@@ -4,7 +4,7 @@ Este proyecto fue desarrollado como parte del trabajo integrador de la materia D
 
 ## Objetivo del Proyecto
 
-Desarrollar una API backend con Node.js y Express para digitalizar la gestión de una librería, incluyendo productos, ventas y proveedores. El almacenamiento se realiza en archivos JSON y se utiliza Pug para generar vistas desacopladas que consumen la API RESTful mediante JavaScript.
+Desarrollar una solución backend integral con Node.js y Express que permita digitalizar la gestión administrativa y comercial de una librería, abarcando la gestión de productos, registro de ventas y administración de proveedores. Esta solución se estructura como una API RESTful que proporciona operaciones CRUD sobre los datos almacenados en archivos JSON, garantizando una arquitectura desacoplada. Además, se implementa un cliente basado en vistas Pug y JavaScript que interactúa con la API a través de fetch. El sistema busca facilitar el control de stock, mejorar el seguimiento de las transacciones y centralizar la información relevante para la toma de decisiones.
 
 ## Tecnologías Utilizadas
 
@@ -147,7 +147,7 @@ POST   | /api/ventas                      | Registrar nueva venta
 GET    | /api/ventas/mas-vendidos         | JSON con los productos más vendidos
 GET    | /api/ventas/ventas-semana        | JSON con ventas de la última semana
 
-## Grupo "El Quinto Elemento" - Roles del Equipo
+## Grupo "El Quinto Elemento" (Ex Grupo 1) - Roles del Equipo
 
 Integrante                    | Rol
 ------------------------------|--------------------------------------------------

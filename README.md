@@ -105,11 +105,17 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
    npm install
    ```
 
-2. Iniciar el servidor:
+2. Iniciar el servidor en modo desarrollo (con reinicio automático):
 
    ```bash
-   npm start
+   npm run dev
    ```
+
+   > Si prefieres iniciar el servidor en modo producción, puedes usar:
+   >
+   > ```bash
+   > npm start
+   > ```
 
 3. Acceder en el navegador:
 

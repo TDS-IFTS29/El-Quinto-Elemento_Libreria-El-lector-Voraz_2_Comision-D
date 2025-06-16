@@ -11,12 +11,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     listaMasVendidos.innerHTML = '';
     masVendidos.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = `${item.producto} – ${item.total} ventas`;
-      listaMasVendidos.appendChild(li);
+      const tr = document.createElement('tr');
+      const tdProducto = document.createElement('td');
+      tdProducto.textContent = item.producto;
+      const tdTotal = document.createElement('td');
+      tdTotal.textContent = item.total + ' ventas';
+      tr.appendChild(tdProducto);
+      tr.appendChild(tdTotal);
+      listaMasVendidos.appendChild(tr);
     });
   } catch (error) {
-    listaMasVendidos.innerHTML = '<li>Error al cargar más vendidos.</li>';
+    listaMasVendidos.innerHTML = '<tr><td colspan="2">Error al cargar más vendidos.</td></tr>';
     console.error(error);
   }
 
@@ -32,12 +37,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (typeof v.producto === 'object' && v.producto.autor) {
         productoNombre += ' - ' + v.producto.autor;
       }
-      const li = document.createElement('li');
-      li.textContent = `${productoNombre} – Cantidad: ${v.cantidad} – Fecha: ${new Date(v.fecha).toLocaleString()}`;
-      listaSemana.appendChild(li);
+      const tr = document.createElement('tr');
+      const tdFecha = document.createElement('td');
+      tdFecha.textContent = new Date(v.fecha).toLocaleString();
+      const tdProducto = document.createElement('td');
+      tdProducto.textContent = productoNombre;
+      const tdCantidad = document.createElement('td');
+      tdCantidad.textContent = v.cantidad;
+      tr.appendChild(tdFecha);
+      tr.appendChild(tdProducto);
+      tr.appendChild(tdCantidad);
+      listaSemana.appendChild(tr);
     });
   } catch (error) {
-    listaSemana.innerHTML = '<li>Error al cargar ventas de la semana.</li>';
+    listaSemana.innerHTML = '<tr><td colspan="3">Error al cargar ventas de la semana.</td></tr>';
     console.error(error);
   }
 });

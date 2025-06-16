@@ -4,19 +4,23 @@ html
     title Catálogo de Proveedores
     link(rel="stylesheet", href="/css/estilos.css")
   body
-    h1 Lista de Proveedores
-
-    a.button(href="/proveedores/nuevo") Agregar nuevo proveedor
-
-    table
-      thead
-        tr
-          th Nombre
-          th Contacto
-          th Acciones
-      tbody#tabla-proveedores
-        tr
-          td(colspan="3") Cargando proveedores...
-
-    a.button(href="/inicio") Volver al inicio
+    .banner
+      img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img" style="max-height:160px;")
+      .bienvenida-box(style="top:20px;right:5vw;max-width:240px;padding:14px 12px;font-size:1rem;")
+        h2(style="font-size:1.1rem;margin:0 0 8px 0;color:#675858;") Catálogo de Proveedores
+        p(style="margin:0;color:#675858;") Consulta y gestiona los proveedores registrados.
+    section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+      .catalogo-header(style="display:flex;justify-content:center;align-items:center;gap:24px;margin-bottom:18px;")
+        img(src="/img/logo-lector-voraz.png" alt="Logo El Lector Voraz" style="width:90px;")
+        a.button(href="/proveedores/nuevo") Agregar nuevo proveedor
+      table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+        thead
+          tr
+            th Nombre
+            th Contacto
+            th Acciones
+        tbody#tabla-proveedores
+          tr
+            td(colspan="3") Cargando proveedores...
+      a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
     script(src="/js/catalogo_proveedores.js")

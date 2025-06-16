@@ -5,20 +5,24 @@ html
     title Catálogo de Productos
     link(rel="stylesheet", href="/css/estilos.css")
   body
-    h1 Catálogo de El Lector Voraz
-
-    a.button(href="/productos/nuevo") Agregar nuevo producto
-
-    table
-      thead
-        tr
-          th Nombre
-          th Autor
-          th Precio
-          th Acciones
-      tbody#tabla-productos
-        tr
-          td(colspan="4") Cargando productos...
-
-    a.button(href="/inicio") Volver al inicio
+    .banner
+      img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img" style="max-height:180px;")
+      .bienvenida-box(style="top:24px;right:5vw;max-width:260px;padding:18px 16px;font-size:1rem;")
+        h2(style="font-size:1.2rem;margin:0 0 8px 0;color:#675858;") Catálogo de El Lector Voraz
+        p(style="margin:0;color:#675858;") Consulta y gestiona los productos disponibles.
+    section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+      .catalogo-header(style="display:flex;justify-content:center;align-items:center;gap:24px;margin-bottom:18px;")
+        img(src="/img/logo-lector-voraz.png" alt="Logo El Lector Voraz" style="width:90px;")
+        a.button(href="/productos/nuevo") Agregar nuevo producto
+      table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+        thead
+          tr
+            th Nombre
+            th Autor
+            th Precio
+            th Acciones
+        tbody#tabla-productos
+          tr
+            td(colspan="4") Cargando productos...
+      a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
     script(src="/js/catalogo.js")

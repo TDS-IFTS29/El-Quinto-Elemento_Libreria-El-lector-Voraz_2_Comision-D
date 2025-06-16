@@ -5,20 +5,26 @@ html
     title Nueva Venta
     link(rel="stylesheet", href="/css/estilos.css")
   body
-    h1 Registrar Nueva Venta
-
-    form#form-nueva-venta
-      div
-        label(for="producto") Producto:
-        select(name="producto" id="producto" required)
-          option(value="") Selecciona un producto
-          each producto in productos
-            option(value=producto._id) #{producto.nombre} - #{producto.autor}
-      div
-        label(for="cantidad") Cantidad:
-        input(type="number" name="cantidad" id="cantidad" min="1" required)
-      div
-        button(type="submit") Registrar
-
-    a.button(href="/inicio") Volver al inicio
+    .banner
+      img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img" style="max-height:160px;")
+      .bienvenida-box(style="top:20px;right:5vw;max-width:240px;padding:14px 12px;font-size:1rem;")
+        h2(style="font-size:1.1rem;margin:0 0 8px 0;color:#675858;") Nueva Venta
+        p(style="margin:0;color:#675858;") Registra una nueva venta en el sistema.
+    section.nueva-venta-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+      .form-box(style="background:#fff;padding:32px 28px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;")
+        img(src="/img/logo-lector-voraz.png" alt="Logo El Lector Voraz" style="width:80px;display:block;margin:0 auto 18px auto;")
+        h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Registrar Nueva Venta
+        form#form-nueva-venta
+          div
+            label(for="producto" style="color:#675858;") Producto:
+            select(name="producto" id="producto" required style="width:100%;margin-bottom:10px;")
+              option(value="") Selecciona un producto
+              each producto in productos
+                option(value=producto._id) #{producto.nombre} - #{producto.autor}
+          div
+            label(for="cantidad" style="color:#675858;") Cantidad:
+            input(type="number" name="cantidad" id="cantidad" min="1" required style="width:100%;margin-bottom:18px;")
+          div
+            button(type="submit" class="button" style="width:100%;margin-top:8px;") Registrar
+      a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
     script(src="/js/nueva_venta.js")

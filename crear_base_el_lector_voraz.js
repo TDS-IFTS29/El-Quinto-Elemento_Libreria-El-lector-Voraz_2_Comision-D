@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Producto = require('./models/Producto');
 const Proveedor = require('./models/Proveedor');
 const Venta = require('./models/Venta');
+const Usuario = require('./models/Usuario');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/el-lector-voraz';
 
@@ -31,8 +32,10 @@ async function crearBaseDeDatos() {
   await Proveedor.deleteMany({});
   await Producto.deleteMany({});
   await Venta.deleteMany({});
+  await Usuario.deleteMany({});
   const proveedoresInsertados = await Proveedor.insertMany(proveedores);
   const productosInsertados = await Producto.insertMany(productos);
+  await Usuario.create({ nombre: 'admin', email: 'admin', password: '1234' });
 
   // Ventas de ejemplo (10 ventas alternando productos)
   const ventas = [

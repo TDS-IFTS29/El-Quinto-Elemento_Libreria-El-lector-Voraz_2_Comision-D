@@ -342,3 +342,43 @@ footer hr {
   padding: 10px 0;
   border-radius: 5px;
 }
+
+.menu-principal {
+  max-width: 1000px;
+  margin: 0 auto 32px auto;
+}
+.menu-grupos {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+.menu-grupo {
+  background: var(--color-bg-secondary);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(60,60,60,0.07);
+  padding: 24px 20px 20px 20px;
+  min-width: 220px;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.menu-icon {
+  margin-bottom: 12px;
+  color: #675858;
+}
+.menu-grupo h3 {
+  margin-bottom: 18px;
+  color: #675858;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+.menu-grupo ul {
+  width: 100%;
+  padding: 0;
+}
+.menu-grupo li {
+  margin-bottom: 10px;
+  text-align: center;
+}

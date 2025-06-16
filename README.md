@@ -161,8 +161,16 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 | Integrante               | Rol                                                                 |
 |-------------------------|---------------------------------------------------------------------|
 | Clausi Damián Andrés    | Migración completa de archivos JSON a MongoDB: scripts, tests, README y datos de ejemplo actualizados. |
-| Descosido Cristian      |                                                                     |
-| César Antonio Gill      |                                                                     |
+|                         | Diseño y unificación del frontend (paleta pastel, UI coherente, tablas, formularios, botones, documentación)|
+|                         |                                                                     |
+| Descosido Cristian      | MODULO COFFEE                                                       |
+|                         | MODULO LOGIN CON SESION Y CIFRADO                                   |
+|                         |                                                                     |
+|                         |                                                                     |
+| César Antonio Gill      | MODULO LIBRERIA                                                     |
+|                         | MODULO ALERTAS Y REPORTES                                           |
+|                         |                                                                     |
+|                         |                                                                     |
 
 - [Google drive](https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs)
 - [Github](https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D)

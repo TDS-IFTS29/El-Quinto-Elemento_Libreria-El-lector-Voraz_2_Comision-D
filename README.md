@@ -160,7 +160,7 @@ César Antonio Gill            | Registro de ventas, reportes y consumo de API c
 
 Integrante                    | Rol
 ------------------------------|--------------------------------------------------
-Clausi Damián Andrés          | Migración de base de datos JSON a MongoDB. Incluyendo modificación de modulos para su funcionamiento
+Clausi Damián Andrés          | Migración completa de archivos JSON a MongoDB: scripts, tests, README y datos de ejemplo actualizados.
 Descosido Cristian            | 
 César Antonio Gill            | 
 

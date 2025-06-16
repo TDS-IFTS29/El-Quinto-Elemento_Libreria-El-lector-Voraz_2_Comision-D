@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputContacto = document.getElementById('contacto');
   const inputId = document.getElementById('proveedor-id');
 
-  // Obtener ID de la URL (último número)
-  const id = window.location.pathname.match(/\d+$/)?.[0];
+  // Obtener ID de la URL (último segmento después de la última barra)
+  const id = window.location.pathname.split('/').pop();
   console.log("ID detectado:", id);
 
   // Cargar proveedor existente
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return res.json();
     })
     .then(proveedor => {
-      inputId.value = proveedor.id;
+      inputId.value = proveedor._id;
       inputNombre.value = proveedor.nombre;
       inputContacto.value = proveedor.contacto;
     })

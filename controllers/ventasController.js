@@ -1,56 +1,49 @@
 // controllers/ventasController.js
-const fs = require('fs').promises;
-const path = require('path');
 const Venta = require('../models/Venta');
-
-const filePath = path.join(__dirname, '../data/ventas.json');
-
-async function leerVentas() {
-  const data = await fs.readFile(filePath, 'utf-8');
-  const lista = JSON.parse(data);
-  return lista.map(Venta.desdeObjetoPlano);
-}
-
-async function guardarVentas(ventas) {
-  await fs.writeFile(filePath, JSON.stringify(ventas, null, 2));
-}
+const Producto = require('../models/Producto');
 
 // API RESTful
 async function listar(req, res) {
-  const ventas = await leerVentas();
+  const ventas = await Venta.find().populate('producto');
   res.json(ventas);
 }
 
 async function registrar(req, res) {
-  const ventas = await leerVentas();
-  const nueva = new Venta(Date.now(), req.body.producto, parseInt(req.body.cantidad), new Date().toISOString());
-  ventas.push(nueva);
-  await guardarVentas(ventas);
+  const { producto, cantidad, fecha } = req.body;
+  // Buscar producto por ID
+  const prod = await Producto.findById(producto);
+  if (!prod) return res.status(400).json({ error: 'Producto no encontrado' });
+  const nueva = new Venta({
+    producto: prod._id,
+    cantidad: parseInt(cantidad),
+    fecha: fecha ? new Date(fecha) : undefined
+  });
+  await nueva.save();
   res.status(201).json(nueva);
 }
 
 async function masVendidos(req, res) {
-  const ventas = await leerVentas();
-  const contador = {};
-
-  for (const venta of ventas) {
-    if (!contador[venta.producto]) {
-      contador[venta.producto] = 0;
-    }
-    contador[venta.producto] += venta.cantidad;
-  }
-
-  const resultado = Object.entries(contador)
-    .map(([producto, total]) => ({ producto, total }))
-    .sort((a, b) => b.total - a.total);
-
-  res.json(resultado);
+  // Agrupar y contar ventas por producto
+  const resultado = await Venta.aggregate([
+    { $group: { _id: '$producto', total: { $sum: '$cantidad' } } },
+    { $sort: { total: -1 } }
+  ]);
+  // Obtener los nombres de los productos
+  const productos = await Producto.find({ _id: { $in: resultado.map(r => r._id) } });
+  const productosMap = {};
+  productos.forEach(p => {
+    productosMap[p._id] = `${p.nombre} - ${p.autor}`;
+  });
+  const resultadoConNombre = resultado.map(r => ({
+    producto: productosMap[r._id] || 'Desconocido',
+    total: r.total
+  }));
+  res.json(resultadoConNombre);
 }
 
 async function ventasSemana(req, res) {
-  const ventas = await leerVentas();
-  const hace7dias = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const recientes = ventas.filter(v => new Date(v.fecha).getTime() >= hace7dias);
+  const hace7dias = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const recientes = await Venta.find({ fecha: { $gte: hace7dias } }).populate('producto');
   res.json(recientes);
 }
 
@@ -59,39 +52,14 @@ async function verCatalogo(req, res) {
   res.render('catalogo_ventas');
 }
 
-async function verReportes(req, res) {
-  const ventas = await leerVentas();
-
-  const contador = {};
-  for (const venta of ventas) {
-    if (!contador[venta.producto]) {
-      contador[venta.producto] = 0;
-    }
-    contador[venta.producto] += venta.cantidad;
-  }
-
-  const masVendidos = Object.entries(contador)
-    .map(([producto, total]) => ({ producto, total }))
-    .sort((a, b) => b.total - a.total);
-
-  const hace7dias = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const ventasSemana = ventas.filter(v => new Date(v.fecha).getTime() >= hace7dias);
-
-  res.render('reportes_ventas', { masVendidos, ventasSemana });
+async function vistaNuevaVenta(req, res) {
+  const productos = await Producto.find();
+  res.render('nueva_venta', { productos });
 }
 
-function vistaNuevaVenta(req, res) {
-  res.render('nueva_venta');
-}
-
-function vistaCatalogoVentas(req, res) {
-  res.render('catalogo_ventas');
-}
-
-function vistaReportesVentas(req, res) {
+async function vistaReportesVentas(req, res) {
   res.render('reportes_ventas');
 }
-
 
 module.exports = {
   listar,
@@ -99,8 +67,6 @@ module.exports = {
   masVendidos,
   ventasSemana,
   verCatalogo,
-  verReportes,
   vistaNuevaVenta,
-  vistaCatalogoVentas,
   vistaReportesVentas
 };

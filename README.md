@@ -1,15 +1,42 @@
-# El Lector Voraz – Backend (Entrega Final)
+# El Lector Voraz – Backend (Entrega Final) - 2da PARTE
 
 Este proyecto fue desarrollado como parte del trabajo integrador de la materia Desarrollo Web Backend – Tecnicatura en Desarrollo de Software (IFTS 29).
 
+## Crear la base de datos con datos de ejemplo
+
+Para facilitar las pruebas, puedes crear la base de datos `el-lector-voraz` con datos de ejemplo ejecutando el siguiente script:
+
+```bash
+node crear_base_el_lector_voraz.js
+```
+
+Esto eliminará los productos, proveedores y el historial de ventas existentes, y cargará datos de ejemplo automáticamente (incluye 10 ventas de prueba asociadas a productos reales).
+
+> **Actualización importante:**
+> Desde la migración a MongoDB, la aplicación utiliza una base de datos MongoDB y modelos Mongoose para almacenar y gestionar los datos. La carpeta `data/` y los archivos JSON han sido eliminados y ya no son utilizados por la aplicación.
+
+## Configuración del Proyecto
+
+### Variables de Entorno (.env)
+
+> **Nota:** En este proyecto estudiantil, el archivo `.env` se incluye en el repositorio solo con fines prácticos y educativos. En proyectos reales, nunca se debe subir `.env` a un repositorio público.
+
+### Pasos para ejecutar el proyecto
+1. Clonar el repositorio
+2. Instalar dependencias: `npm install`
+3. Iniciar MongoDB localmente
+4. Ejecutar el proyecto: `npm start`
+
 ## Objetivo del Proyecto
 
-Desarrollar una solución backend integral con Node.js y Express que permita digitalizar la gestión administrativa y comercial de una librería, abarcando la gestión de productos, registro de ventas y administración de proveedores. Esta solución se estructura como una API RESTful que proporciona operaciones CRUD sobre los datos almacenados en archivos JSON, garantizando una arquitectura desacoplada. Además, se implementa un cliente basado en vistas Pug y JavaScript que interactúa con la API a través de fetch. El sistema busca facilitar el control de stock, mejorar el seguimiento de las transacciones y centralizar la información relevante para la toma de decisiones.
+Desarrollar una solución backend integral con Node.js y Express que permita digitalizar la gestión administrativa y comercial de una librería, abarcando la gestión de productos, registro de ventas y administración de proveedores. Esta solución se estructura como una API RESTful que proporciona operaciones CRUD sobre los datos almacenados en una base de datos MongoDB (antes archivos JSON), garantizando una arquitectura desacoplada. Además, se implementa un cliente basado en vistas Pug y JavaScript que interactúa con la API a través de fetch. El sistema busca facilitar el control de stock, mejorar el seguimiento de las transacciones y centralizar la información relevante para la toma de decisiones.
 
 ## Tecnologías Utilizadas
 
 - Node.js
 - Express.js
+- MongoDB
+- Mongoose
 - Pug
 - JSON
 - Fetch API
@@ -31,97 +58,62 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 
 ```bash
 /el-lector-voraz/
+├── .env
 ├── .gitignore
 ├── app.js
-├── package-lock.json
 ├── package.json
 ├── README.md
 ├── __tests__/
-│   ├── api.productos.test.js
-│   ├── api.proveedores.test.js
-│   └── api.ventas.test.js
-├── data/
-│   ├── productos.json
-│   ├── proveedores.json
-│   ├── usuarios.json
-│   └── ventas.json
+│   └── ...
 ├── controllers/
-│   ├── catalogoController.js
-│   ├── homeController.js
-│   ├── productosController.js
-│   ├── proveedoresController.js
-│   ├── usuariosController.js
-│   └── ventasController.js
+│   └── ...
 ├── models/
-│   ├── Producto.js
-│   ├── Proveedor.js
-│   └── Venta.js
+│   └── ...
 ├── public/
-│   └── css/
-│       └── estilos.css
-│   └── js/
-│       ├── catalogo.js
-│       ├── catalogo_proveedores.js
-│       ├── catalogo_ventas.js
-│       ├── editar_producto.js
-│       ├── editar_proveedor.js
-│       ├── login.js
-│       ├── nueva_venta.js
-│       ├── nuevo_producto.js
-│       ├── nuevo_proveedor.js
-│       └── reportes_ventas.js
+│   └── ...
 ├── routes/
-│   ├── apiDocs.js
-│   ├── catalogo.js
-│   ├── home.js
-│   ├── productos.js
-│   ├── proveedores.js
-│   ├── usuarios.js
-│   ├── ventas.js
-│   └── api/
-│       ├── productos.js
-│       ├── proveedores.js
-│       └── ventas.js
+│   └── ...
 ├── views/
-│   ├── api_docs.pug
-│   ├── catalogo.pug
-│   ├── catalogo_proveedores.pug
-│   ├── catalogo_ventas.pug
-│   ├── editar_producto.pug
-│   ├── editar_proveedor.pug
-│   ├── index.pug
-│   ├── login.pug
-│   ├── nueva_venta.pug
-│   ├── nuevo_producto.pug
-│   ├── nuevo_proveedor.pug
-│   └── reportes_ventas.pug
+│   └── ...
 ```
+
+> **Nota:** Todos los datos actuales se almacenan en MongoDB. Los modelos y controladores están adaptados para trabajar con Mongoose.
 
 ## Cómo Ejecutar el Proyecto
 
-1. Instalar dependencias:
+### 1. Crear la base de datos con datos de ejemplo
 
-   ```bash
-   npm install
-   ```
+Para facilitar las pruebas, puedes crear la base de datos `el-lector-voraz` con datos de ejemplo ejecutando el siguiente script:
 
-2. Iniciar el servidor en modo desarrollo (con reinicio automático):
+```bash
+node crear_base_el_lector_voraz.js
+```
 
-   ```bash
-   npm run dev
-   ```
+Esto eliminará los productos, proveedores y el historial de ventas existentes, y cargará datos de ejemplo automáticamente (incluye 10 ventas de prueba asociadas a productos reales).
 
-   > Si prefieres iniciar el servidor en modo producción, puedes usar:
-   >
-   > ```bash
-   > npm start
-   > ```
+### 2. Instalar dependencias
 
-3. Acceder en el navegador:
+```bash
+npm install
+```
 
-   ```
-   http://localhost:3000
-   ```
+### 3. Iniciar el servidor en modo desarrollo (con reinicio automático)
+
+```bash
+npm run dev
+```
+
+> Si prefieres iniciar el servidor en modo producción, puedes usar:
+>
+> ```bash
+> npm start
+> ```
+
+### 4. Acceder en el navegador
+
+```
+http://localhost:3000
+```
 
 ## Rutas Principales
 
@@ -129,12 +121,11 @@ Método | Ruta                             | Descripción
 -------|----------------------------------|-------------------------------
 GET    | /                                | Página principal
 GET    | /catalogo                        | Vista de catálogo de productos (Pug)
-GET    | /productos/catalogo              | Vista con tabla de productos y acciones
 GET    | /productos/nuevo                 | Formulario nuevo producto
-GET    | /productos/editar/:id            | Formulario de edición
+GET    | /productos/editar/:id            | Formulario de edición de producto
 GET    | /proveedores/catalogo            | Vista de proveedores con acciones
 GET    | /proveedores/nuevo               | Formulario nuevo proveedor
-GET    | /proveedores/editar/:id          | Formulario de edición proveedor
+GET    | /proveedores/editar/:id          | Formulario de edición de proveedor
 GET    | /ventas/catalogo                 | Historial de ventas
 GET    | /ventas/nueva                    | Formulario registrar venta
 GET    | /ventas/reportes                 | Vista con reportes dinámicos
@@ -153,7 +144,8 @@ POST   | /api/ventas                      | Registrar nueva venta
 GET    | /api/ventas/mas-vendidos         | JSON con los productos más vendidos
 GET    | /api/ventas/ventas-semana        | JSON con ventas de la última semana
 
-## Grupo "El Quinto Elemento" (Ex Grupo 1) - Roles del Equipo
+## Grupo "El Quinto Elemento" - Roles del Equipo
+### Primera parte
 
 Integrante                    | Rol
 ------------------------------|--------------------------------------------------
@@ -161,7 +153,16 @@ Clausi Damián Andrés          | CRUD de productos y modularización del backen
 Descosido Cristian            | Gestión de proveedores y vistas dinámicas
 César Antonio Gill            | Registro de ventas, reportes y consumo de API con fetch
 
-## Documentación Complementaria
-
 - Google drive: https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs
 - Github: https://github.com/TDS-IFTS29/grupo1_BackEnd_El_Lector_Voraz
+
+### Primera parte
+
+Integrante                    | Rol
+------------------------------|--------------------------------------------------
+Clausi Damián Andrés          | Migración de base de datos JSON a MongoDB. Incluyendo modificación de modulos para su funcionamiento
+Descosido Cristian            | 
+César Antonio Gill            | 
+
+- Google drive: https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs
+- Github: https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D

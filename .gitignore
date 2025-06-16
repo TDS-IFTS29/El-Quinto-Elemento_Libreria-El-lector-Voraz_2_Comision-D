@@ -1,1 +1,10 @@
 node_modules/
+# .env NO ignorado por fines prácticos y educativos
+*.log
+*.bak
+dump/
+data/*.bson
+data/*.lock
+coverage/
+.DS_Store
+npm-debug.log*

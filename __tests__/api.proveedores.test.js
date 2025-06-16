@@ -19,7 +19,7 @@ describe('API de Proveedores', () => {
       .post('/api/proveedores')
       .send(nuevoProveedor);
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('id');
+    expect(res.body).toHaveProperty('_id');
     expect(res.body.nombre).toBe(nuevoProveedor.nombre);
     expect(res.body.contacto).toBe(nuevoProveedor.contacto);
   });
@@ -33,11 +33,11 @@ describe('API de Proveedores', () => {
     const postRes = await request(app)
       .post('/api/proveedores')
       .send(proveedorParaObtener);
-    const proveedorId = postRes.body.id;
+    const proveedorId = postRes.body._id;
 
     const getRes = await request(app).get(`/api/proveedores/${proveedorId}`);
     expect(getRes.statusCode).toBe(200);
-    expect(getRes.body.id).toBe(proveedorId);
+    expect(getRes.body._id).toBe(proveedorId);
     expect(getRes.body.nombre).toBe(proveedorParaObtener.nombre);
   });
 
@@ -50,7 +50,7 @@ describe('API de Proveedores', () => {
     const postRes = await request(app)
       .post('/api/proveedores')
       .send(proveedorParaActualizar);
-    const proveedorId = postRes.body.id;
+    const proveedorId = postRes.body._id;
 
     const datosActualizados = {
       contacto: 'Nuevo Contacto'
@@ -59,7 +59,7 @@ describe('API de Proveedores', () => {
       .patch(`/api/proveedores/${proveedorId}`)
       .send(datosActualizados);
     expect(patchRes.statusCode).toBe(200);
-    expect(patchRes.body.id).toBe(proveedorId);
+    expect(patchRes.body._id).toBe(proveedorId);
     expect(patchRes.body.contacto).toBe(datosActualizados.contacto);
   });
 
@@ -72,7 +72,7 @@ describe('API de Proveedores', () => {
     const postRes = await request(app)
       .post('/api/proveedores')
       .send(proveedorParaEliminar);
-    const proveedorId = postRes.body.id;
+    const proveedorId = postRes.body._id;
 
     const deleteRes = await request(app).delete(`/api/proveedores/${proveedorId}`);
     expect(deleteRes.statusCode).toBe(200);

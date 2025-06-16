@@ -5,6 +5,17 @@ const app = express();
 // Cargar variables de entorno desde .env
 require('dotenv').config();
 
+// Conexión a MongoDB
+const mongoose = require('mongoose');
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/el-lector-voraz';
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => {
+    console.error('Error al conectar a MongoDB:', err);
+    process.exit(1);
+  });
+
 // Configurar Express para servir archivos estáticos
 app.use(express.static('public'));
 

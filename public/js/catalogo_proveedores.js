@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${p.nombre}</td>
           <td>${p.contacto}</td>
           <td>
-            <a href="/proveedores/editar/${p.id}" class="button edit">Editar</a>
-            <button data-id="${p.id}" class="button delete">Eliminar</button>
+            <a href="/proveedores/editar/${p._id}" class="button edit">Editar</a>
+            <button data-id="${p._id}" class="button delete">Eliminar</button>
           </td>
         `;
         tabla.appendChild(fila);
@@ -23,8 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('delete')) {
           const id = e.target.dataset.id;
           if (confirm('¿Seguro que querés eliminar este proveedor?')) {
-            await fetch(`/api/proveedores/${id}`, { method: 'DELETE' });
-            location.reload();
+            const resp = await fetch(`/api/proveedores/${id}`, { method: 'DELETE' });
+            if (resp.ok) {
+              alert('Proveedor eliminado exitosamente');
+              location.reload();
+            } else {
+              alert('Error al eliminar el proveedor');
+            }
           }
         }
       });

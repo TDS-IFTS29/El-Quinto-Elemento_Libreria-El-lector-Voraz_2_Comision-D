@@ -1,17 +1,9 @@
-const fs = require('fs').promises;
-const path = require('path');
-const filePath = path.join(__dirname, '../data/usuarios.json');
-
-async function leerUsuarios() {
-  const data = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
-}
+const Usuario = require('../models/Usuario');
 
 async function login(req, res) {
   const { usuario, contrasena } = req.body;
-  const usuarios = await leerUsuarios();
-  const existe = usuarios.find(u => u.usuario === usuario && u.contrasena === contrasena);
-
+  // Buscar usuario por nombre y password
+  const existe = await Usuario.findOne({ nombre: usuario, password: contrasena });
   if (existe) {
     res.redirect('/inicio');
   } else {

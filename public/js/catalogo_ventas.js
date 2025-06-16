@@ -9,9 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
       ventas.forEach(v => {
         const fila = document.createElement('tr');
         const fecha = new Date(v.fecha).toLocaleString();
+        let productoNombre = v.producto && v.producto.nombre ? v.producto.nombre : '[Sin nombre]';
+        if (typeof v.producto === 'object' && v.producto.autor) {
+          productoNombre += ' - ' + v.producto.autor;
+        }
         fila.innerHTML = `
           <td>${fecha}</td>
-          <td>${v.producto}</td>
+          <td>${productoNombre}</td>
           <td>${v.cantidad}</td>
         `;
         tabla.appendChild(fila);

@@ -1,13 +1,10 @@
-class Proveedor {
-  constructor(id, nombre, contacto) {
-    this.id = id;
-    this.nombre = nombre;
-    this.contacto = contacto;
-  }
+const mongoose = require('mongoose');
 
-  static desdeObjetoPlano(obj) {
-    return new Proveedor(obj.id, obj.nombre, obj.contacto);
-  }
-}
+const proveedorSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
+  contacto: { type: String, required: true }
+});
+
+const Proveedor = mongoose.model('Proveedor', proveedorSchema);
 
 module.exports = Proveedor;

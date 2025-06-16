@@ -20,13 +20,12 @@ describe('API de Productos', () => {
       .post('/api/productos')
       .send(nuevoProducto);
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('id');
+    expect(res.body).toHaveProperty('_id');
     expect(res.body.nombre).toBe(nuevoProducto.nombre);
     expect(res.body.autor).toBe(nuevoProducto.autor);
     expect(res.body.precio).toBe(nuevoProducto.precio);
   });
 
- 
   test('GET /api/productos/:id debería retornar un producto específico', async () => {
     const productoParaObtener = {
       nombre: 'Libro para Obtener',
@@ -36,11 +35,11 @@ describe('API de Productos', () => {
     const postRes = await request(app)
       .post('/api/productos')
       .send(productoParaObtener);
-    const productoId = postRes.body.id;
+    const productoId = postRes.body._id;
 
     const getRes = await request(app).get(`/api/productos/${productoId}`);
     expect(getRes.statusCode).toBe(200);
-    expect(getRes.body.id).toBe(productoId);
+    expect(getRes.body._id).toBe(productoId);
     expect(getRes.body.nombre).toBe(productoParaObtener.nombre);
   });
 
@@ -54,7 +53,7 @@ describe('API de Productos', () => {
     const postRes = await request(app)
       .post('/api/productos')
       .send(productoParaActualizar);
-    const productoId = postRes.body.id;
+    const productoId = postRes.body._id;
 
     const datosActualizados = {
       precio: 35.75
@@ -63,7 +62,7 @@ describe('API de Productos', () => {
       .patch(`/api/productos/${productoId}`)
       .send(datosActualizados);
     expect(patchRes.statusCode).toBe(200);
-    expect(patchRes.body.id).toBe(productoId);
+    expect(patchRes.body._id).toBe(productoId);
     expect(patchRes.body.precio).toBe(datosActualizados.precio);
   });
 
@@ -77,7 +76,7 @@ describe('API de Productos', () => {
     const postRes = await request(app)
       .post('/api/productos')
       .send(productoParaEliminar);
-    const productoId = postRes.body.id;
+    const productoId = postRes.body._id;
 
     const deleteRes = await request(app).delete(`/api/productos/${productoId}`);
     expect(deleteRes.statusCode).toBe(200);

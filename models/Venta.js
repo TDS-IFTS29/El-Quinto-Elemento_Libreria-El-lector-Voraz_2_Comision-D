@@ -1,14 +1,11 @@
-class Venta {
-  constructor(id, producto, cantidad, fecha = new Date().toISOString()) {
-    this.id = id;
-    this.producto = producto;
-    this.cantidad = cantidad;
-    this.fecha = fecha;
-  }
+const mongoose = require('mongoose');
 
-  static desdeObjetoPlano(obj) {
-    return new Venta(obj.id, obj.producto, obj.cantidad, obj.fecha);
-  }
-}
+const ventaSchema = new mongoose.Schema({
+  producto: { type: mongoose.Schema.Types.ObjectId, ref: 'Producto', required: true },
+  cantidad: { type: Number, required: true },
+  fecha: { type: Date, default: Date.now }
+});
+
+const Venta = mongoose.model('Venta', ventaSchema);
 
 module.exports = Venta;

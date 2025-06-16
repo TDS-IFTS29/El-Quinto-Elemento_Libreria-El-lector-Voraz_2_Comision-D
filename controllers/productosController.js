@@ -1,111 +1,83 @@
 // controllers/productosController.js
-const fs = require('fs').promises;
-const path = require('path');
 const Producto = require('../models/Producto');
-
-const filePath = path.join(__dirname, '../data/productos.json');
-
-async function leerProductos() {
-  const data = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(data).map(Producto.desdeObjetoPlano);
-}
-
-async function guardarProductos(productos) {
-  await fs.writeFile(filePath, JSON.stringify(productos, null, 2));
-}
+const mongoose = require('mongoose');
 
 // API RESTful
 async function listar(req, res) {
-  const productos = await leerProductos();
+  const productos = await Producto.find();
   res.json(productos);
 }
 
 async function crear(req, res) {
-  const productos = await leerProductos();
-  const nuevo = new Producto(
-    Date.now(),//para el id
-    req.body.nombre,
-    req.body.autor,
-    parseFloat(req.body.precio)
-  );
-  productos.push(nuevo);
-  await guardarProductos(productos);
+  const nuevo = new Producto({
+    nombre: req.body.nombre,
+    autor: req.body.autor,
+    precio: parseFloat(req.body.precio)
+  });
+  await nuevo.save();
   res.status(201).json(nuevo);
 }
 
 async function eliminar(req, res) {
-  const id = parseInt(req.params.id);
-  let productos = await leerProductos();
-  const originalLength = productos.length;
-  productos = productos.filter(p => p.id !== id);
-
-  if (productos.length === originalLength) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
+  const result = await Producto.findByIdAndDelete(id);
+  if (!result) {
     return res.status(404).json({ error: 'Producto no encontrado' });
   }
-
-  await guardarProductos(productos);
   res.json({ mensaje: 'Producto eliminado correctamente' });
 }
 
 async function guardarEdicion(req, res) {
-  const productos = await leerProductos();
-  const id = parseInt(req.params.id);
-  const index = productos.findIndex(p => p.id === id);
-
-  if (index === -1) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
+  const producto = await Producto.findById(id);
+  if (!producto) {
     return res.status(404).json({ error: 'Producto no encontrado' });
   }
-
-  productos[index].nombre = req.body.nombre ?? productos[index].nombre;
-  productos[index].autor = req.body.autor ?? productos[index].autor;
-  productos[index].precio = req.body.precio !== undefined ? parseFloat(req.body.precio) : productos[index].precio;
-
-  await guardarProductos(productos);
-  res.json(productos[index]);
+  producto.nombre = req.body.nombre ?? producto.nombre;
+  producto.autor = req.body.autor ?? producto.autor;
+  producto.precio = req.body.precio ?? producto.precio;
+  await producto.save();
+  res.json(producto);
 }
 
-// Solo vistas: editar producto
-async function formularioEditar(req, res) {
-  const productos = await leerProductos();
-  const producto = productos.find(p => p.id == req.params.id);
+async function vistaNuevoProducto(req, res) {
+  res.render('nuevo_producto');
+}
+
+async function vistaEditarProducto(req, res) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send('ID de producto inválido');
+  }
+  const producto = await Producto.findById(id);
   if (!producto) return res.status(404).send('Producto no encontrado');
   res.render('editar_producto', { producto });
 }
 
 async function obtener(req, res) {
-  const productos = await leerProductos();
-  const id = parseInt(req.params.id);
-  const producto = productos.find(p => p.id === id);
-
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
+  const producto = await Producto.findById(id);
   if (!producto) {
     return res.status(404).json({ error: 'Producto no encontrado' });
   }
-
   res.json(producto);
 }
-
-function vistaNuevoProducto(req, res) {
-  res.render('nuevo_producto');
-}
-
-function vistaEditarProducto(req, res) {
-  res.render('editar_producto');
-}
-
-function vistaCatalogoProducto(req, res) {
-  res.render('catalogo');
-}
-
-
 
 module.exports = {
   listar,
   crear,
   eliminar,
   guardarEdicion,
-  formularioEditar,
-  obtener,
   vistaNuevoProducto,
   vistaEditarProducto,
-  vistaCatalogoProducto
+  obtener
 };

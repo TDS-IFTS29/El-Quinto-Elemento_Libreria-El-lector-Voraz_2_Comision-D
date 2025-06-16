@@ -8,13 +8,13 @@ html
     h1 Editar Proveedor
 
     form#form-editar-proveedor
-      input(type="hidden" id="proveedor-id")
+      input(type="hidden" id="proveedor-id" name="id" value=proveedor._id)
       div
         label(for="nombre") Nombre:
-        input(type="text" name="nombre" id="nombre" required)
+        input(type="text" name="nombre" id="nombre" required value=proveedor.nombre)
       div
         label(for="contacto") Contacto:
-        input(type="text" name="contacto" id="contacto" required)
+        input(type="text" name="contacto" id="contacto" required value=proveedor.contacto)
       div
         button(type="submit") Guardar Cambios
 

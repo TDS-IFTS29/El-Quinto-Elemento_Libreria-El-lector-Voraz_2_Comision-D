@@ -1,65 +1,54 @@
 // controllers/proveedoresController.js
-const fs = require('fs').promises;
-const path = require('path');
 const Proveedor = require('../models/Proveedor');
-
-const filePath = path.join(__dirname, '../data/proveedores.json');
-
-async function leerProveedores() {
-  const data = await fs.readFile(filePath, 'utf-8');
-  const lista = JSON.parse(data);
-  return lista.map(Proveedor.desdeObjetoPlano);
-}
-
-async function guardarProveedores(proveedores) {
-  await fs.writeFile(filePath, JSON.stringify(proveedores, null, 2));
-}
+const mongoose = require('mongoose');
 
 // API RESTful
 async function listar(req, res) {
-  const proveedores = await leerProveedores();
+  const proveedores = await Proveedor.find();
   res.json(proveedores);
 }
 
 async function crear(req, res) {
-  const proveedores = await leerProveedores();
-  const nuevo = new Proveedor(Date.now(), req.body.nombre, req.body.contacto);
-  proveedores.push(nuevo);
-  await guardarProveedores(proveedores);
+  const nuevo = new Proveedor({
+    nombre: req.body.nombre,
+    contacto: req.body.contacto
+  });
+  await nuevo.save();
   res.status(201).json(nuevo);
 }
 
 async function eliminar(req, res) {
-  const id = parseInt(req.params.id);
-  let proveedores = await leerProveedores();
-  const originalLength = proveedores.length;
-  proveedores = proveedores.filter(p => p.id !== id);
-
-  if (proveedores.length === originalLength) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de proveedor inválido' });
+  }
+  const result = await Proveedor.findByIdAndDelete(id);
+  if (!result) {
     return res.status(404).json({ error: 'Proveedor no encontrado' });
   }
-
-  await guardarProveedores(proveedores);
   res.json({ mensaje: 'Proveedor eliminado correctamente' });
 }
 
 async function actualizar(req, res) {
-  const id = parseInt(req.params.id);
-  const proveedores = await leerProveedores();
-  const index = proveedores.findIndex(p => p.id === id);
-  if (index === -1) return res.status(404).json({ error: 'Proveedor no encontrado' });
-
-  proveedores[index].nombre = req.body.nombre ?? proveedores[index].nombre;
-  proveedores[index].contacto = req.body.contacto ?? proveedores[index].contacto;
-  await guardarProveedores(proveedores);
-  res.json(proveedores[index]);
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de proveedor inválido' });
+  }
+  const proveedor = await Proveedor.findById(id);
+  if (!proveedor) return res.status(404).json({ error: 'Proveedor no encontrado' });
+  proveedor.nombre = req.body.nombre ?? proveedor.nombre;
+  proveedor.contacto = req.body.contacto ?? proveedor.contacto;
+  await proveedor.save();
+  res.json(proveedor);
 }
 
 // Solo vistas
 async function formularioEditar(req, res) {
-  const id = parseInt(req.params.id);
-  const proveedores = await leerProveedores();
-  const proveedor = proveedores.find(p => p.id === id);
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send('ID de proveedor inválido');
+  }
+  const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).send('Proveedor no encontrado');
   res.render('editar_proveedor', { proveedor });
 }
@@ -69,14 +58,14 @@ async function vistaCatalogo(req, res) {
 }
 
 async function obtener(req, res) {
-  const proveedores = await leerProveedores();
-  const id = parseInt(req.params.id);
-  const proveedor = proveedores.find(p => p.id === id);
-
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ error: 'ID de proveedor inválido' });
+  }
+  const proveedor = await Proveedor.findById(id);
   if (!proveedor) {
     return res.status(404).json({ error: 'Proveedor no encontrado' });
   }
-
   res.json(proveedor);
 }
 
@@ -84,8 +73,11 @@ function vistaNuevoProveedor(req, res) {
   res.render('nuevo_proveedor');
 }
 
-function vistaEditarProveedor(req, res) {
-  res.render('editar_proveedor');
+async function vistaEditarProveedor(req, res) {
+  const id = req.params.id;
+  const proveedor = await Proveedor.findById(id);
+  if (!proveedor) return res.status(404).send('Proveedor no encontrado');
+  res.render('editar_proveedor', { proveedor });
 }
 
 function vistaCatalogoProveedor(req, res) {

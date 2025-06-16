@@ -8,16 +8,16 @@ html
     h1 Editar Producto
 
     form#form-editar-producto
-      input(type="hidden" id="producto-id")
+      input(type="hidden" id="producto-id" name="id" value=producto._id)
       div
         label(for="nombre") Nombre:
-        input(type="text" name="nombre" id="nombre" required)
+        input(type="text" name="nombre" id="nombre" required value=producto.nombre)
       div
         label(for="autor") Autor:
-        input(type="text" name="autor" id="autor" required)
+        input(type="text" name="autor" id="autor" required value=producto.autor)
       div
         label(for="precio") Precio:
-        input(type="number" name="precio" id="precio" step="0.01" required)
+        input(type="number" name="precio" id="precio" step="0.01" required value=producto.precio)
       div
         button(type="submit") Guardar Cambios
 

@@ -28,8 +28,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     listaSemana.innerHTML = '';
     ventasSemana.forEach(v => {
+      let productoNombre = v.producto && v.producto.nombre ? v.producto.nombre : '[Sin nombre]';
+      if (typeof v.producto === 'object' && v.producto.autor) {
+        productoNombre += ' - ' + v.producto.autor;
+      }
       const li = document.createElement('li');
-      li.textContent = `${v.producto} – Cantidad: ${v.cantidad} – Fecha: ${new Date(v.fecha).toLocaleString()}`;
+      li.textContent = `${productoNombre} – Cantidad: ${v.cantidad} – Fecha: ${new Date(v.fecha).toLocaleString()}`;
       listaSemana.appendChild(li);
     });
   } catch (error) {

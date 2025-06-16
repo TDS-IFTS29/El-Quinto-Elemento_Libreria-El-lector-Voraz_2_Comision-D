@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${p.autor}</td>
           <td>$${p.precio}</td>
           <td>
-            <a href="/productos/editar/${p.id}" class="button edit">Editar</a>
-            <button data-id="${p.id}" class="button delete">Eliminar</button>
+            <a href="/productos/editar/${p._id}" class="button edit">Editar</a>
+            <button data-id="${p._id}" class="button delete">Eliminar</button>
           </td>
         `;
         tabla.appendChild(fila);
@@ -24,8 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('delete')) {
           const id = e.target.dataset.id;
           if (confirm('¿Seguro que querés eliminar este producto?')) {
-            await fetch(`/api/productos/${id}`, { method: 'DELETE' });
-            location.reload();
+            const resp = await fetch(`/api/productos/${id}`, { method: 'DELETE' });
+            if (resp.ok) {
+              alert('Producto eliminado exitosamente');
+              location.reload();
+            } else {
+              alert('Error al eliminar el producto');
+            }
           }
         }
       });

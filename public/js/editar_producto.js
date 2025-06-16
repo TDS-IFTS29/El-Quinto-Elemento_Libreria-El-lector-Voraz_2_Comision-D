@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputPrecio = document.getElementById('precio');
   const inputId = document.getElementById('producto-id');
 
-  // Obtener ID de la URL (último número)
-  const id = window.location.pathname.match(/\d+$/)?.[0];
+  // Obtener ID de la URL (último segmento después de la última barra)
+  const id = window.location.pathname.split('/').pop();
   console.log("ID detectado:", id);
 
   // Cargar producto existente
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return res.json();
     })
     .then(producto => {
-      inputId.value = producto.id;
+      inputId.value = producto._id;
       inputNombre.value = producto.nombre;
       inputAutor.value = producto.autor;
       inputPrecio.value = producto.precio;

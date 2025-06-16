@@ -10,7 +10,10 @@ html
     form#form-nueva-venta
       div
         label(for="producto") Producto:
-        input(type="text" name="producto" id="producto" required)
+        select(name="producto" id="producto" required)
+          option(value="") Selecciona un producto
+          each producto in productos
+            option(value=producto._id) #{producto.nombre} - #{producto.autor}
       div
         label(for="cantidad") Cantidad:
         input(type="number" name="cantidad" id="cantidad" min="1" required)

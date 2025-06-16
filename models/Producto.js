@@ -1,14 +1,11 @@
-class Producto {
-  constructor(id, nombre, autor, precio) {
-    this.id = id;
-    this.nombre = nombre;
-    this.autor = autor;
-    this.precio = precio;
-  }
+const mongoose = require('mongoose');
 
-  static desdeObjetoPlano(obj) {
-    return new Producto(obj.id, obj.nombre, obj.autor, obj.precio);
-  }
-}
+const productoSchema = new mongoose.Schema({
+  nombre: { type: String, required: true },
+  autor: { type: String, required: true },
+  precio: { type: Number, required: true }
+});
+
+const Producto = mongoose.model('Producto', productoSchema);
 
 module.exports = Producto;

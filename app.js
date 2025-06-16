@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
+// Cargar variables de entorno desde .env
+require('dotenv').config();
+
 // Configurar Express para servir archivos estáticos
 app.use(express.static('public'));
 
@@ -32,7 +35,7 @@ app.use('/api/proveedores', require('./routes/api/proveedores'));
 app.use('/api/ventas', require('./routes/api/ventas'));
 
 // Puerto
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

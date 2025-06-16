@@ -5,6 +5,7 @@ Este proyecto fue desarrollado como parte del trabajo integrador de la materia D
 ## Cómo Ejecutar el Proyecto
 
 ### 1. Clonar el repositorio
+
 ```bash
 git clone git@github.com:TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D.git
 ```
@@ -16,6 +17,7 @@ npm install
 ```
 
 ### 3. Iniciar MongoDB localmente
+
 Debe tener instalado MongoDB localmente e iniciado.
 
 ### 4. Crear la base de datos con datos de ejemplo
@@ -30,8 +32,9 @@ Esto eliminará los productos, proveedores y el historial de ventas existentes, 
 
 > **Actualización importante:**
 > Desde la migración a MongoDB, la aplicación utiliza una base de datos MongoDB y modelos Mongoose para almacenar y gestionar los datos. La carpeta `data/` y los archivos JSON han sido eliminados y ya no son utilizados por la aplicación.
-
+>
 > **Usuario de prueba creado automáticamente:**
+>
 > - Usuario: `admin`
 > - Contraseña: `1234`
 
@@ -49,7 +52,7 @@ npm run dev
 
 ### 6. Acceder en el navegador
 
-```
+```text
 http://localhost:3000
 ```
 
@@ -113,52 +116,53 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 
 ## Rutas Principales
 
-Método | Ruta                             | Descripción
--------|----------------------------------|-------------------------------
-GET    | /                                | Página principal
-GET    | /catalogo                        | Vista de catálogo de productos (Pug)
-GET    | /productos/nuevo                 | Formulario nuevo producto
-GET    | /productos/editar/:id            | Formulario de edición de producto
-GET    | /proveedores/catalogo            | Vista de proveedores con acciones
-GET    | /proveedores/nuevo               | Formulario nuevo proveedor
-GET    | /proveedores/editar/:id          | Formulario de edición de proveedor
-GET    | /ventas/catalogo                 | Historial de ventas
-GET    | /ventas/nueva                    | Formulario registrar venta
-GET    | /ventas/reportes                 | Vista con reportes dinámicos
-GET    | /api/productos                   | Listar productos (JSON)
-GET    | /api/productos/:id               | Obtener un producto
-POST   | /api/productos                   | Crear producto
-PATCH  | /api/productos/:id               | Actualizar producto
-DELETE | /api/productos/:id               | Eliminar producto
-GET    | /api/proveedores                 | Listar proveedores (JSON)
-GET    | /api/proveedores/:id             | Obtener proveedor
-POST   | /api/proveedores                 | Crear proveedor
-PATCH  | /api/proveedores/:id             | Actualizar proveedor
-DELETE | /api/proveedores/:id             | Eliminar proveedor
-GET    | /api/ventas                      | Listar ventas (JSON)
-POST   | /api/ventas                      | Registrar nueva venta
-GET    | /api/ventas/mas-vendidos         | JSON con los productos más vendidos
-GET    | /api/ventas/ventas-semana        | JSON con ventas de la última semana
+| Método | Ruta                       | Descripción                              |
+|--------|----------------------------|------------------------------------------|
+| GET    | /                          | Página principal                         |
+| GET    | /catalogo                  | Vista de catálogo de productos (Pug)     |
+| GET    | /productos/nuevo           | Formulario nuevo producto                |
+| GET    | /productos/editar/:id      | Formulario de edición de producto        |
+| GET    | /proveedores/catalogo      | Vista de proveedores con acciones        |
+| GET    | /proveedores/nuevo         | Formulario nuevo proveedor               |
+| GET    | /proveedores/editar/:id    | Formulario de edición de proveedor       |
+| GET    | /ventas/catalogo           | Historial de ventas                      |
+| GET    | /ventas/nueva              | Formulario registrar venta               |
+| GET    | /ventas/reportes           | Vista con reportes dinámicos             |
+| GET    | /api/productos             | Listar productos (JSON)                  |
+| GET    | /api/productos/:id         | Obtener un producto                      |
+| POST   | /api/productos             | Crear producto                           |
+| PATCH  | /api/productos/:id         | Actualizar producto                      |
+| DELETE | /api/productos/:id         | Eliminar producto                        |
+| GET    | /api/proveedores           | Listar proveedores (JSON)                |
+| GET    | /api/proveedores/:id       | Obtener proveedor                        |
+| POST   | /api/proveedores           | Crear proveedor                          |
+| PATCH  | /api/proveedores/:id       | Actualizar proveedor                     |
+| DELETE | /api/proveedores/:id       | Eliminar proveedor                       |
+| GET    | /api/ventas                | Listar ventas (JSON)                     |
+| POST   | /api/ventas                | Registrar nueva venta                    |
+| GET    | /api/ventas/mas-vendidos   | JSON con los productos más vendidos      |
+| GET    | /api/ventas/ventas-semana  | JSON con ventas de la última semana      |
 
 ## Grupo "El Quinto Elemento" - Roles del Equipo
+
 ### Primera parte
 
-Integrante                    | Rol
-------------------------------|--------------------------------------------------
-Clausi Damián Andrés          | CRUD de productos y modularización del backend
-Descosido Cristian            | Gestión de proveedores y vistas dinámicas
-César Antonio Gill            | Registro de ventas, reportes y consumo de API con fetch
+| Integrante               | Rol                                                        |
+|-------------------------|------------------------------------------------------------|
+| Clausi Damián Andrés    | CRUD de productos y modularización del backend             |
+| Descosido Cristian      | Gestión de proveedores y vistas dinámicas                  |
+| César Antonio Gill      | Registro de ventas, reportes y consumo de API con fetch    |
 
-- Google drive: https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs
-- Github: https://github.com/TDS-IFTS29/grupo1_BackEnd_El_Lector_Voraz
+- [Google drive](https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs)
+- [Github](https://github.com/TDS-IFTS29/grupo1_BackEnd_El_Lector_Voraz)
 
 ### Segunda parte
 
-Integrante                    | Rol
-------------------------------|--------------------------------------------------
-Clausi Damián Andrés          | Migración completa de archivos JSON a MongoDB: scripts, tests, README y datos de ejemplo actualizados.
-Descosido Cristian            | 
-César Antonio Gill            | 
+| Integrante               | Rol                                                                 |
+|-------------------------|---------------------------------------------------------------------|
+| Clausi Damián Andrés    | Migración completa de archivos JSON a MongoDB: scripts, tests, README y datos de ejemplo actualizados. |
+| Descosido Cristian      |                                                                     |
+| César Antonio Gill      |                                                                     |
 
-- Google drive: https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs
-- Github: https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D
+- [Google drive](https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs)
+- [Github](https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D)

@@ -2,7 +2,23 @@
 
 Este proyecto fue desarrollado como parte del trabajo integrador de la materia Desarrollo Web Backend – Tecnicatura en Desarrollo de Software (IFTS 29).
 
-## Crear la base de datos con datos de ejemplo
+## Cómo Ejecutar el Proyecto
+
+### 1. Clonar el repositorio
+```bash
+git clone git@github.com:TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D.git
+```
+
+### 2. Instalar dependencias
+
+```bash
+npm install
+```
+
+### 3. Iniciar MongoDB localmente
+Debe tener instalado MongoDB localmente e iniciado.
+
+### 4. Crear la base de datos con datos de ejemplo
 
 Para facilitar las pruebas, puedes crear la base de datos `el-lector-voraz` con datos de ejemplo ejecutando el siguiente script:
 
@@ -15,17 +31,33 @@ Esto eliminará los productos, proveedores y el historial de ventas existentes, 
 > **Actualización importante:**
 > Desde la migración a MongoDB, la aplicación utiliza una base de datos MongoDB y modelos Mongoose para almacenar y gestionar los datos. La carpeta `data/` y los archivos JSON han sido eliminados y ya no son utilizados por la aplicación.
 
+> **Usuario de prueba creado automáticamente:**
+> - Usuario: `admin`
+> - Contraseña: `1234`
+
+### 5. Iniciar el servidor en modo desarrollo (con reinicio automático)
+
+```bash
+npm run dev
+```
+
+> Si prefieres iniciar el servidor en modo producción, puedes usar:
+>
+> ```bash
+> npm start
+> ```
+
+### 6. Acceder en el navegador
+
+```
+http://localhost:3000
+```
+
 ## Configuración del Proyecto
 
 ### Variables de Entorno (.env)
 
 > **Nota:** En este proyecto estudiantil, el archivo `.env` se incluye en el repositorio solo con fines prácticos y educativos. En proyectos reales, nunca se debe subir `.env` a un repositorio público.
-
-### Pasos para ejecutar el proyecto
-1. Clonar el repositorio
-2. Instalar dependencias: `npm install`
-3. Iniciar MongoDB localmente
-4. Ejecutar el proyecto: `npm start`
 
 ## Objetivo del Proyecto
 
@@ -78,42 +110,6 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 ```
 
 > **Nota:** Todos los datos actuales se almacenan en MongoDB. Los modelos y controladores están adaptados para trabajar con Mongoose.
-
-## Cómo Ejecutar el Proyecto
-
-### 1. Crear la base de datos con datos de ejemplo
-
-Para facilitar las pruebas, puedes crear la base de datos `el-lector-voraz` con datos de ejemplo ejecutando el siguiente script:
-
-```bash
-node crear_base_el_lector_voraz.js
-```
-
-Esto eliminará los productos, proveedores y el historial de ventas existentes, y cargará datos de ejemplo automáticamente (incluye 10 ventas de prueba asociadas a productos reales).
-
-### 2. Instalar dependencias
-
-```bash
-npm install
-```
-
-### 3. Iniciar el servidor en modo desarrollo (con reinicio automático)
-
-```bash
-npm run dev
-```
-
-> Si prefieres iniciar el servidor en modo producción, puedes usar:
->
-> ```bash
-> npm start
-> ```
-
-### 4. Acceder en el navegador
-
-```
-http://localhost:3000
-```
 
 ## Rutas Principales
 

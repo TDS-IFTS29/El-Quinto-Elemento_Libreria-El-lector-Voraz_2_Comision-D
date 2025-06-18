@@ -14,7 +14,7 @@ async function crear(req, res) {
     contacto: req.body.contacto
   });
   await nuevo.save();
-  res.status(201).json(nuevo);
+  res.status(201).json(nuevo); // Cambiado a status 201 y respuesta JSON
 }
 
 async function eliminar(req, res) {
@@ -26,7 +26,7 @@ async function eliminar(req, res) {
   if (!result) {
     return res.status(404).json({ error: 'Proveedor no encontrado' });
   }
-  res.json({ mensaje: 'Proveedor eliminado correctamente' });
+  res.status(200).json({ mensaje: 'Proveedor eliminado correctamente' }); // status 200 explícito
 }
 
 async function actualizar(req, res) {
@@ -39,10 +39,18 @@ async function actualizar(req, res) {
   proveedor.nombre = req.body.nombre ?? proveedor.nombre;
   proveedor.contacto = req.body.contacto ?? proveedor.contacto;
   await proveedor.save();
-  res.json(proveedor);
+  res.status(200).json(proveedor); // status 200 explícito
 }
 
 // Solo vistas
+async function vistaCatalogo(req, res) {
+  res.render('proveedor/catalogo_proveedores');
+}
+
+function vistaNuevoProveedor(req, res) {
+  res.render('proveedor/nuevo_proveedor');
+}
+
 async function formularioEditar(req, res) {
   const id = req.params.id;
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -50,11 +58,7 @@ async function formularioEditar(req, res) {
   }
   const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).send('Proveedor no encontrado');
-  res.render('editar_proveedor', { proveedor });
-}
-
-async function vistaCatalogo(req, res) {
-  res.render('catalogo_proveedores');
+  res.render('proveedor/editar_proveedor', { proveedor });
 }
 
 async function obtener(req, res) {
@@ -66,35 +70,44 @@ async function obtener(req, res) {
   if (!proveedor) {
     return res.status(404).json({ error: 'Proveedor no encontrado' });
   }
-  res.json(proveedor);
-}
-
-function vistaNuevoProveedor(req, res) {
-  res.render('nuevo_proveedor');
+  res.status(200).json(proveedor); // status 200 explícito
 }
 
 async function vistaEditarProveedor(req, res) {
   const id = req.params.id;
   const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).send('Proveedor no encontrado');
-  res.render('editar_proveedor', { proveedor });
+  res.render('proveedor/editar_proveedor', { proveedor });
 }
 
 function vistaCatalogoProveedor(req, res) {
-  res.render('catalogo_proveedores');
+  const exito = req.query.exito;
+  res.render('proveedor/catalogo_proveedores', { exito });
 }
 
-
+async function guardarEdicionProveedor(req, res) {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send('ID de proveedor inválido');
+  }
+  const proveedor = await Proveedor.findById(id);
+  if (!proveedor) return res.status(404).send('Proveedor no encontrado');
+  proveedor.nombre = req.body.nombre ?? proveedor.nombre;
+  proveedor.contacto = req.body.contacto ?? proveedor.contacto;
+  await proveedor.save();
+  res.redirect('/proveedores/catalogo');
+}
 
 module.exports = {
   listar,
   crear,
   eliminar,
   actualizar,
-  formularioEditar,
   vistaCatalogo,
-  obtener,
   vistaNuevoProveedor,
+  formularioEditar,
+  obtener,
   vistaEditarProveedor,
-  vistaCatalogoProveedor
+  vistaCatalogoProveedor,
+  guardarEdicionProveedor
 };

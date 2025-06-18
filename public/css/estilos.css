@@ -382,3 +382,386 @@ footer hr {
   margin-bottom: 10px;
   text-align: center;
 }
+
+/* --- DASHBOARD NUEVO (COLORES ORIGINALES) --- */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+.sidebar {
+  width: 240px;
+  background: #F2F0EC;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 0 0 0;
+  min-height: 100vh;
+  box-shadow: 2px 0 12px rgba(60,60,60,0.07);
+}
+.sidebar-logo {
+  width: 80px;
+  margin-bottom: 12px;
+}
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-text-secondary);
+}
+.sidebar-header span {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+}
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 32px;
+}
+.sidebar-nav li {
+  margin-bottom: 18px;
+}
+.sidebar-nav a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.sidebar-nav a:hover {
+  color: var(--color-accent);
+}
+.main-panel {
+  flex: 1;
+  padding: 40px 48px 32px 48px;
+  background: var(--color-bg-secondary);
+}
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.logout-btn {
+  background: #F2B5B5;
+  color: var(--color-btn-text);
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.logout-btn:hover {
+  background: #e57373;
+}
+.dashboard-cards {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 32px;
+}
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(60,60,60,0.07);
+  padding: 24px 20px 20px 20px;
+  min-width: 260px;
+  flex: 1 1 0;
+}
+.card h3 {
+  margin-top: 0;
+  color: var(--color-text-secondary);
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+}
+.card ul {
+  padding: 0;
+  list-style: none;
+}
+.card-turnos li {
+  background: var(--color-btn);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+.card-stock li {
+  padding: 7px 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.card-stock .low-stock {
+  background: #fff8e1;
+  color: #ff9800;
+}
+.card-stock .expiring-stock {
+  background: #fffde7;
+  color: #bfa600;
+}
+.card-stock .out-stock {
+  background: #ffebee;
+  color: #e53935;
+}
+.card-ventas li.venta {
+  background: #e8f5e9;
+  color: #388e3c;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.total-ventas {
+  margin-top: 12px;
+  font-weight: bold;
+  color: var(--color-text-secondary);
+}
+.total-ventas .total {
+  color: #43a047;
+  font-size: 1.1rem;
+}
+.dashboard-actions {
+  display: flex;
+  gap: 24px;
+  justify-content: flex-start;
+  margin-top: 12px;
+}
+.dashboard-actions .button {
+  min-width: 180px;
+  font-size: 1.1rem;
+  padding: 12px 0;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .dashboard-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+/* --- LIBROS PANEL MODERNO --- */
+.libros-panel {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(60,60,60,0.10);
+  padding: 36px 32px 32px 32px;
+  max-width: 600px;
+  margin: 0 auto 32px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.libros-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.libros-header .menu-icon {
+  margin-bottom: 10px;
+  color: var(--color-text-secondary);
+}
+.libros-header h2 {
+  margin: 0 0 8px 0;
+  color: var(--color-text-secondary);
+  font-size: 2rem;
+}
+.libros-header p {
+  color: #888;
+  font-size: 1.1rem;
+}
+.libros-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+}
+.libros-btn {
+  display: flex;
+  align-items: center;
+  background: var(--color-btn);
+  color: var(--color-btn-text);
+  border-radius: 8px;
+  padding: 16px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(60,60,60,0.07);
+  transition: background 0.2s, color 0.2s;
+  border: none;
+}
+.libros-btn:hover {
+  background: var(--color-accent);
+  color: var(--color-text-secondary);
+}
+
+/* --- MENÚ HORIZONTAL LIBROS --- */
+.menu-grupo-horizontal {
+  background: var(--color-bg-secondary);
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(60,60,60,0.07);
+  padding: 24px 20px 20px 20px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 32px auto;
+}
+.menu-grupo-horizontal h3 {
+  margin-bottom: 18px;
+  color: #675858;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+.menu-horizontal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+.menu-horizontal li {
+  margin-bottom: 0;
+}
+.menu-horizontal a.button, .dashboard-actions .button {
+  min-width: 180px;
+  font-size: 1.1rem;
+  padding: 12px 0;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+a.button.active, button.active {
+  background-color: #675858;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(103,88,88,0.13);
+  border: 2px solid #4d3e3e;
+}
+@media (max-width: 900px) {
+  .menu-horizontal {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+.input-lg {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #fff;
+  color: #000;
+  margin-bottom: 10px;
+}
+.button-lg {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 12px 0;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background: #fff;
+  min-width: 180px;
+  box-shadow: 0 2px 12px rgba(60,60,60,0.10);
+  border-radius: 8px;
+  z-index: 1000;
+  margin-top: 6px;
+  padding: 0;
+  list-style: none;
+}
+.dropdown-menu li {
+  width: 100%;
+}
+.dropdown-menu a {
+  display: block;
+  padding: 12px 18px;
+  color: #675858;
+  text-decoration: none;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  background: none;
+  transition: background 0.2s;
+}
+.dropdown-menu a:last-child {
+  border-bottom: none;
+}
+.dropdown-menu a:hover:not(.inactivo) {
+  background: #F3E3CB;
+}
+.dropdown-menu li:first-child a {
+  text-align: center;
+  font-weight: bold;
+}
+.button.inactivo {
+  color: #aaa !important;
+  background: #f5f5f5 !important;
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+/* Badges de stock para catálogo de libros */
+.stock-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.98em;
+  font-weight: 600;
+  margin: 0 2px;
+}
+.stock-cero {
+  background: #ffebee;
+  color: #e57373;
+}
+.stock-bajo {
+  background: #fff3e0;
+  color: #ffb74d;
+}
+.stock-ok {
+  background: #e8f5e9;
+  color: #43a047;
+}
+
+/* Botones de acción con iconos */
+.icon-btn {
+  background: none;
+  border: none;
+  color: #675858;
+  font-size: 1.2em;
+  margin: 0 4px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 5px;
+  transition: background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover {
+  background: #f3e3cb;
+}
+.icon-btn.delete {
+  color: #e57373;
+}
+.icon-btn.delete:hover {
+  background: #ffebee;
+}
+.icon-btn[title="Vender"] {
+  color: #64b5f6;
+}
+.icon-btn[title="Vender"]:hover {
+  background: #e3f2fd;
+}

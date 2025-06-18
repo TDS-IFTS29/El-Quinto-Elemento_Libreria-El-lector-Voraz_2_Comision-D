@@ -1,0 +1,83 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box(style="top:20px;right:5vw;max-width:240px;padding:14px 12px;font-size:1rem;")
+      h2(style="font-size:1.1rem;margin:0 0 8px 0;color:#675858;") Registrar venta de libro
+      p(style="margin:0;color:#675858;") Ingresa los datos para registrar una nueva venta.
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="#")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header
+        h1 Nueva Venta
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-book.fa-2x
+        h3 Libros
+        ul.menu-horizontal
+          li: a.button(href="/libros") Catálogo de libros
+          li: a.button(href="/libros/nuevo") Agregar libro
+          li: a.button(href="/libros/ventas") Listado de ventas
+          li: a.button.active(href="/libros/ventas/nueva") Registrar venta
+          li: a.button(href="/libros/ventas/reportes") Ver reportes de ventas
+      section.nueva-venta-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+        .form-box.nueva-venta-form(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+          h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Registrar Nueva Venta
+          form#form-nueva-venta(style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+            div
+              label(for="libro" style="color:#675858;font-size:1rem;margin-bottom:4px;") Libro:
+              select(name="libro" id="libro" required style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                option(value="") Selecciona un libro
+                each libro in libros
+                  if libroSeleccionado && libroSeleccionado == libro._id.toString()
+                    option(value=libro._id data-precio=libro.precio selected) #{libro.nombre} - #{libro.autor}
+                  else
+                    option(value=libro._id data-precio=libro.precio) #{libro.nombre} - #{libro.autor}
+            div#precio-libro-box(style="margin-bottom:10px;")
+              label(style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+              input(type="text" id="precio-libro" readonly class="input-lg" style="width:100%;background:#eee;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="cantidad" style="color:#675858;font-size:1rem;margin-bottom:4px;") Cantidad:
+              input(type="number" name="cantidad" id="cantidad" min="1" required style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div#total-venta-box(style="margin-bottom:10px;")
+              label(style="color:#675858;font-size:1rem;margin-bottom:4px;") Total:
+              input(type="text" id="total-venta" readonly class="input-lg" style="width:100%;background:#eee;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              button(type="submit" class="button" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Registrar
+        a.button(href="/libros" style="margin-top:18px;") Volver al catálogo
+    script(src="/js/libros/nueva_venta.js")
+    script(src="/js/libros/nueva_venta_libro.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

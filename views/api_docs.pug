@@ -18,59 +18,85 @@ html
     h1 Documentación de la API
 
     .endpoint
-      h2 Productos API
+      h2 Libros API
 
       h3
         span.method.get GET
-        | /api/productos
-      p Obtiene una lista de todos los productos.
+        | /api/libros
+      p Obtiene una lista de todos los libros.
       pre
         code.
-          GET /api/productos
+          GET /api/libros
 
       h3
         span.method.get GET
-        | /api/productos/:id
-      p Obtiene un producto por su ObjectId.
+        | /api/libros/:id
+      p Obtiene un libro por su ObjectId.
       pre
         code.
-          GET /api/productos/ID_DEL_PRODUCTO
+          GET /api/libros/ID_DEL_LIBRO
 
       h3
         span.method.post POST
-        | /api/productos
-      p Crea un nuevo producto.
+        | /api/libros
+      p Crea un nuevo libro.
       pre
         code.
-          POST /api/productos
+          POST /api/libros
           Content-Type: application/json
           {
-            "nombre": "Nombre del producto",
+            "nombre": "Nombre del libro",
             "autor": "Autor",
-            "precio": 123.45
+            "precio": 123.45,
+            "genero": "Novela",
+            "stock": 10
           }
 
       h3
         span.method.patch PATCH
-        | /api/productos/:id
-      p Edita un producto existente.
+        | /api/libros/:id
+      p Edita un libro existente.
       pre
         code.
-          PATCH /api/productos/ID_DEL_PRODUCTO
+          PATCH /api/libros/ID_DEL_LIBRO
           Content-Type: application/json
           {
             "nombre": "Nuevo nombre",
             "autor": "Nuevo autor",
-            "precio": 99.99
+            "precio": 99.99,
+            "genero": "Cuento",
+            "stock": 5
           }
 
       h3
         span.method.delete DELETE
-        | /api/productos/:id
-      p Elimina un producto por su ObjectId.
+        | /api/libros/:id
+      p Elimina un libro por su ObjectId.
       pre
         code.
-          DELETE /api/productos/ID_DEL_PRODUCTO
+          DELETE /api/libros/ID_DEL_LIBRO
+
+      h3
+        span.method.post POST
+        | /api/libros/ventas
+      p Registra una nueva venta de libro.
+      pre
+        code.
+          POST /api/libros/ventas
+          Content-Type: application/json
+          {
+            "libro": "ID_DEL_LIBRO",
+            "cantidad": 2
+          }
+      p Respuesta exitosa:
+      pre
+        code.
+          {
+            "_id": "ID_VENTA",
+            "libro": "ID_DEL_LIBRO",
+            "cantidad": 2,
+            "fecha": "2025-06-18T12:34:56.789Z"
+          }
 
     .endpoint
       h2 Proveedores API
@@ -124,3 +150,56 @@ html
       pre
         code.
           DELETE /api/proveedores/ID_DEL_PROVEEDOR
+
+    .endpoint
+      h2 Ventas API
+
+      h3
+        span.method.get GET
+        | /api/libros/ventas
+      p Obtiene el historial de ventas de libros (requiere implementación en backend si no existe).
+      pre
+        code.
+          GET /api/libros/ventas
+
+      h3
+        span.method.get GET
+        | /api/libros/ventas/:id
+      p Obtiene los detalles de una venta específica (requiere implementación en backend si no existe).
+      pre
+        code.
+          GET /api/libros/ventas/ID_VENTA
+
+      h3
+        span.method.delete DELETE
+        | /api/libros/ventas/:id
+      p Elimina una venta por su ObjectId (requiere implementación en backend si no existe).
+      pre
+        code.
+          DELETE /api/libros/ventas/ID_VENTA
+
+    .endpoint
+      h2 Notas y Consideraciones
+      ul
+        li Todas las rutas requieren Content-Type: application/json para los métodos POST y PATCH.
+        li Los IDs deben ser válidos de MongoDB (ObjectId).
+        li El endpoint de ventas está anidado bajo /api/libros/ventas para mantener la relación con los libros.
+        li Si necesitas endpoints adicionales (reportes, filtros, etc.), agrégalos según la necesidad del sistema.
+        li Las fechas se devuelven en formato ISO 8601 (ejemplo: 2025-06-18T12:34:56.789Z).
+        li Para reportes o listados personalizados, se recomienda implementar endpoints específicos en el backend.
+
+    .endpoint
+      h2 Autenticación y Seguridad
+      p Actualmente, la API no requiere autenticación. Para entornos productivos, se recomienda implementar autenticación JWT o sesiones para proteger los endpoints sensibles (crear, editar, eliminar).
+      ul
+        li Para agregar autenticación, utiliza middleware como passport.js o express-jwt.
+        li Protege los endpoints POST, PATCH y DELETE para evitar modificaciones no autorizadas.
+        li Considera agregar roles de usuario (admin, vendedor, etc.) según las necesidades del sistema.
+
+    .endpoint
+      h2 Ejemplo de Respuesta de Error
+      pre
+        code.
+          {
+            "error": "Mensaje descriptivo del error"
+          }

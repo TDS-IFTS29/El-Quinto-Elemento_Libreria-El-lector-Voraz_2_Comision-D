@@ -116,32 +116,32 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 
 ## Rutas Principales
 
-| Método | Ruta                       | Descripción                              |
-|--------|----------------------------|------------------------------------------|
-| GET    | /                          | Página principal                         |
-| GET    | /catalogo                  | Vista de catálogo de productos (Pug)     |
-| GET    | /productos/nuevo           | Formulario nuevo producto                |
-| GET    | /productos/editar/:id      | Formulario de edición de producto        |
-| GET    | /proveedores/catalogo      | Vista de proveedores con acciones        |
-| GET    | /proveedores/nuevo         | Formulario nuevo proveedor               |
-| GET    | /proveedores/editar/:id    | Formulario de edición de proveedor       |
-| GET    | /ventas/catalogo           | Historial de ventas                      |
-| GET    | /ventas/nueva              | Formulario registrar venta               |
-| GET    | /ventas/reportes           | Vista con reportes dinámicos             |
-| GET    | /api/productos             | Listar productos (JSON)                  |
-| GET    | /api/productos/:id         | Obtener un producto                      |
-| POST   | /api/productos             | Crear producto                           |
-| PATCH  | /api/productos/:id         | Actualizar producto                      |
-| DELETE | /api/productos/:id         | Eliminar producto                        |
-| GET    | /api/proveedores           | Listar proveedores (JSON)                |
-| GET    | /api/proveedores/:id       | Obtener proveedor                        |
-| POST   | /api/proveedores           | Crear proveedor                          |
-| PATCH  | /api/proveedores/:id       | Actualizar proveedor                     |
-| DELETE | /api/proveedores/:id       | Eliminar proveedor                       |
-| GET    | /api/ventas                | Listar ventas (JSON)                     |
-| POST   | /api/ventas                | Registrar nueva venta                    |
-| GET    | /api/ventas/mas-vendidos   | JSON con los productos más vendidos      |
-| GET    | /api/ventas/ventas-semana  | JSON con ventas de la última semana      |
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /                                | Página principal                         |
+| GET    | /libros/catalogo                 | Vista de catálogo de libros (Pug)        |
+| GET    | /libros/nuevo                    | Formulario nuevo libro                   |
+| GET    | /libros/editar/:id               | Formulario de edición de libro           |
+| GET    | /proveedor/catalogo_proveedores  | Vista de proveedores con acciones        |
+| GET    | /proveedor/nuevo_proveedor       | Formulario nuevo proveedor               |
+| GET    | /proveedor/editar_proveedor/:id  | Formulario de edición de proveedor       |
+| GET    | /libros/ventas                   | Historial de ventas de libros            |
+| GET    | /libros/ventas/nueva             | Formulario registrar venta de libro      |
+| GET    | /libros/ventas/reportes          | Vista con reportes dinámicos             |
+| GET    | /api/libros                      | Listar libros (JSON)                     |
+| GET    | /api/libros/:id                  | Obtener un libro                         |
+| POST   | /api/libros                      | Crear libro                              |
+| PATCH  | /api/libros/:id                  | Actualizar libro                         |
+| DELETE | /api/libros/:id                  | Eliminar libro                           |
+| GET    | /api/proveedores                 | Listar proveedores (JSON)                |
+| GET    | /api/proveedores/:id             | Obtener proveedor                        |
+| POST   | /api/proveedores                 | Crear proveedor                          |
+| PATCH  | /api/proveedores/:id             | Actualizar proveedor                     |
+| DELETE | /api/proveedores/:id             | Eliminar proveedor                       |
+| GET    | /api/libros/ventas               | Listar ventas de libros (JSON)           |
+| POST   | /api/libros/ventas               | Registrar nueva venta de libro           |
+| GET    | /api/libros/ventas/mas-vendidos  | JSON con los libros más vendidos         |
+| GET    | /api/libros/ventas/ventas-semana | JSON con ventas de la última semana      |
 
 ## Grupo "El Quinto Elemento" - Roles del Equipo
 

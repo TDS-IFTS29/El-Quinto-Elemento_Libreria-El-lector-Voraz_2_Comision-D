@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { verInicio } = require('../controllers/homeController');
+const { vistaDashboard } = require('../controllers/librosController');
 
-router.get('/', verInicio); // Muestra la vista principal en /inicio
+// Dashboard con ventas recientes en /inicio
+router.get('/', vistaDashboard);
 
 module.exports = router;

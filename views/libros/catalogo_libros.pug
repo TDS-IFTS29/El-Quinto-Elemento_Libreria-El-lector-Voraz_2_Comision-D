@@ -1,0 +1,73 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Explora, gestiona y vende tus libros de manera eficiente!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="#")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header
+        h1 Catálogo de Libros
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-book.fa-2x
+        h3 Libros
+        ul.menu-horizontal
+          li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/libros") Catálogo de libros
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/libros/nuevo") Agregar libro
+          li: a.button(class=(activeMenu === 'ventas' ? 'active' : ''), href="/libros/ventas") Listado de ventas
+          li: a.button(class=(activeMenu === 'nueva' ? 'active' : ''), href="/libros/ventas/nueva") Registrar venta
+          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/libros/ventas/reportes") Ver reportes de ventas
+      section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          thead
+            tr
+              th Nombre
+              th Autor
+              th Precio
+              th Género
+              th Stock
+              th Última venta
+              th Acciones
+          tbody#tabla-libros
+            tr
+              td(colspan="7") Cargando libros...
+        a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
+    script(src="/js/libros/catalogo_libro.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

@@ -1,0 +1,73 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box(style="top:20px;right:5vw;max-width:240px;padding:14px 12px;font-size:1rem;")
+      h2(style="font-size:1.1rem;margin:0 0 8px 0;color:#675858;") Editar Libro
+      p(style="margin:0;color:#675858;") Modifica los datos del libro.
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="#")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header
+        h1 Libros
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-book.fa-2x
+        h3 Libros
+        ul.menu-horizontal
+          li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/libros") Catálogo de libros
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/libros/nuevo") Agregar libro
+          li: a.button(class=(activeMenu === 'ventas' ? 'active' : ''), href="/libros/ventas") Listado de ventas
+          li: a.button(class=(activeMenu === 'nueva' ? 'active' : ''), href="/libros/ventas/nueva") Registrar venta
+          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/libros/ventas/reportes") Ver reportes de ventas
+      section.editar-libro-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+        .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+          h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Editar Libro
+          form#form-editar-libro(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+            input(type="hidden" id="libro-id" name="id" value=libro && libro._id ? libro._id : '')
+            div
+              label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
+              input(type="text" name="nombre" id="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.nombre ? libro.nombre : '')
+            div
+              label(for="autor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Autor:
+              input(type="text" name="autor" id="autor" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.autor ? libro.autor : '')
+            div
+              label(for="precio" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+              input(type="number" name="precio" id="precio" step="0.01" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.precio ? libro.precio : '')
+            div
+              label(for="stock" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock:
+              input(type="number" name="stock" id="stock" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.stock ? libro.stock : 0)
+            div
+              button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar Cambios
+        a.button(href="/libros" style="margin-top:18px;") Volver al catálogo
+    script(src="/js/libros/editar_libro.js")

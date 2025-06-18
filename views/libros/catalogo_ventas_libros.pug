@@ -1,0 +1,83 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Consulta y gestiona todas las ventas de tus libros!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="#")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header
+        h1 Historial de Ventas
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-book.fa-2x
+        h3 Libros
+        ul.menu-horizontal
+          li: a.button(href="/libros") Catálogo de libros
+          li: a.button(href="/libros/nuevo") Agregar libro
+          li: a.button.active(href="/libros/ventas") Listado de ventas
+          li: a.button(href="/libros/ventas/nueva") Registrar venta
+          li: a.button(href="/libros/ventas/reportes") Ver reportes de ventas
+      section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        .catalogo-header(style="display:flex;justify-content:center;align-items:center;gap:24px;margin-bottom:18px;")
+          // Se eliminó el logo de El Lector Voraz aquí
+        table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);width:100%;max-width:700px;margin:0 auto;")
+          thead
+            tr
+              th Fecha
+              th Libro
+              th Autor
+              th Cantidad
+          tbody
+            if ventas && ventas.length
+              each venta in ventas
+                tr
+                  td= new Date(venta.fecha).toLocaleDateString()
+                  td= venta.producto && venta.producto.nombre ? venta.producto.nombre : venta.nombreLibro
+                  td= venta.producto && venta.producto.autor ? venta.producto.autor : venta.autorLibro
+                  td= venta.cantidad
+            else
+              tr
+                td(colspan="4") No hay ventas registradas.
+        .catalogo-actions(style="display:flex;gap:16px;justify-content:center;margin-top:18px;")
+          a.button(href="/libros/ventas/nueva") Registrar nueva venta
+          a.button(href="/libros/ventas/reportes") Ver reportes de ventas
+          a.button(href="/inicio") Volver al inicio
+    script(src="/js/libros/catalogo_ventas_libros.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

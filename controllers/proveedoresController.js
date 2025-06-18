@@ -11,7 +11,10 @@ async function listar(req, res) {
 async function crear(req, res) {
   const nuevo = new Proveedor({
     nombre: req.body.nombre,
-    contacto: req.body.contacto
+    mail: req.body.mail,
+    tipo_proveedor: req.body.tipo_proveedor,
+    whatsapp: req.body.whatsapp,
+    sitio_web: req.body.sitio_web
   });
   await nuevo.save();
   res.status(201).json(nuevo); // Cambiado a status 201 y respuesta JSON
@@ -37,7 +40,10 @@ async function actualizar(req, res) {
   const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).json({ error: 'Proveedor no encontrado' });
   proveedor.nombre = req.body.nombre ?? proveedor.nombre;
-  proveedor.contacto = req.body.contacto ?? proveedor.contacto;
+  proveedor.mail = req.body.mail ?? proveedor.mail;
+  proveedor.tipo_proveedor = req.body.tipo_proveedor ?? proveedor.tipo_proveedor;
+  proveedor.whatsapp = req.body.whatsapp ?? proveedor.whatsapp;
+  proveedor.sitio_web = req.body.sitio_web ?? proveedor.sitio_web;
   await proveedor.save();
   res.status(200).json(proveedor); // status 200 explícito
 }
@@ -93,9 +99,12 @@ async function guardarEdicionProveedor(req, res) {
   const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).send('Proveedor no encontrado');
   proveedor.nombre = req.body.nombre ?? proveedor.nombre;
-  proveedor.contacto = req.body.contacto ?? proveedor.contacto;
+  proveedor.mail = req.body.mail ?? proveedor.mail;
+  proveedor.tipo_proveedor = req.body.tipo_proveedor ?? proveedor.tipo_proveedor;
+  proveedor.whatsapp = req.body.whatsapp ?? proveedor.whatsapp;
+  proveedor.sitio_web = req.body.sitio_web ?? proveedor.sitio_web;
   await proveedor.save();
-  res.redirect('/proveedores/catalogo');
+  res.redirect('/proveedores');
 }
 
 module.exports = {

@@ -55,8 +55,20 @@ block content
               label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
               input(type="text" name="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.nombre ? proveedor.nombre : '')
             div
-              label(for="contacto" style="color:#675858;font-size:1rem;margin-bottom:4px;") Contacto:
-              input(type="text" name="contacto" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.contacto ? proveedor.contacto : '')
+              label(for="mail" style="color:#675858;font-size:1rem;margin-bottom:4px;") Mail:
+              input(type="text" name="mail" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.mail ? proveedor.mail : '')
+            div
+              label(for="tipo_proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Tipo de proveedor:
+              select(name="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
+                option(value="libreria" selected=proveedor && proveedor.tipo_proveedor==='libreria') Librería
+                option(value="cafeteria" selected=proveedor && proveedor.tipo_proveedor==='cafeteria') Cafetería
+                option(value="utileria" selected=proveedor && proveedor.tipo_proveedor==='utileria') Utilería
+            div
+              label(for="whatsapp" style="color:#675858;font-size:1rem;margin-bottom:4px;") WhatsApp:
+              input(type="text" name="whatsapp" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.whatsapp ? proveedor.whatsapp : '')
+            div
+              label(for="sitio_web" style="color:#675858;font-size:1rem;margin-bottom:4px;") Sitio web:
+              input(type="text" name="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.sitio_web ? proveedor.sitio_web : '')
             div
               button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar cambios
         a.button(href="/proveedores" style="margin-top:18px;") Volver al catálogo

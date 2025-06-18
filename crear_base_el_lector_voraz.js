@@ -17,11 +17,17 @@ async function crearBaseDeDatos() {
 
   // Proveedores de ejemplo
   const proveedores = [
-    { nombre: 'Editorial Sudamericana', contacto: 'sudamericana@editorial.com' },
-    { nombre: 'Planeta Libros', contacto: 'contacto@planeta.com' },
-    { nombre: 'Ediciones Santillana', contacto: 'info@santillana.com' },
-    { nombre: 'Penguin Random House', contacto: 'ventas@penguinrandomhouse.com' },
-    { nombre: 'Siglo XXI Editores', contacto: 'info@sigloxxieditores.com' }
+    { nombre: 'Editorial Sudamericana', mail: 'sudamericana@editorial.com', tipo_proveedor: 'libreria', whatsapp: '+5491111111111', sitio_web: 'https://sudamericana.com' },
+    { nombre: 'Planeta Libros', mail: 'contacto@planeta.com', tipo_proveedor: 'libreria', whatsapp: '+5492222222222', sitio_web: 'https://planeta.com' },
+    { nombre: 'Ediciones Santillana', mail: 'info@santillana.com', tipo_proveedor: 'libreria', whatsapp: '+5493333333333', sitio_web: 'https://santillana.com' },
+    { nombre: 'Penguin Random House', mail: 'ventas@penguinrandomhouse.com', tipo_proveedor: 'libreria', whatsapp: '+5494444444444', sitio_web: 'https://penguinrandomhouse.com' },
+    { nombre: 'Siglo XXI Editores', mail: 'info@sigloxxieditores.com', tipo_proveedor: 'libreria', whatsapp: '+5495555555555', sitio_web: 'https://sigloxxieditores.com' },
+    // Cafetería
+    { nombre: 'Café Martínez', mail: 'contacto@cafemartinez.com', tipo_proveedor: 'cafeteria', whatsapp: '+5496666666666', sitio_web: 'https://cafemartinez.com' },
+    { nombre: 'Bonafide', mail: 'info@bonafide.com', tipo_proveedor: 'cafeteria', whatsapp: '+5497777777777', sitio_web: 'https://bonafide.com' },
+    // Utilería
+    { nombre: 'Utilería Express', mail: 'ventas@utileriaexpress.com', tipo_proveedor: 'utileria', whatsapp: '+5498888888888', sitio_web: 'https://utileriaexpress.com' },
+    { nombre: 'Papelería Central', mail: 'info@papeleriacentral.com', tipo_proveedor: 'utileria', whatsapp: '+5499999999999', sitio_web: 'https://papeleriacentral.com' }
   ];
 
   // Libros de ejemplo con stock y última reposición (stock aleatorio entre 0 y 15)

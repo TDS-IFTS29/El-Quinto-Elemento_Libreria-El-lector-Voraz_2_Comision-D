@@ -9,7 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const fila = document.createElement('tr');
         fila.innerHTML = `
           <td>${p.nombre}</td>
-          <td>${p.contacto}</td>
+          <td>${p.tipo_proveedor ? p.tipo_proveedor.charAt(0).toUpperCase() + p.tipo_proveedor.slice(1) : ''}</td>
+          <td>${p.mail}</td>
+          <td>${p.whatsapp ? `<a href='https://wa.me/${p.whatsapp.replace(/[^\d]/g, '')}' target='_blank'>${p.whatsapp}</a>` : ''}</td>
+          <td>${p.sitio_web ? `<a href='${p.sitio_web}' target='_blank'>${p.sitio_web}</a>` : ''}</td>
           <td style="text-align:center;">
             <a href="/proveedores/editar/${p._id}" class="icon-btn" title="Editar"><i class="fas fa-edit"></i></a>
             <button data-id="${p._id}" class="icon-btn delete" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
@@ -19,9 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       tabla.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('delete')) {
-          const id = e.target.dataset.id;
-          if (confirm('¿Seguro que querés eliminar este proveedor?')) {
+        let btn = e.target;
+        if (btn.classList.contains('delete') || (btn.closest && btn.closest('button.delete'))) {
+          if (!btn.classList.contains('delete')) {
+            btn = btn.closest('button.delete');
+          }
+          const id = btn.dataset.id;
+          if (id && confirm('¿Seguro que querés eliminar este proveedor?')) {
             const resp = await fetch(`/api/proveedores/${id}`, { method: 'DELETE' });
             if (resp.ok) {
               alert('Proveedor eliminado exitosamente');
@@ -34,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(error => {
-      tabla.innerHTML = '<tr><td colspan="3">Error al cargar proveedores</td></tr>';
+      tabla.innerHTML = '<tr><td colspan="6">Error al cargar proveedores</td></tr>';
       console.error(error);
     });
 });

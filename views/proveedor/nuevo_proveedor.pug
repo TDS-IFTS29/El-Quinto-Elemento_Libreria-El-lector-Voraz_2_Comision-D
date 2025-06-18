@@ -21,8 +21,20 @@ html
             label(for="nombre" style="color:#675858;") Nombre:
             input(type="text" name="nombre" required class="input-lg" style="width:100%;margin-bottom:10px;")
           div
-            label(for="contacto" style="color:#675858;") Contacto:
-            input(type="text" name="contacto" required class="input-lg" style="width:100%;margin-bottom:18px;")
+            label(for="mail" style="color:#675858;") Mail:
+            input(type="text" name="mail" required class="input-lg" style="width:100%;margin-bottom:10px;")
+          div
+            label(for="tipo_proveedor" style="color:#675858;") Tipo de proveedor:
+            select(name="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
+              option(value="libreria") Librería
+              option(value="cafeteria") Cafetería
+              option(value="utileria") Utilería
+          div
+            label(for="whatsapp" style="color:#675858;") WhatsApp:
+            input(type="text" name="whatsapp" class="input-lg" style="width:100%;margin-bottom:10px;" placeholder="Ej: +5491122334455")
+          div
+            label(for="sitio_web" style="color:#675858;") Sitio web:
+            input(type="text" name="sitio_web" class="input-lg" style="width:100%;margin-bottom:18px;" placeholder="https://..." )
           div
             button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;") Guardar
       a.button(href="/proveedores/catalogo" style="margin-top:18px;") Volver al catálogo

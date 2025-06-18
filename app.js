@@ -42,6 +42,7 @@ app.use('/api-docs', require('./routes/apiDocs'));
 // app.use('/api/productos', require('./routes/api/productos'));
 app.use('/api/proveedores', require('./routes/api/proveedores'));
 app.use('/api/libros', require('./routes/api/libros'));
+// app.use('/api/proveedores_libros', require('./routes/api/proveedores_libros'));
 // app.use('/api/ventas', require('./routes/api/ventas'));
 // app.use('/api/debug', require('./routes/debug'));
 

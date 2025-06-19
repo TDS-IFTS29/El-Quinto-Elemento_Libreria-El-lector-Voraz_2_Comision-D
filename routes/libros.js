@@ -21,5 +21,14 @@ router.get('/nuevo', (req, res) => {
 router.get('/editar/:id', (req, res) => {
   res.render('libros/editar_libro', { activeMenu: 'editar', libroId: req.params.id });
 });
+router.get('/ventas/editar/:id', (req, res) => {
+  res.render('libros/editar_venta', { ventaId: req.params.id });
+});
+router.get('/ventas/nueva', (req, res) => {
+  res.render('libros/nueva_venta', { libros: [] });
+});
+router.get('/ventas/reportes', (req, res) => {
+  res.render('libros/reportes_ventas_libros', { libros: [] });
+});
 
 module.exports = router;

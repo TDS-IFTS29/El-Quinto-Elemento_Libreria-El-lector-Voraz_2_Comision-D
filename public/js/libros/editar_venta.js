@@ -1,17 +1,19 @@
-// public/js/nueva_venta.js
-// Actualizado para mostrar el precio y el total en tiempo real y cargar libros vía fetch
+// JS para editar una venta de libro vía API RESTful
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const form = document.getElementById('form-nueva-venta');
+  const form = document.getElementById('form-editar-venta');
   const selectLibro = document.getElementById('libro');
   const precioInput = document.getElementById('precio-libro');
   const cantidadInput = document.getElementById('cantidad');
   const totalInput = document.getElementById('total-venta');
 
-  // Cargar libros vía API
+  // Obtener el ID de la venta desde la URL
+  const ventaId = window.location.pathname.split('/').pop();
+
+  // Cargar libros y datos de la venta
   try {
+    // Cargar libros
     const resLibros = await fetch('/api/libros');
-    if (!resLibros.ok) throw new Error('No se pudieron cargar los libros');
     const libros = await resLibros.json();
     libros.forEach(libro => {
       const option = document.createElement('option');
@@ -20,8 +22,17 @@ document.addEventListener('DOMContentLoaded', async () => {
       option.setAttribute('data-precio', libro.precio);
       selectLibro.appendChild(option);
     });
+
+    // Cargar datos de la venta
+    const resVenta = await fetch(`/api/ventas/${ventaId}`);
+    if (!resVenta.ok) throw new Error('No se pudo cargar la venta');
+    const venta = await resVenta.json();
+    selectLibro.value = venta.libro ? venta.libro._id : '';
+    cantidadInput.value = venta.cantidad;
+    precioInput.value = venta.libro ? `$${venta.libro.precio}` : '';
+    totalInput.value = venta.libro ? `$${venta.libro.precio * venta.cantidad}` : '';
   } catch (err) {
-    alert('Error al cargar libros: ' + err.message);
+    alert('Error al cargar datos: ' + err.message);
   }
 
   function actualizarPrecioYTotal() {
@@ -32,42 +43,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     totalInput.value = (precio && cantidad) ? `$${precio * cantidad}` : '';
   }
 
-  if (selectLibro && precioInput && cantidadInput && totalInput) {
-    selectLibro.addEventListener('change', actualizarPrecioYTotal);
-    cantidadInput.addEventListener('input', actualizarPrecioYTotal);
-    // Mostrar precio al cargar si hay libro seleccionado
-    actualizarPrecioYTotal();
-  }
+  selectLibro.addEventListener('change', actualizarPrecioYTotal);
+  cantidadInput.addEventListener('input', actualizarPrecioYTotal);
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-
-    const libro = form.libro.value.trim();
-    const cantidad = parseInt(form.cantidad.value);
-
+    const libro = selectLibro.value;
+    const cantidad = parseInt(cantidadInput.value);
     if (!libro || cantidad <= 0) {
       alert('Por favor, completá los campos correctamente.');
       return;
     }
-
     try {
-      const res = await fetch('/api/ventas', {
-        method: 'POST',
+      const res = await fetch(`/api/ventas/${ventaId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ libro, cantidad })
       });
-
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || 'Error al registrar la venta.');
+        alert(data.error || 'Error al actualizar la venta.');
         return;
       }
-
-      alert('Venta registrada correctamente.');
-      window.location.href = '/libros';
+      alert('Venta actualizada correctamente.');
+      window.location.href = '/libros/ventas';
     } catch (error) {
       alert('Error: ' + error.message);
-      console.error(error);
     }
   });
 });

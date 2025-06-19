@@ -102,27 +102,47 @@ block content
           .editar-proveedor-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
             .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
               h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Editar Proveedor
-              form#form-editar-proveedor(method="post" action="/proveedores/editar/" + (proveedor && proveedor._id ? proveedor._id : '') style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+              form#form-editar-proveedor(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
                 div
                   label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
-                  input(type="text" name="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.nombre ? proveedor.nombre : '')
+                  input(type="text" name="nombre" id="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
                 div
-                  label(for="mail" style="color:#675858;font-size:1rem;margin-bottom:4px;") Mail:
-                  input(type="text" name="mail" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.mail ? proveedor.mail : '')
+                  label(for="mail" style="color:#675858;font-size:1rem;margin-bottom:4px;") Email:
+                  input(type="email" name="mail" id="mail" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
                 div
                   label(for="tipo_proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Tipo de proveedor:
-                  select(name="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
-                    option(value="libreria" selected=proveedor && proveedor.tipo_proveedor==='libreria') Librería
-                    option(value="cafeteria" selected=proveedor && proveedor.tipo_proveedor==='cafeteria') Cafetería
-                    option(value="utileria" selected=proveedor && proveedor.tipo_proveedor==='utileria') Utilería
+                  select(name="tipo_proveedor" id="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
+                    option(value="libreria") Librería
+                    option(value="cafeteria") Cafetería
+                    option(value="utileria") Utilería
                 div
                   label(for="telefono" style="color:#675858;font-size:1rem;margin-bottom:4px;") Teléfono:
-                  input(type="text" name="telefono" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.telefono ? proveedor.telefono : '')
+                  input(type="text" name="telefono" id="telefono" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
                 div
                   label(for="sitio_web" style="color:#675858;font-size:1rem;margin-bottom:4px;") Sitio web:
-                  input(type="text" name="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.sitio_web ? proveedor.sitio_web : '')
+                  input(type="url" name="sitio_web" id="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;")
                 div
                   button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar cambios
+              script(src="/js/proveedores/editar_proveedor.js")
+              script.
+                document.addEventListener('DOMContentLoaded', async () => {
+                  const id = window.location.pathname.split('/').pop();
+                  try {
+                    const resp = await fetch(`/api/proveedores/${id}`);
+                    if (resp.ok) {
+                      const proveedor = await resp.json();
+                      document.getElementById('nombre').value = proveedor.nombre || '';
+                      document.getElementById('mail').value = proveedor.mail || '';
+                      document.getElementById('tipo_proveedor').value = proveedor.tipo_proveedor || 'libreria';
+                      document.getElementById('telefono').value = proveedor.telefono || '';
+                      document.getElementById('sitio_web').value = proveedor.sitio_web || '';
+                    } else {
+                      alert('No se pudo cargar el proveedor');
+                    }
+                  } catch (e) {
+                    alert('Error de red al cargar proveedor');
+                  }
+                });
         else
           section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
             table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")

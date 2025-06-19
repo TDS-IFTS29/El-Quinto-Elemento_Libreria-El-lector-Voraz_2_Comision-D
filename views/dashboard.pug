@@ -42,8 +42,11 @@ block content
               | Usuarios
     main.main-panel
       if libros
-        .main-header
+        .main-header(style="display:flex;justify-content:space-between;align-items:center;")
           h1 Libros
+          .user-info(style="display:flex;align-items:center;gap:12px;")
+            span Admin
+            button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
         .menu-grupo.menu-grupo-horizontal
           .menu-icon
             i.fas.fa-book.fa-2x
@@ -54,9 +57,14 @@ block content
             li: a.button(href="/libros/ventas") Listado de ventas
             li: a.button(href="/libros/ventas/nueva") Registrar venta
             li: a.button(href="/libros/ventas/reportes") Ver reportes de ventas
-      else if proveedores
         .main-header
+          h2 Proveedores
+      else if proveedores
+        .main-header(style="display:flex;justify-content:space-between;align-items:center;")
           h1 Proveedores
+          .user-info(style="display:flex;align-items:center;gap:12px;")
+            span Admin
+            button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
         .menu-grupo.menu-grupo-horizontal
           .menu-icon
             i.fas.fa-truck.fa-2x
@@ -87,7 +95,19 @@ block content
                   input(type="text" name="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.nombre ? proveedor.nombre : '')
                 div
                   label(for="mail" style="color:#675858;font-size:1rem;margin-bottom:4px;") Mail:
-                  input(type="text" name="mail" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.mail ? proveedor.mail : '')
+                  input(type="text" name="mail" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.mail ? proveedor.mail : '')
+                div
+                  label(for="tipo_proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Tipo de proveedor:
+                  select(name="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
+                    option(value="libreria" selected=proveedor && proveedor.tipo_proveedor==='libreria') Librería
+                    option(value="cafeteria" selected=proveedor && proveedor.tipo_proveedor==='cafeteria') Cafetería
+                    option(value="utileria" selected=proveedor && proveedor.tipo_proveedor==='utileria') Utilería
+                div
+                  label(for="whatsapp" style="color:#675858;font-size:1rem;margin-bottom:4px;") WhatsApp:
+                  input(type="text" name="whatsapp" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.whatsapp ? proveedor.whatsapp : '')
+                div
+                  label(for="sitio_web" style="color:#675858;font-size:1rem;margin-bottom:4px;") Sitio web:
+                  input(type="text" name="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.sitio_web ? proveedor.sitio_web : '')
                 div
                   button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar cambios
         else
@@ -107,9 +127,9 @@ block content
             a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
             script(src="/js/proveedor/catalogo_proveedores.js")
       else
-        .main-header
+        .main-header(style="display:flex;justify-content:space-between;align-items:center;")
           h1 Panel Principal
-          .user-info
+          .user-info(style="display:flex;align-items:center;gap:12px;")
             span Admin
             button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
         .dashboard-cards

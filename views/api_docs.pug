@@ -49,7 +49,8 @@ html
             "autor": "Autor",
             "precio": 123.45,
             "genero": "Novela",
-            "stock": 10
+            "stock": 10,
+            "stockMinimo": 5
           }
 
       h3
@@ -65,7 +66,8 @@ html
             "autor": "Nuevo autor",
             "precio": 99.99,
             "genero": "Cuento",
-            "stock": 5
+            "stock": 5,
+            "stockMinimo": 3
           }
 
       h3
@@ -75,28 +77,6 @@ html
       pre
         code.
           DELETE /api/libros/ID_DEL_LIBRO
-
-      h3
-        span.method.post POST
-        | /api/libros/ventas
-      p Registra una nueva venta de libro.
-      pre
-        code.
-          POST /api/libros/ventas
-          Content-Type: application/json
-          {
-            "libro": "ID_DEL_LIBRO",
-            "cantidad": 2
-          }
-      p Respuesta exitosa:
-      pre
-        code.
-          {
-            "_id": "ID_VENTA",
-            "libro": "ID_DEL_LIBRO",
-            "cantidad": 2,
-            "fecha": "2025-06-18T12:34:56.789Z"
-          }
 
     .endpoint
       h2 Proveedores API
@@ -156,27 +136,62 @@ html
 
       h3
         span.method.get GET
-        | /api/libros/ventas
-      p Obtiene el historial de ventas de libros (requiere implementación en backend si no existe).
+        | /api/ventas
+      p Obtiene el historial de ventas de libros.
       pre
         code.
-          GET /api/libros/ventas
+          GET /api/ventas
 
       h3
         span.method.get GET
-        | /api/libros/ventas/:id
-      p Obtiene los detalles de una venta específica (requiere implementación en backend si no existe).
+        | /api/ventas/:id
+      p Obtiene los detalles de una venta específica.
       pre
         code.
-          GET /api/libros/ventas/ID_VENTA
+          GET /api/ventas/ID_VENTA
+
+      h3
+        span.method.post POST
+        | /api/ventas
+      p Registra una nueva venta de libro.
+      pre
+        code.
+          POST /api/ventas
+          Content-Type: application/json
+          {
+            "libro": "ID_DEL_LIBRO",
+            "cantidad": 2
+          }
+      p Respuesta exitosa:
+      pre
+        code.
+          {
+            "_id": "ID_VENTA",
+            "libro": "ID_DEL_LIBRO",
+            "cantidad": 2,
+            "fecha": "2025-06-18T12:34:56.789Z"
+          }
+
+      h3
+        span.method.put PUT
+        | /api/ventas/:id
+      p Edita una venta existente.
+      pre
+        code.
+          PUT /api/ventas/ID_VENTA
+          Content-Type: application/json
+          {
+            "libro": "ID_DEL_LIBRO",
+            "cantidad": 3
+          }
 
       h3
         span.method.delete DELETE
-        | /api/libros/ventas/:id
-      p Elimina una venta por su ObjectId (requiere implementación en backend si no existe).
+        | /api/ventas/:id
+      p Elimina una venta por su ObjectId.
       pre
         code.
-          DELETE /api/libros/ventas/ID_VENTA
+          DELETE /api/ventas/ID_VENTA
 
     .endpoint
       h2 Notas y Consideraciones

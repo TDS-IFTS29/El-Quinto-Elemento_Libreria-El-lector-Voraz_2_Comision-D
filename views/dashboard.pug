@@ -79,12 +79,25 @@ block content
               form#form-nuevo-proveedor(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
                 div
                   label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
-                  input(type="text" name="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                  input(type="text" name="nombre" id="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
                 div
-                  label(for="contacto" style="color:#675858;font-size:1rem;margin-bottom:4px;") Contacto:
-                  input(type="text" name="contacto" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;")
+                  label(for="mail" style="color:#675858;font-size:1rem;margin-bottom:4px;") Email:
+                  input(type="email" name="mail" id="mail" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="tipo_proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Tipo de proveedor:
+                  select(name="tipo_proveedor" id="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
+                    option(value="Libros") Libros
+                    option(value="Utilería") Utilería
+                    option(value="Cafetería") Cafetería
+                div
+                  label(for="telefono" style="color:#675858;font-size:1rem;margin-bottom:4px;") Teléfono:
+                  input(type="text" name="telefono" id="telefono" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="sitio_web" style="color:#675858;font-size:1rem;margin-bottom:4px;") Sitio web:
+                  input(type="url" name="sitio_web" id="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;")
                 div
                   button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
+              script(src="/js/proveedor/nuevo_proveedor.js")
         else if activeMenu === 'editar'
           .editar-proveedor-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
             .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
@@ -103,8 +116,8 @@ block content
                     option(value="cafeteria" selected=proveedor && proveedor.tipo_proveedor==='cafeteria') Cafetería
                     option(value="utileria" selected=proveedor && proveedor.tipo_proveedor==='utileria') Utilería
                 div
-                  label(for="whatsapp" style="color:#675858;font-size:1rem;margin-bottom:4px;") WhatsApp:
-                  input(type="text" name="whatsapp" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.whatsapp ? proveedor.whatsapp : '')
+                  label(for="telefono" style="color:#675858;font-size:1rem;margin-bottom:4px;") Teléfono:
+                  input(type="text" name="telefono" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.telefono ? proveedor.telefono : '')
                 div
                   label(for="sitio_web" style="color:#675858;font-size:1rem;margin-bottom:4px;") Sitio web:
                   input(type="text" name="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.sitio_web ? proveedor.sitio_web : '')

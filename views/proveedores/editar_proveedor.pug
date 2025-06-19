@@ -1,1 +1,46 @@
-// ...existing code from proveedor/editar_proveedor.pug...
+extends ../layout
+
+block content
+  .container.mt-5
+    h2 Editar Proveedor
+    form#form-editar-proveedor(method='POST')
+      .mb-3
+        label.form-label(for='nombre') Nombre
+        input.form-control(type='text', id='nombre', name='nombre', required)
+      .mb-3
+        label.form-label(for='mail') Email
+        input.form-control(type='email', id='mail', name='mail', required)
+      .mb-3
+        label.form-label(for='tipo_proveedor') Tipo de Proveedor
+        select.form-select(id='tipo_proveedor', name='tipo_proveedor', required)
+          option(value='Libros') Libros
+          option(value='Utilería') Utilería
+          option(value='Cafetería') Cafetería
+      .mb-3
+        label.form-label(for='telefono') Teléfono
+        input.form-control(type='text', id='telefono', name='telefono')
+      .mb-3
+        label.form-label(for='sitio_web') Sitio Web
+        input.form-control(type='url', id='sitio_web', name='sitio_web')
+      button.btn.btn-primary(type='submit') Guardar Cambios
+    script(src='/js/proveedor/editar_proveedor.js')
+    script.
+      // Obtener datos del proveedor y rellenar el formulario
+      document.addEventListener('DOMContentLoaded', async () => {
+        const id = window.location.pathname.split('/').pop();
+        try {
+          const resp = await fetch(`/api/proveedores/${id}`);
+          if (resp.ok) {
+            const proveedor = await resp.json();
+            document.getElementById('nombre').value = proveedor.nombre || '';
+            document.getElementById('mail').value = proveedor.mail || '';
+            document.getElementById('tipo_proveedor').value = proveedor.tipo_proveedor || 'Libros';
+            document.getElementById('telefono').value = proveedor.telefono || '';
+            document.getElementById('sitio_web').value = proveedor.sitio_web || '';
+          } else {
+            alert('No se pudo cargar el proveedor');
+          }
+        } catch (e) {
+          alert('Error de red al cargar proveedor');
+        }
+      });

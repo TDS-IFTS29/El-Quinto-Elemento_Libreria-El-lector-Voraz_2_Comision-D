@@ -13,7 +13,7 @@ async function crear(req, res) {
     nombre: req.body.nombre,
     mail: req.body.mail,
     tipo_proveedor: req.body.tipo_proveedor,
-    whatsapp: req.body.whatsapp,
+    telefono: req.body.telefono,
     sitio_web: req.body.sitio_web
   });
   await nuevo.save();
@@ -42,7 +42,7 @@ async function actualizar(req, res) {
   proveedor.nombre = req.body.nombre ?? proveedor.nombre;
   proveedor.mail = req.body.mail ?? proveedor.mail;
   proveedor.tipo_proveedor = req.body.tipo_proveedor ?? proveedor.tipo_proveedor;
-  proveedor.whatsapp = req.body.whatsapp ?? proveedor.whatsapp;
+  proveedor.telefono = req.body.telefono ?? proveedor.telefono;
   proveedor.sitio_web = req.body.sitio_web ?? proveedor.sitio_web;
   await proveedor.save();
   res.status(200).json(proveedor); // status 200 explícito
@@ -101,7 +101,7 @@ async function guardarEdicionProveedor(req, res) {
   proveedor.nombre = req.body.nombre ?? proveedor.nombre;
   proveedor.mail = req.body.mail ?? proveedor.mail;
   proveedor.tipo_proveedor = req.body.tipo_proveedor ?? proveedor.tipo_proveedor;
-  proveedor.whatsapp = req.body.whatsapp ?? proveedor.whatsapp;
+  proveedor.telefono = req.body.telefono ?? proveedor.telefono;
   proveedor.sitio_web = req.body.sitio_web ?? proveedor.sitio_web;
   await proveedor.save();
   res.redirect('/proveedores');

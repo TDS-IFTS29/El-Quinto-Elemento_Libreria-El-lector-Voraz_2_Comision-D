@@ -1,3 +1,27 @@
-// ...existing code from proveedor/nuevo_proveedor.pug...
+extends ../layout
+
+block content
+  .container.mt-5
+    h2 Nuevo Proveedor
+    form#form-nuevo-proveedor(method='POST')
+      .mb-3
+        label.form-label(for='nombre') Nombre
+        input.form-control(type='text', id='nombre', name='nombre', required)
+      .mb-3
+        label.form-label(for='mail') Email
+        input.form-control(type='email', id='mail', name='mail', required)
+      .mb-3
+        label.form-label(for='tipo_proveedor') Tipo de Proveedor
+        select.form-select(id='tipo_proveedor', name='tipo_proveedor', required)
+          option(value='Libros') Libros
+          option(value='Utilería') Utilería
+          option(value='Cafetería') Cafetería
+      .mb-3
+        label.form-label(for='telefono') Teléfono
+        input.form-control(type='text', id='telefono', name='telefono')
+      .mb-3
+        label.form-label(for='sitio_web') Sitio Web
+        input.form-control(type='url', id='sitio_web', name='sitio_web')
+      button.btn.btn-success(type='submit') Agregar Proveedor
+    script(src='/js/proveedor/nuevo_proveedor.js')
     link(rel="stylesheet", href="/css/styles.css")
-// ...existing code...

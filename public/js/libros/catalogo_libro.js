@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
           if (confirm('¿Seguro que querés eliminar este libro? Esta acción no se puede deshacer.')) {
             const resp = await fetch(`/api/libros/${id}`, { method: 'DELETE' });
             if (resp.ok) {
-              // Animación de fade out
               fila.style.transition = 'opacity 0.5s';
               fila.style.opacity = '0';
               setTimeout(() => fila.remove(), 500);
@@ -44,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     })
     .catch(error => {
-      tabla.innerHTML = '<tr><td colspan="4">Error al cargar libros</td></tr>';
+      tabla.innerHTML = '<tr><td colspan="7">Error al cargar libros</td></tr>';
       console.error(error);
     });
 });

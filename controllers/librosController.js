@@ -48,6 +48,10 @@ async function guardarEdicion(req, res) {
     libro.stock = parseInt(req.body.stock);
     if (isNaN(libro.stock) || libro.stock < 0) libro.stock = 0;
   }
+  if (req.body.stockMinimo !== undefined) {
+    libro.stockMinimo = parseInt(req.body.stockMinimo);
+    if (isNaN(libro.stockMinimo) || libro.stockMinimo < 0) libro.stockMinimo = 0;
+  }
   await libro.save();
   res.status(200).json(libro); // status 200 explícito
 }

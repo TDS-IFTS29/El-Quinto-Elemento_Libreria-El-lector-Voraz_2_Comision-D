@@ -36,17 +36,17 @@ async function crearBaseDeDatos() {
       return Math.floor(Math.random() * 16); // 0 a 15
     }
     const libros = [
-      { nombre: 'Cien años de soledad', autor: 'Gabriel García Márquez', precio: 3500, genero: 'Novela', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Rayuela', autor: 'Julio Cortázar', precio: 2800, genero: 'Novela', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'El Aleph', autor: 'Jorge Luis Borges', precio: 3200, genero: 'Cuento', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Sobre héroes y tumbas', autor: 'Ernesto Sabato', precio: 3000, genero: 'Ensayo', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Don Quijote de la Mancha', autor: 'Miguel de Cervantes', precio: 4000, genero: 'Clásico', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Antología poética', autor: 'Pablo Neruda', precio: 2500, genero: 'Poesía', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Romeo y Julieta', autor: 'William Shakespeare', precio: 2700, genero: 'Teatro', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Sapiens', autor: 'Yuval Noah Harari', precio: 3800, genero: 'No Ficción', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'El Principito', autor: 'Antoine de Saint-Exupéry', precio: 2100, genero: 'Infantil', stock: randomStock(), ultimaReposicion: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000) }, // hace más de 6 meses
-      { nombre: 'Harry Potter y la piedra filosofal', autor: 'J.K. Rowling', precio: 2900, genero: 'Juvenil', stock: randomStock(), ultimaReposicion: new Date() },
-      { nombre: 'Fahrenheit 451', autor: 'Ray Bradbury', precio: 2600, genero: 'Ciencia Ficción', stock: randomStock(), ultimaReposicion: new Date() } // Puede ser 0
+      { nombre: 'Cien años de soledad', autor: 'Gabriel García Márquez', precio: 3500, genero: 'Novela', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Rayuela', autor: 'Julio Cortázar', precio: 2800, genero: 'Novela', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'El Aleph', autor: 'Jorge Luis Borges', precio: 3200, genero: 'Cuento', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Sobre héroes y tumbas', autor: 'Ernesto Sabato', precio: 3000, genero: 'Ensayo', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Don Quijote de la Mancha', autor: 'Miguel de Cervantes', precio: 4000, genero: 'Clásico', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Antología poética', autor: 'Pablo Neruda', precio: 2500, genero: 'Poesía', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Romeo y Julieta', autor: 'William Shakespeare', precio: 2700, genero: 'Teatro', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Sapiens', autor: 'Yuval Noah Harari', precio: 3800, genero: 'No Ficción', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'El Principito', autor: 'Antoine de Saint-Exupéry', precio: 2100, genero: 'Infantil', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000) }, // hace más de 6 meses
+      { nombre: 'Harry Potter y la piedra filosofal', autor: 'J.K. Rowling', precio: 2900, genero: 'Juvenil', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() },
+      { nombre: 'Fahrenheit 451', autor: 'Ray Bradbury', precio: 2600, genero: 'Ciencia Ficción', stock: randomStock(), stockMinimo: 5, ultimaReposicion: new Date() } // Puede ser 0
     ];
 
     // Asignar fechas de última venta inventadas (al azar en los últimos 400 días)

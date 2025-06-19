@@ -30,5 +30,8 @@ router.get('/ventas/nueva', (req, res) => {
 router.get('/ventas/reportes', (req, res) => {
   res.render('libros/reportes_ventas_libros', { libros: [] });
 });
+router.get('/ventas', (req, res) => {
+  res.render('libros/catalogo_ventas_libros');
+});
 
 module.exports = router;

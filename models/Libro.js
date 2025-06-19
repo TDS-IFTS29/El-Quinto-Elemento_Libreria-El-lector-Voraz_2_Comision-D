@@ -6,6 +6,7 @@ const libroSchema = new mongoose.Schema({
   precio: { type: Number, required: true },
   genero: { type: String, required: true },
   stock: { type: Number, default: 0 },
+  stockMinimo: { type: Number, default: 5 }, // Nuevo campo para alerta
   ultimaReposicion: { type: Date },
   ultimaVenta: { type: Date } // Nueva propiedad para guardar la última venta
 });

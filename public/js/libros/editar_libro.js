@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
       nombre: form.nombre.value,
       autor: form.autor.value,
       precio: form.precio.value,
-      stock: form.stock.value
+      stock: form.stock.value,
+      stockMinimo: form.stockMinimo.value
     };
     try {
       const resp = await fetch(`/api/libros/${id}`, {

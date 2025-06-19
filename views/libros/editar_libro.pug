@@ -69,7 +69,10 @@ block content
               input(type="number" name="precio" id="precio" step="0.01" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.precio ? libro.precio : '')
             div
               label(for="stock" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock:
-              input(type="number" name="stock" id="stock" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.stock ? libro.stock : 0)
+              input(type="number" name="stock" id="stock" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.stock ? libro.stock : 0)
+            div
+              label(for="stockMinimo" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock mínimo para alerta:
+              input(type="number" name="stockMinimo" id="stockMinimo" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.stockMinimo ? libro.stockMinimo : 5)
             div
               button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar Cambios
         a.button(href="/libros" style="margin-top:18px;") Volver al catálogo
@@ -85,6 +88,7 @@ block content
             document.getElementById('autor').value = libro.autor || '';
             document.getElementById('precio').value = libro.precio || '';
             document.getElementById('stock').value = libro.stock || 0;
+            document.getElementById('stockMinimo').value = libro.stockMinimo || 5;
           } else {
             alert('No se pudo cargar el libro');
           }

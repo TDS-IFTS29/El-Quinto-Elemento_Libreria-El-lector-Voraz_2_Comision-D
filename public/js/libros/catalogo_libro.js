@@ -10,9 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
         fila.innerHTML = `
           <td>${l.nombre}</td>
           <td>${l.autor}</td>
-          <td>${l.genero || '-'}</td>
+          <td>${l.genero || '-'} </td>
           <td>$${l.precio}</td>
-          <td><span class="stock-badge ${l.stock === 0 ? 'stock-cero' : l.stock <= 5 ? 'stock-bajo' : 'stock-ok'}">${l.stock ?? '-'} unidades</span></td>
+          <td><span class="stock-badge ${l.stock === 0 ? 'stock-cero' : l.stock <= (l.stockMinimo ?? 5) ? 'stock-bajo' : 'stock-ok'}">${l.stock ?? '-'} unidades</span></td>
+          <td>${l.stockMinimo ?? 5}</td>
           <td>${l.ultimaVenta ? new Date(l.ultimaVenta).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-'}</td>
           <td style="text-align:center;">
             <a href="/libros/ventas/nueva?libro=${l._id}" class="icon-btn" title="Comprar" style="color:#64b5f6;"><i class="fas fa-shopping-cart"></i></a>
@@ -25,22 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       tabla.addEventListener('click', async (e) => {
-        if (e.target.closest('.delete')) {
-          const btn = e.target.closest('.delete');
-          const id = btn.dataset.id;
-          const fila = btn.closest('tr');
-          if (confirm('¿Seguro que querés eliminar este libro? Esta acción no se puede deshacer.')) {
-            const resp = await fetch(`/api/libros/${id}`, { method: 'DELETE' });
-            if (resp.ok) {
-              fila.style.transition = 'opacity 0.5s';
-              fila.style.opacity = '0';
-              setTimeout(() => fila.remove(), 500);
-              alert('Libro eliminado exitosamente');
-            } else {
-              alert('Error al eliminar el libro');
-            }
-          }
-        }
         if (e.target.closest('.sumar-stock')) {
           const btn = e.target.closest('.sumar-stock');
           const id = btn.dataset.id;
@@ -58,6 +43,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           } catch (err) {
             alert('Error al sumar stock');
+          }
+        }
+
+        if (e.target.closest('.delete')) {
+          const btn = e.target.closest('.delete');
+          const id = btn.dataset.id;
+          const fila = btn.closest('tr');
+          if (confirm('¿Seguro que querés eliminar este libro? Esta acción no se puede deshacer.')) {
+            const resp = await fetch(`/api/libros/${id}`, { method: 'DELETE' });
+            if (resp.ok) {
+              fila.style.transition = 'opacity 0.5s';
+              fila.style.opacity = '0';
+              setTimeout(() => fila.remove(), 500);
+              alert('Libro eliminado exitosamente');
+            } else {
+              alert('Error al eliminar el libro');
+            }
           }
         }
       });

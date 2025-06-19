@@ -122,9 +122,9 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 | GET    | /libros/catalogo                 | Vista de catálogo de libros (Pug)        |
 | GET    | /libros/nuevo                    | Formulario nuevo libro                   |
 | GET    | /libros/editar/:id               | Formulario de edición de libro           |
-| GET    | /proveedor/catalogo_proveedores  | Vista de proveedores con acciones        |
-| GET    | /proveedor/nuevo_proveedor       | Formulario nuevo proveedor               |
-| GET    | /proveedor/editar_proveedor/:id  | Formulario de edición de proveedor       |
+| GET    | /proveedores/catalogo_proveedores  | Vista de proveedores con acciones        |
+| GET    | /proveedores/nuevo_proveedor       | Formulario nuevo proveedor               |
+| GET    | /proveedores/editar_proveedor/:id  | Formulario de edición de proveedor       |
 | GET    | /libros/ventas                   | Historial de ventas de libros            |
 | GET    | /libros/ventas/nueva             | Formulario registrar venta de libro      |
 | GET    | /libros/ventas/reportes          | Vista con reportes dinámicos             |

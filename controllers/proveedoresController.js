@@ -50,11 +50,11 @@ async function actualizar(req, res) {
 
 // Solo vistas
 async function vistaCatalogo(req, res) {
-  res.render('proveedor/catalogo_proveedores');
+  res.render('proveedores/catalogo_proveedores');
 }
 
 function vistaNuevoProveedor(req, res) {
-  res.render('proveedor/nuevo_proveedor');
+  res.render('proveedores/nuevo_proveedor');
 }
 
 async function formularioEditar(req, res) {
@@ -64,7 +64,7 @@ async function formularioEditar(req, res) {
   }
   const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).send('Proveedor no encontrado');
-  res.render('proveedor/editar_proveedor', { proveedor });
+  res.render('proveedores/editar_proveedor', { proveedor });
 }
 
 async function obtener(req, res) {
@@ -83,12 +83,12 @@ async function vistaEditarProveedor(req, res) {
   const id = req.params.id;
   const proveedor = await Proveedor.findById(id);
   if (!proveedor) return res.status(404).send('Proveedor no encontrado');
-  res.render('proveedor/editar_proveedor', { proveedor });
+  res.render('proveedores/editar_proveedor', { proveedor });
 }
 
 function vistaCatalogoProveedor(req, res) {
   const exito = req.query.exito;
-  res.render('proveedor/catalogo_proveedores', { exito });
+  res.render('proveedores/catalogo_proveedores', { exito });
 }
 
 async function guardarEdicionProveedor(req, res) {

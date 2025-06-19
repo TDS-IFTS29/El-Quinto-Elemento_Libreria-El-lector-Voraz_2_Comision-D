@@ -86,9 +86,9 @@ block content
                 div
                   label(for="tipo_proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Tipo de proveedor:
                   select(name="tipo_proveedor" id="tipo_proveedor" required class="input-lg" style="width:100%;margin-bottom:10px;")
-                    option(value="Libros") Libros
-                    option(value="Utilería") Utilería
-                    option(value="Cafetería") Cafetería
+                    option(value="libreria") Librería
+                    option(value="cafeteria") Cafetería
+                    option(value="utileria") Utilería
                 div
                   label(for="telefono" style="color:#675858;font-size:1rem;margin-bottom:4px;") Teléfono:
                   input(type="text" name="telefono" id="telefono" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
@@ -102,7 +102,7 @@ block content
           .editar-proveedor-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
             .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
               h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Editar Proveedor
-              form#form-editar-proveedor(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+              form#form-editar-proveedor(method="post" action="/proveedores/editar/" + (proveedor && proveedor._id ? proveedor._id : '') style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
                 div
                   label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
                   input(type="text" name="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=proveedor && proveedor.nombre ? proveedor.nombre : '')
@@ -181,7 +181,7 @@ block content
               li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Cafetería (próximamente)
               li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Utilería (próximamente)
           a.button(href="/libros/nuevo") Nuevo Libro
-          a.button(href="/proveedores/nuevo") Nuevo Proveedor
+          a.button(href="#proveedores-nuevo" onclick="mostrarSeccion('proveedores','nuevo');return false;" style="margin-top:18px;") Nuevo Proveedor
           button.button(type="button") Nuevo Usuario
     script.
       const btn = document.getElementById('ventaRapidaBtn');
@@ -207,6 +207,7 @@ block content
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       });
+    script(src="/js/dashboard.js")
   footer
     hr
     p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29

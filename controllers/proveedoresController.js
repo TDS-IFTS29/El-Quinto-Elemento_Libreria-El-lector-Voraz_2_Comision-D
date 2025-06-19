@@ -9,15 +9,20 @@ async function listar(req, res) {
 }
 
 async function crear(req, res) {
-  const nuevo = new Proveedor({
-    nombre: req.body.nombre,
-    mail: req.body.mail,
-    tipo_proveedor: req.body.tipo_proveedor,
-    telefono: req.body.telefono,
-    sitio_web: req.body.sitio_web
-  });
-  await nuevo.save();
-  res.status(201).json(nuevo); // Cambiado a status 201 y respuesta JSON
+  try {
+    const nuevo = new Proveedor({
+      nombre: req.body.nombre,
+      mail: req.body.mail,
+      tipo_proveedor: req.body.tipo_proveedor,
+      telefono: req.body.telefono,
+      sitio_web: req.body.sitio_web
+    });
+    await nuevo.save();
+    res.status(201).json(nuevo);
+  } catch (error) {
+    console.error('Error al crear proveedor:', error);
+    res.status(500).json({ error: error.message || 'Error interno al crear proveedor' });
+  }
 }
 
 async function eliminar(req, res) {

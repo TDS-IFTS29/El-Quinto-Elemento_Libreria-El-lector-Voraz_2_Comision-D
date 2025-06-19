@@ -143,7 +143,26 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 | GET    | /api/libros/ventas/mas-vendidos  | JSON con los libros más vendidos         |
 | GET    | /api/libros/ventas/ventas-semana | JSON con ventas de la última semana      |
 
-## Grupo "El Quinto Elemento" - Roles del Equipo
+## Endpoints RESTful principales
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| GET    | /api/libros                 | Listar libros                               |
+| GET    | /api/libros/:id             | Obtener un libro                            |
+| POST   | /api/libros                 | Crear libro (incluye `stockMinimo`)         |
+| PATCH  | /api/libros/:id             | Actualizar libro (incluye `stockMinimo`)    |
+| PATCH  | /api/libros/:id/sumar-stock | Sumar 1 al stock de un libro                |
+| DELETE | /api/libros/:id             | Eliminar libro                              |
+| GET    | /api/proveedores            | Listar proveedores                          |
+| GET    | /api/proveedores/:id        | Obtener proveedor                           |
+| POST   | /api/proveedores            | Crear proveedor                             |
+| PATCH  | /api/proveedores/:id        | Actualizar proveedor                        |
+| DELETE | /api/proveedores/:id        | Eliminar proveedor                          |
+| GET    | /api/ventas                 | Listar ventas                               |
+| GET    | /api/ventas/:id             | Obtener venta                               |
+| POST   | /api/ventas                 | Registrar nueva venta                       |
+| PUT    | /api/ventas/:id             | Editar venta                                |
+| DELETE | /api/ventas/:id             | Eliminar venta                              |
 
 ### Primera parte
 
@@ -162,15 +181,10 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 |-------------------------|---------------------------------------------------------------------|
 | Clausi Damián Andrés    | Migración completa de archivos JSON a MongoDB: scripts, tests, README y datos de ejemplo actualizados. |
 |                         | Diseño y unificación del frontend (paleta pastel, UI coherente, tablas, formularios, botones, documentación)|
-|                         |                                                                     |
 | Descosido Cristian      | MODULO COFFEE                                                       |
 |                         | MODULO LOGIN CON SESION Y CIFRADO                                   |
-|                         |                                                                     |
-|                         |                                                                     |
 | César Antonio Gill      | MODULO LIBRERIA                                                     |
 |                         | MODULO ALERTAS Y REPORTES                                           |
-|                         |                                                                     |
-|                         |                                                                     |
 
 - [Google drive](https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs)
 - [Github](https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D)

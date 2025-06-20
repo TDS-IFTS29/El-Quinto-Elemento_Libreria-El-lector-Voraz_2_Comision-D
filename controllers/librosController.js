@@ -190,11 +190,17 @@ async function vistaReportesVentas(req, res) {
 }
 
 async function vistaDashboard(req, res) {
-  // Obtener todas las ventas y agrupar por libro (como en el reporte)
-  const ventas = await Venta.find().populate('libro');
-  // Ordenar por fecha descendente y tomar las 2 últimas
+  // Obtener todas las ventas del día actual
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  const manana = new Date(hoy);
+  manana.setDate(hoy.getDate() + 1);
+  const ventas = await Venta.find({
+    fecha: { $gte: hoy, $lt: manana }
+  }).populate('libro');
+  // Ordenar por fecha descendente
   ventas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  const ultimas = ventas.slice(0, 2).map(v => ({
+  const ultimas = ventas.map(v => ({
     nombre: v.libro && v.libro.nombre ? v.libro.nombre : v.nombreLibro,
     autor: v.libro && v.libro.autor ? v.libro.autor : v.autorLibro,
     cantidad: v.cantidad,

@@ -177,14 +177,14 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 
 ### Segunda parte
 
-| Integrante               | Rol                                                                 |
+| Integrante               | Rol                                                                |
 |-------------------------|---------------------------------------------------------------------|
 | Clausi Damián Andrés    | FRONTEND                                                            |
-|                         | MODULO LIBRERIA|
+|                         | MODULO LIBRERIA                                                     |
 | Descosido Cristian      | MODULO COFFEE CON REPORTES                                          |
 |                         | MODULO LOGIN CON SESION Y CIFRADO                                   |
 | César Antonio Gill      | MODULO UTILERIA CON REPORTES                                        |
-|                         |                                                                     |
+|                         | Mongo Atlas y Vercel                                                |
 
 - [Google drive](https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs)
 - [Github](https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D)

@@ -35,18 +35,22 @@ async function crearBaseDeDatos() {
     // Libros de ejemplo
     function randomStock() { return Math.floor(Math.random() * 16); }
     function randomStockMinimo() { return Math.floor(Math.random() * 11); } // 0 a 10
+    // 2 libros con stock 0 y sin venta hace más de 6 meses
+    const hace6Meses = new Date(Date.now() - 185 * 24 * 60 * 60 * 1000); // ~6 meses atrás
     const libros = [
-      { nombre: 'Cien años de soledad', autor: 'Gabriel García Márquez', precio: 3500, genero: 'Novela', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Rayuela', autor: 'Julio Cortázar', precio: 2800, genero: 'Novela', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'El Aleph', autor: 'Jorge Luis Borges', precio: 3200, genero: 'Cuento', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Sobre héroes y tumbas', autor: 'Ernesto Sabato', precio: 3000, genero: 'Ensayo', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Don Quijote de la Mancha', autor: 'Miguel de Cervantes', precio: 4000, genero: 'Clásico', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Antología poética', autor: 'Pablo Neruda', precio: 2500, genero: 'Poesía', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Romeo y Julieta', autor: 'William Shakespeare', precio: 2700, genero: 'Teatro', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Sapiens', autor: 'Yuval Noah Harari', precio: 3800, genero: 'No Ficción', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'El Principito', autor: 'Antoine de Saint-Exupéry', precio: 2100, genero: 'Infantil', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000) },
-      { nombre: 'Harry Potter y la piedra filosofal', autor: 'J.K. Rowling', precio: 2900, genero: 'Juvenil', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() },
-      { nombre: 'Fahrenheit 451', autor: 'Ray Bradbury', precio: 2600, genero: 'Ciencia Ficción', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date() }
+      { nombre: 'Cien años de soledad', autor: 'Gabriel García Márquez', precio: 3500, genero: 'Novela', stock: 0, stockMinimo: 3, ultimaReposicion: new Date(), ultimaVenta: hace6Meses },
+      { nombre: 'Rayuela', autor: 'Julio Cortázar', precio: 2800, genero: 'Novela', stock: 0, stockMinimo: 2, ultimaReposicion: new Date(), ultimaVenta: hace6Meses },
+      // 3 libros con stock menor al mínimo y ventas recientes
+      { nombre: 'El Aleph', autor: 'Jorge Luis Borges', precio: 3200, genero: 'Cuento', stock: 1, stockMinimo: 4, ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      { nombre: 'Sobre héroes y tumbas', autor: 'Ernesto Sabato', precio: 3000, genero: 'Ensayo', stock: 2, stockMinimo: 5, ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      { nombre: 'Don Quijote de la Mancha', autor: 'Miguel de Cervantes', precio: 4000, genero: 'Clásico', stock: 1, stockMinimo: 6, ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      // El resto aleatorios y ventas recientes
+      { nombre: 'Antología poética', autor: 'Pablo Neruda', precio: 2500, genero: 'Poesía', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      { nombre: 'Romeo y Julieta', autor: 'William Shakespeare', precio: 2700, genero: 'Teatro', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      { nombre: 'Sapiens', autor: 'Yuval Noah Harari', precio: 3800, genero: 'No Ficción', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      { nombre: 'El Principito', autor: 'Antoine de Saint-Exupéry', precio: 2100, genero: 'Infantil', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000), ultimaVenta: new Date() },
+      { nombre: 'Harry Potter y la piedra filosofal', autor: 'J.K. Rowling', precio: 2900, genero: 'Juvenil', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(), ultimaVenta: new Date() },
+      { nombre: 'Fahrenheit 451', autor: 'Ray Bradbury', precio: 2600, genero: 'Ciencia Ficción', stock: randomStock(), stockMinimo: randomStockMinimo(), ultimaReposicion: new Date(), ultimaVenta: new Date() }
     ];
     function randomUltimaVenta() {
       const dias = Math.floor(Math.random() * 400);
@@ -61,17 +65,17 @@ async function crearBaseDeDatos() {
     await Usuario.create({ nombre: 'admin', email: 'admin', password: '1234' });
 
     // Ventas de ejemplo (solo con libros válidos)
+    // Solo crear ventas para los libros a partir del índice 2 (los demás tendrán ventas recientes)
     const ventas = [
-      { libro: librosInsertados[0]._id, nombreLibro: librosInsertados[0].nombre, autorLibro: librosInsertados[0].autor, cantidad: 2 },
-      { libro: librosInsertados[1]._id, nombreLibro: librosInsertados[1].nombre, autorLibro: librosInsertados[1].autor, cantidad: 1 },
       { libro: librosInsertados[2]._id, nombreLibro: librosInsertados[2].nombre, autorLibro: librosInsertados[2].autor, cantidad: 3 },
-      { libro: librosInsertados[0]._id, nombreLibro: librosInsertados[0].nombre, autorLibro: librosInsertados[0].autor, cantidad: 1 },
-      { libro: librosInsertados[1]._id, nombreLibro: librosInsertados[1].nombre, autorLibro: librosInsertados[1].autor, cantidad: 4 },
-      { libro: librosInsertados[2]._id, nombreLibro: librosInsertados[2].nombre, autorLibro: librosInsertados[2].autor, cantidad: 2 },
-      { libro: librosInsertados[0]._id, nombreLibro: librosInsertados[0].nombre, autorLibro: librosInsertados[0].autor, cantidad: 5 },
-      { libro: librosInsertados[1]._id, nombreLibro: librosInsertados[1].nombre, autorLibro: librosInsertados[1].autor, cantidad: 2 },
-      { libro: librosInsertados[2]._id, nombreLibro: librosInsertados[2].nombre, autorLibro: librosInsertados[2].autor, cantidad: 1 },
-      { libro: librosInsertados[0]._id, nombreLibro: librosInsertados[0].nombre, autorLibro: librosInsertados[0].autor, cantidad: 3 }
+      { libro: librosInsertados[3]._id, nombreLibro: librosInsertados[3].nombre, autorLibro: librosInsertados[3].autor, cantidad: 2 },
+      { libro: librosInsertados[4]._id, nombreLibro: librosInsertados[4].nombre, autorLibro: librosInsertados[4].autor, cantidad: 1 },
+      { libro: librosInsertados[5]._id, nombreLibro: librosInsertados[5].nombre, autorLibro: librosInsertados[5].autor, cantidad: 4 },
+      { libro: librosInsertados[6]._id, nombreLibro: librosInsertados[6].nombre, autorLibro: librosInsertados[6].autor, cantidad: 2 },
+      { libro: librosInsertados[7]._id, nombreLibro: librosInsertados[7].nombre, autorLibro: librosInsertados[7].autor, cantidad: 1 },
+      { libro: librosInsertados[8]._id, nombreLibro: librosInsertados[8].nombre, autorLibro: librosInsertados[8].autor, cantidad: 3 },
+      { libro: librosInsertados[9]._id, nombreLibro: librosInsertados[9].nombre, autorLibro: librosInsertados[9].autor, cantidad: 2 },
+      { libro: librosInsertados[10]._id, nombreLibro: librosInsertados[10].nombre, autorLibro: librosInsertados[10].autor, cantidad: 1 }
     ];
     for (const v of ventas) {
       await new Venta({ ...v, fecha: new Date() }).save();

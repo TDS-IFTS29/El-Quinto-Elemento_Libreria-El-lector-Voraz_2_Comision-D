@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Agrupar ventas por registro individual (por fecha y libro)
     const resumen = ventasFiltradas.map(venta => ({
+      id: venta._id,
       titulo: venta.libro ? venta.libro.nombre : venta.nombreLibro,
       autor: venta.libro ? venta.libro.autor : venta.autorLibro,
       genero: venta.libro ? venta.libro.genero : venta.generoLibro,
@@ -67,6 +68,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>$${libro.precio}</td>
         <td>${libro.cantidad_vendida}</td>
         <td>$${libro.ingresos}</td>
+        <td style="text-align:center;">
+          <a href="/libros/ventas/factura/${libro.id}" target="_blank" title="Imprimir">
+            <i class="fas fa-print" style="color:#675858;font-size:1.2em;"></i>
+          </a>
+        </td>
       `;
       tbody.appendChild(tr);
     });

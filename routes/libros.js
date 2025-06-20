@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const Venta = require('../models/Venta');
+const Libro = require('../models/Libro');
 const {
   vistaNuevoLibro,
   vistaEditarLibro,
@@ -27,11 +29,29 @@ router.get('/ventas/editar/:id', (req, res) => {
 router.get('/ventas/nueva', (req, res) => {
   res.render('libros/nueva_venta', { libros: [] });
 });
-router.get('/ventas/reportes', (req, res) => {
-  res.render('libros/reportes_ventas_libros', { libros: [] });
-});
+router.get('/ventas/reportes', require('../controllers/librosController').vistaReportesVentas);
 router.get('/ventas', (req, res) => {
   res.render('libros/catalogo_ventas_libros');
+});
+router.get('/ventas/factura/:id', async (req, res) => {
+  const ventaId = req.params.id;
+  try {
+    const venta = await Venta.findById(ventaId).populate('libro');
+    if (!venta) return res.render('libros/factura_venta', { venta: null });
+    // Adaptar los campos para la vista
+    const datos = {
+      fecha: venta.fecha,
+      titulo: venta.nombreLibro || (venta.libro && venta.libro.nombre),
+      autor: venta.autorLibro || (venta.libro && venta.libro.autor),
+      genero: venta.generoLibro || (venta.libro && venta.libro.genero),
+      precio: venta.precioLibro,
+      cantidad: venta.cantidad,
+      ingresos: venta.precioLibro * venta.cantidad
+    };
+    res.render('libros/factura_venta', { venta: datos });
+  } catch (e) {
+    res.render('libros/factura_venta', { venta: null });
+  }
 });
 
 module.exports = router;

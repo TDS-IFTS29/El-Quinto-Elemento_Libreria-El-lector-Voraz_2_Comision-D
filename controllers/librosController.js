@@ -182,6 +182,29 @@ async function vistaReportesLibros(req, res) {
   res.render('libros/reportes_libros');
 }
 
+async function vistaReportesVentas(req, res) {
+  // Obtener todas las ventas y armar el array para la tabla
+  const ventas = await Venta.find().populate('libro');
+  let total_ingresos = 0;
+  const libros = ventas.map(v => {
+    const precio = v.precioLibro;
+    const cantidad = v.cantidad;
+    const ingresos = precio * cantidad;
+    total_ingresos += ingresos;
+    return {
+      id: v._id,
+      fecha: v.fecha ? new Date(v.fecha).toLocaleDateString() : '',
+      titulo: v.nombreLibro || (v.libro && v.libro.nombre),
+      autor: v.autorLibro || (v.libro && v.libro.autor),
+      genero: v.generoLibro || (v.libro && v.libro.genero),
+      precio: precio,
+      cantidad_vendida: cantidad,
+      ingresos: ingresos
+    };
+  });
+  res.render('libros/reportes_ventas_libros', { libros, total_ingresos });
+}
+
 async function vistaDashboard(req, res) {
   // Obtener todas las ventas del día actual
   const hoy = new Date();
@@ -247,5 +270,6 @@ module.exports = {
   ventasSemana,
   verCatalogoVentas,
   vistaNuevaVenta,
-  vistaDashboard
+  vistaDashboard,
+  vistaReportesVentas
 };

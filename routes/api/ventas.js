@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const ventasController = require('../../controllers/ventasController');
 
+// Obtener los libros más vendidos
+router.get('/mas-vendidos', ventasController.getMasVendidos);
+
+// Obtener ventas de la última semana
+router.get('/ventas-semana', ventasController.getVentasSemana);
+
 // Obtener todas las ventas
 router.get('/', ventasController.getAllVentas);
 

@@ -25,7 +25,14 @@ describe('API de Ventas de Libros', () => {
       .post('/api/ventas')
       .send(nuevaVenta);
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('mensaje', 'Venta registrada correctamente.');
+    // Ahora se espera el objeto venta con los campos históricos
+    expect(res.body).toHaveProperty('libro', libroId);
+    expect(res.body).toHaveProperty('nombreLibro', 'Rayuela');
+    expect(res.body).toHaveProperty('autorLibro', 'Julio Cortázar');
+    expect(res.body).toHaveProperty('generoLibro', 'Novela');
+    expect(res.body).toHaveProperty('precioLibro', 100);
+    expect(res.body).toHaveProperty('cantidad', 5);
+    expect(res.body).toHaveProperty('fecha');
 
     // Verifica que el stock se haya actualizado
     const libroActualizado = await request(app).get(`/api/libros/${libroId}`);

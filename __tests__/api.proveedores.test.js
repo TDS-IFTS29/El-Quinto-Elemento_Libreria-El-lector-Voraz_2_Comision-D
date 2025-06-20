@@ -13,7 +13,8 @@ describe('API de Proveedores', () => {
   test('POST /api/proveedores debería crear un nuevo proveedor', async () => {
     const nuevoProveedor = {
       nombre: 'Nuevo Proveedor de Prueba',
-      contacto: 'Contacto de Prueba'
+      mail: 'proveedorprueba@mail.com',
+      tipo_proveedor: 'libreria'
     };
     const res = await request(app)
       .post('/api/proveedores')
@@ -21,14 +22,15 @@ describe('API de Proveedores', () => {
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('_id');
     expect(res.body.nombre).toBe(nuevoProveedor.nombre);
-    expect(res.body.contacto).toBe(nuevoProveedor.contacto);
+    expect(res.body.mail).toBe(nuevoProveedor.mail);
   });
 
   // Test para GET /api/proveedores/:id
   test('GET /api/proveedores/:id debería retornar un proveedor específico', async () => {
     const proveedorParaObtener = {
       nombre: 'Proveedor para Obtener',
-      contacto: 'Contacto Obtener'
+      mail: 'obtener@mail.com',
+      tipo_proveedor: 'libreria'
     };
     const postRes = await request(app)
       .post('/api/proveedores')
@@ -39,13 +41,15 @@ describe('API de Proveedores', () => {
     expect(getRes.statusCode).toBe(200);
     expect(getRes.body._id).toBe(proveedorId);
     expect(getRes.body.nombre).toBe(proveedorParaObtener.nombre);
+    expect(getRes.body.mail).toBe(proveedorParaObtener.mail);
   });
 
   // Test para PATCH /api/proveedores/:id
   test('PATCH /api/proveedores/:id debería actualizar un proveedor existente', async () => {
     const proveedorParaActualizar = {
       nombre: 'Proveedor para Actualizar',
-      contacto: 'Contacto Actualizar'
+      mail: 'actualizar@mail.com',
+      tipo_proveedor: 'libreria'
     };
     const postRes = await request(app)
       .post('/api/proveedores')
@@ -53,21 +57,22 @@ describe('API de Proveedores', () => {
     const proveedorId = postRes.body._id;
 
     const datosActualizados = {
-      contacto: 'Nuevo Contacto'
+      mail: 'nuevoactualizar@mail.com'
     };
     const patchRes = await request(app)
       .patch(`/api/proveedores/${proveedorId}`)
       .send(datosActualizados);
     expect(patchRes.statusCode).toBe(200);
     expect(patchRes.body._id).toBe(proveedorId);
-    expect(patchRes.body.contacto).toBe(datosActualizados.contacto);
+    expect(patchRes.body.mail).toBe(datosActualizados.mail);
   });
 
   // Test para DELETE /api/proveedores/:id
   test('DELETE /api/proveedores/:id debería eliminar un proveedor', async () => {
     const proveedorParaEliminar = {
       nombre: 'Proveedor para Eliminar',
-      contacto: 'Contacto Eliminar'
+      mail: 'eliminar@mail.com',
+      tipo_proveedor: 'libreria'
     };
     const postRes = await request(app)
       .post('/api/proveedores')

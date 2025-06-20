@@ -55,9 +55,17 @@ block content
           li: a.button(href="/libros/ventas/nueva") Registrar venta
           li: a.button.active(href="/libros/ventas/reportes") Ver reportes de ventas
       section.reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        .filtros-ventas(style="text-align:center;margin-bottom:18px;")
+          label(for="filtro-fecha" style="font-weight:bold;margin-right:8px;") Filtrar por:
+          select#filtro-fecha(style="padding:4px 8px;")
+            option(value="todo") Todo
+            option(value="dia") Día
+            option(value="semana") Semana
+            option(value="mes") Mes
         table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);width:100%;max-width:700px;margin:0 auto;")
           thead
             tr
+              th Fecha
               th Título
               th Autor
               th Género
@@ -67,17 +75,17 @@ block content
           tbody
             each libro in libros
               tr
+                td= libro.fecha
                 td= libro.titulo
                 td= libro.autor
                 td= libro.genero
-                td= libro.precio
+                td $#{libro.precio}
                 td= libro.cantidad_vendida
-                td= libro.ingresos
+                td $#{libro.ingresos}
           tfoot
             tr
-              td(colspan="4") Total
-              td= total_cantidad_vendida
-              td= total_ingresos
+              td(colspan="6") Total
+              td $#{total_ingresos}
         a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
     script(src="/js/libros/reportes_ventas_libros.js")
     footer

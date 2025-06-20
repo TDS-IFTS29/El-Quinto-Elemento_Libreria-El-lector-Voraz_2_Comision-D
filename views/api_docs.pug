@@ -137,10 +137,74 @@ html
       h3
         span.method.get GET
         | /api/ventas
-      p Obtiene el historial de ventas de libros.
+      p Obtiene el historial de ventas de libros. Cada venta incluye los datos históricos del libro (nombre, autor, género, precio) para mantener el reporte aunque el libro sea eliminado.
       pre
         code.
           GET /api/ventas
+      p Respuesta de ejemplo:
+      pre
+        code.
+          [
+            {
+              "_id": "ID_VENTA",
+              "libro": "ID_DEL_LIBRO",
+              "nombreLibro": "El Aleph",
+              "autorLibro": "Jorge Luis Borges",
+              "generoLibro": "Cuento",
+              "precioLibro": 3200,
+              "cantidad": 3,
+              "fecha": "2025-06-18T12:34:56.789Z"
+            },
+            // ...
+          ]
+      p Puedes filtrar los reportes por día, semana, mes o todo desde el frontend. Las fechas se muestran en formato día/mes/año en la interfaz.
+
+      h3
+        span.method.get GET
+        | /api/ventas/mas-vendidos
+      p Devuelve un array plano con los libros más vendidos en el periodo seleccionado. Permite filtrar por día, semana, mes o todo usando el query param <code>periodo</code> (valores: <code>dia</code>, <code>semana</code>, <code>mes</code>, <code>todo</code>). Por defecto: <code>todo</code>.
+      pre
+        code.
+          GET /api/ventas/mas-vendidos?periodo=semana
+      p Respuesta de ejemplo:
+      pre
+        code.
+          [
+            {
+              "nombreLibro": "El Aleph",
+              "autorLibro": "Jorge Luis Borges",
+              "generoLibro": "Cuento",
+              "precioLibro": 3200,
+              "cantidadVendida": 8
+            },
+            {
+              "nombreLibro": "Rayuela",
+              "autorLibro": "Julio Cortázar",
+              "generoLibro": "Novela",
+              "precioLibro": 4100,
+              "cantidadVendida": 5
+            }
+          ]
+
+      h3
+        span.method.get GET
+        | /api/ventas/ventas-semana
+      p Devuelve la cantidad total de ventas y el ingreso total por cada día de la semana actual. Útil para reportes y gráficos de ventas semanales.
+      pre
+        code.
+          GET /api/ventas/ventas-semana
+      p Respuesta de ejemplo:
+      pre
+        code.
+          [
+            { "dia": "Lunes", "cantidad": 4, "ingresos": 12800 },
+            { "dia": "Martes", "cantidad": 2, "ingresos": 6400 },
+            { "dia": "Miércoles", "cantidad": 0, "ingresos": 0 },
+            { "dia": "Jueves", "cantidad": 1, "ingresos": 3200 },
+            { "dia": "Viernes", "cantidad": 3, "ingresos": 9600 },
+            { "dia": "Sábado", "cantidad": 0, "ingresos": 0 },
+            { "dia": "Domingo", "cantidad": 0, "ingresos": 0 }
+          ]
 
       h3
         span.method.get GET

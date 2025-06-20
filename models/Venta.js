@@ -6,6 +6,8 @@ const ventaSchema = new mongoose.Schema({
   libro: { type: mongoose.Schema.Types.ObjectId, ref: 'Libro', required: true },
   nombreLibro: { type: String, required: true },
   autorLibro: { type: String, required: true },
+  generoLibro: { type: String, required: true },
+  precioLibro: { type: Number, required: true },
   cantidad: { type: Number, required: true },
   fecha: { type: Date, default: Date.now }
 });

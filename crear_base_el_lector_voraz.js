@@ -67,15 +67,15 @@ async function crearBaseDeDatos() {
     // Ventas de ejemplo (solo con libros válidos)
     // Solo crear ventas para los libros a partir del índice 2 (los demás tendrán ventas recientes)
     const ventas = [
-      { libro: librosInsertados[2]._id, nombreLibro: librosInsertados[2].nombre, autorLibro: librosInsertados[2].autor, cantidad: 3 },
-      { libro: librosInsertados[3]._id, nombreLibro: librosInsertados[3].nombre, autorLibro: librosInsertados[3].autor, cantidad: 2 },
-      { libro: librosInsertados[4]._id, nombreLibro: librosInsertados[4].nombre, autorLibro: librosInsertados[4].autor, cantidad: 1 },
-      { libro: librosInsertados[5]._id, nombreLibro: librosInsertados[5].nombre, autorLibro: librosInsertados[5].autor, cantidad: 4 },
-      { libro: librosInsertados[6]._id, nombreLibro: librosInsertados[6].nombre, autorLibro: librosInsertados[6].autor, cantidad: 2 },
-      { libro: librosInsertados[7]._id, nombreLibro: librosInsertados[7].nombre, autorLibro: librosInsertados[7].autor, cantidad: 1 },
-      { libro: librosInsertados[8]._id, nombreLibro: librosInsertados[8].nombre, autorLibro: librosInsertados[8].autor, cantidad: 3 },
-      { libro: librosInsertados[9]._id, nombreLibro: librosInsertados[9].nombre, autorLibro: librosInsertados[9].autor, cantidad: 2 },
-      { libro: librosInsertados[10]._id, nombreLibro: librosInsertados[10].nombre, autorLibro: librosInsertados[10].autor, cantidad: 1 }
+      { libro: librosInsertados[2]._id, nombreLibro: librosInsertados[2].nombre, autorLibro: librosInsertados[2].autor, generoLibro: librosInsertados[2].genero, precioLibro: librosInsertados[2].precio, cantidad: 3 },
+      { libro: librosInsertados[3]._id, nombreLibro: librosInsertados[3].nombre, autorLibro: librosInsertados[3].autor, generoLibro: librosInsertados[3].genero, precioLibro: librosInsertados[3].precio, cantidad: 2 },
+      { libro: librosInsertados[4]._id, nombreLibro: librosInsertados[4].nombre, autorLibro: librosInsertados[4].autor, generoLibro: librosInsertados[4].genero, precioLibro: librosInsertados[4].precio, cantidad: 1 },
+      { libro: librosInsertados[5]._id, nombreLibro: librosInsertados[5].nombre, autorLibro: librosInsertados[5].autor, generoLibro: librosInsertados[5].genero, precioLibro: librosInsertados[5].precio, cantidad: 4 },
+      { libro: librosInsertados[6]._id, nombreLibro: librosInsertados[6].nombre, autorLibro: librosInsertados[6].autor, generoLibro: librosInsertados[6].genero, precioLibro: librosInsertados[6].precio, cantidad: 2 },
+      { libro: librosInsertados[7]._id, nombreLibro: librosInsertados[7].nombre, autorLibro: librosInsertados[7].autor, generoLibro: librosInsertados[7].genero, precioLibro: librosInsertados[7].precio, cantidad: 1 },
+      { libro: librosInsertados[8]._id, nombreLibro: librosInsertados[8].nombre, autorLibro: librosInsertados[8].autor, generoLibro: librosInsertados[8].genero, precioLibro: librosInsertados[8].precio, cantidad: 3 },
+      { libro: librosInsertados[9]._id, nombreLibro: librosInsertados[9].nombre, autorLibro: librosInsertados[9].autor, generoLibro: librosInsertados[9].genero, precioLibro: librosInsertados[9].precio, cantidad: 2 },
+      { libro: librosInsertados[10]._id, nombreLibro: librosInsertados[10].nombre, autorLibro: librosInsertados[10].autor, generoLibro: librosInsertados[10].genero, precioLibro: librosInsertados[10].precio, cantidad: 1 }
     ];
     const hoy = new Date();
     hoy.setHours(10, 0, 0, 0); // hora fija para las ventas de hoy

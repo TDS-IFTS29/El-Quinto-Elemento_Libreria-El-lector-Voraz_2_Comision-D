@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cantidadInput = document.getElementById('cantidad');
   const totalInput = document.getElementById('total-venta');
 
+  // Detectar parámetro 'libro' en la URL
+  const params = new URLSearchParams(window.location.search);
+  const libroIdParam = params.get('libro');
+
   // Cargar libros vía API
   try {
     const resLibros = await fetch('/api/libros');
@@ -18,8 +22,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       option.value = libro._id;
       option.textContent = `${libro.nombre} - ${libro.autor}`;
       option.setAttribute('data-precio', libro.precio);
+      if (libroIdParam && libro._id === libroIdParam) {
+        option.selected = true;
+      }
       selectLibro.appendChild(option);
     });
+    // Si hay libro en la URL, actualizar precio y total
+    if (libroIdParam) {
+      actualizarPrecioYTotal();
+    }
   } catch (err) {
     alert('Error al cargar libros: ' + err.message);
   }

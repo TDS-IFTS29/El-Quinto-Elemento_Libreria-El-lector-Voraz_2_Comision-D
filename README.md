@@ -180,9 +180,11 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 | Integrante               | Rol                                                                |
 |-------------------------|---------------------------------------------------------------------|
 | Clausi Damián Andrés    | FRONTEND                                                            |
-|                         | MODULO LIBRERIA                                                     |
+|                         | MODULO LIBRERIA CON REPORTES                                        |
+|-------------------------|---------------------------------------------------------------------|
 | Descosido Cristian      | MODULO COFFEE CON REPORTES                                          |
 |                         | MODULO LOGIN CON SESION Y CIFRADO                                   |
+|-------------------------|---------------------------------------------------------------------|
 | César Antonio Gill      | MODULO UTILERIA CON REPORTES                                        |
 |                         | Mongo Atlas y Vercel                                                |
 

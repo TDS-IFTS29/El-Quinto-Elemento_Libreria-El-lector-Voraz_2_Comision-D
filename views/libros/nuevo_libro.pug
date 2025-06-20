@@ -52,7 +52,6 @@ block content
           li: a.button(href="/libros") Catálogo de libros
           li: a.button.active(href="/libros/nuevo") Agregar libro
           li: a.button(href="/libros/ventas/nueva") Registrar venta
-          li: a.button(href="/libros/ventas") Listado de ventas
           li: a.button(href="/libros/ventas/reportes") Reporte de ventas
       section.nuevo-libro-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
         .form-box.nuevo-libro-form(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
@@ -85,6 +84,11 @@ block content
             div
               label(for="precio" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
               input(type="number" name="precio" step="0.01" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Proveedor:
+              select(name="proveedor" id="proveedor" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                option(value="") Selecciona un proveedor
+              // El JS llenará las opciones
             div
               button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
         a.button(href="/libros" style="margin-top:18px;") Volver al catálogo

@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td><span class="stock-badge ${l.stock === 0 ? 'stock-cero' : l.stock <= (l.stockMinimo ?? 5) ? 'stock-bajo' : 'stock-ok'}">${l.stock ?? '-'} unidades</span></td>
           <td>${l.stockMinimo ?? 5}</td>
           <td>${l.ultimaVenta ? new Date(l.ultimaVenta).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-'}</td>
+          <td>${l.proveedor && l.proveedor.nombre ? l.proveedor.nombre : '-'}</td>
           <td style="text-align:center;display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;">
             <a href="/libros/ventas/nueva?libro=${l._id}" class="icon-btn" title="Comprar" style="color:#64b5f6;"><i class="fas fa-shopping-cart"></i></a>
             <button data-id="${l._id}" class="icon-btn sumar-stock" title="Sumar 1 al stock" style="color:#43a047;"><i class="fas fa-plus-circle"></i></button>

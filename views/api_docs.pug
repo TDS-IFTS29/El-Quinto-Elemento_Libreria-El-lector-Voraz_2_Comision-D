@@ -39,7 +39,7 @@ html
       h3
         span.method.post POST
         | /api/libros
-      p Crea un nuevo libro.
+      p Crea un nuevo libro. El campo <code>proveedor</code> es obligatorio y debe ser el ObjectId de un proveedor de tipo "libreria".
       pre
         code.
           POST /api/libros
@@ -50,13 +50,14 @@ html
             "precio": 123.45,
             "genero": "Novela",
             "stock": 10,
-            "stockMinimo": 5
+            "stockMinimo": 5,
+            "proveedor": "ID_DEL_PROVEEDOR"
           }
 
       h3
         span.method.patch PATCH
         | /api/libros/:id
-      p Edita un libro existente.
+      p Edita un libro existente. El campo <code>proveedor</code> también puede ser actualizado (debe ser un proveedor de tipo "libreria").
       pre
         code.
           PATCH /api/libros/ID_DEL_LIBRO
@@ -67,7 +68,8 @@ html
             "precio": 99.99,
             "genero": "Cuento",
             "stock": 5,
-            "stockMinimo": 3
+            "stockMinimo": 3,
+            "proveedor": "ID_DEL_PROVEEDOR"
           }
 
       h3
@@ -84,10 +86,10 @@ html
       h3
         span.method.get GET
         | /api/proveedores
-      p Obtiene una lista de todos los proveedores.
+      p Obtiene una lista de todos los proveedores. Puedes filtrar por tipo usando <code>?tipo=libreria</code>, <code>?tipo=cafeteria</code>, etc.
       pre
         code.
-          GET /api/proveedores
+          GET /api/proveedores?tipo=libreria
 
       h3
         span.method.get GET
@@ -107,7 +109,11 @@ html
           Content-Type: application/json
           {
             "nombre": "Nombre del proveedor",
-            "contacto": "contacto@email.com"
+            "mail": "proveedor@email.com",
+            "tipo_proveedor": "libreria",
+            "contacto": "Contacto",
+            "telefono": "011-1234-5678",
+            "sitio_web": "https://proveedor.com"
           }
 
       h3
@@ -120,7 +126,11 @@ html
           Content-Type: application/json
           {
             "nombre": "Nuevo nombre",
-            "contacto": "nuevo@email.com"
+            "mail": "nuevo@email.com",
+            "tipo_proveedor": "libreria",
+            "contacto": "Nuevo contacto",
+            "telefono": "011-0000-0000",
+            "sitio_web": "https://nuevo.com"
           }
 
       h3
@@ -217,7 +227,7 @@ html
       h3
         span.method.post POST
         | /api/ventas
-      p Registra una nueva venta de libro.
+      p Registra una nueva venta de libro. Al registrar una venta, el campo <code>ultimaVenta</code> del libro se actualiza automáticamente con la fecha de la venta.
       pre
         code.
           POST /api/ventas

@@ -8,7 +8,8 @@ const libroSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   stockMinimo: { type: Number, default: 5 }, // Nuevo campo para alerta
   ultimaReposicion: { type: Date },
-  ultimaVenta: { type: Date } // Nueva propiedad para guardar la última venta
+  ultimaVenta: { type: Date }, // Nueva propiedad para guardar la última venta
+  proveedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor', required: true } // Referencia a proveedor
 });
 
 const Libro = mongoose.model('Libro', libroSchema);

@@ -39,6 +39,7 @@ exports.createVenta = async (req, res) => {
       return res.status(400).json({ error: 'Stock insuficiente' });
     }
     libroDoc.stock -= cantidad;
+    libroDoc.ultimaVenta = new Date(); // Actualiza la fecha de última venta
     await libroDoc.save();
     const nuevaVenta = new Venta({
       libro,

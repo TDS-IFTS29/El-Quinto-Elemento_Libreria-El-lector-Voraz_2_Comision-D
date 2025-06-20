@@ -50,7 +50,6 @@ block content
         ul.menu-horizontal
           li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/libros") Catálogo de libros
           li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/libros/nuevo") Agregar libro
-          li: a.button(class=(activeMenu === 'ventas' ? 'active' : ''), href="/libros/ventas") Listado de ventas
           li: a.button(class=(activeMenu === 'nueva' ? 'active' : ''), href="/libros/ventas/nueva") Registrar venta
           li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/libros/ventas/reportes") Reporte de ventas
       section.editar-libro-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
@@ -74,6 +73,11 @@ block content
               label(for="stockMinimo" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock mínimo para alerta:
               input(type="number" name="stockMinimo" id="stockMinimo" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=libro && libro.stockMinimo ? libro.stockMinimo : 5)
             div
+              label(for="proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Proveedor:
+              select(name="proveedor" id="proveedor" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                option(value="") Selecciona un proveedor
+              // El JS llenará las opciones y seleccionará la actual
+            div
               button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar Cambios
         a.button(href="/libros" style="margin-top:18px;") Volver al catálogo
     script(src="/js/libros/editar_libro.js")
@@ -89,6 +93,11 @@ block content
             document.getElementById('precio').value = libro.precio || '';
             document.getElementById('stock').value = libro.stock || 0;
             document.getElementById('stockMinimo').value = libro.stockMinimo || 5;
+            if (libro.proveedor && libro.proveedor.nombre) {
+              document.getElementById('proveedor').value = libro.proveedor.nombre;
+            } else {
+              document.getElementById('proveedor').value = '-';
+            }
           } else {
             alert('No se pudo cargar el libro');
           }

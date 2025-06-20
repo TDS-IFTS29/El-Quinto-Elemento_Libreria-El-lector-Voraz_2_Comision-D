@@ -87,4 +87,15 @@ describe('API de Proveedores', () => {
     const getRes = await request(app).get(`/api/proveedores/${proveedorId}`);
     expect(getRes.statusCode).toBe(404);
   });
+
+  // Test para el filtro por tipo en proveedores (?tipo=libreria)
+  test('GET /api/proveedores?tipo=libreria debería retornar solo proveedores de tipo libreria', async () => {
+    // Crea dos proveedores de distinto tipo
+    await request(app).post('/api/proveedores').send({ nombre: 'Libreria 1', mail: 'l1@mail.com', tipo_proveedor: 'libreria' });
+    await request(app).post('/api/proveedores').send({ nombre: 'Cafeteria 1', mail: 'c1@mail.com', tipo_proveedor: 'cafeteria' });
+    const res = await request(app).get('/api/proveedores?tipo=libreria');
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.every(p => p.tipo_proveedor === 'libreria')).toBe(true);
+  });
 });

@@ -4,7 +4,11 @@ const mongoose = require('mongoose');
 
 // API RESTful
 async function listar(req, res) {
-  const proveedores = await Proveedor.find();
+  const filtro = {};
+  if (req.query.tipo) {
+    filtro.tipo_proveedor = req.query.tipo;
+  }
+  const proveedores = await Proveedor.find(filtro);
   res.json(proveedores);
 }
 

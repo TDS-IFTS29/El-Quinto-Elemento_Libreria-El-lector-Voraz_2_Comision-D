@@ -1,22 +1,35 @@
 const Libro = require('../models/Libro');
 const Venta = require('../models/Venta');
+const Proveedor = require('../models/Proveedor');
 const mongoose = require('mongoose');
 
 // API RESTful
 async function listar(req, res) {
-  const libros = await Libro.find();
+  const libros = await Libro.find().populate('proveedor');
   res.json(libros);
 }
 
 async function crear(req, res) {
+  // Validar que se envíe proveedor
+  let proveedorId = req.body.proveedor;
+  if (!proveedorId) {
+    return res.status(400).json({ error: 'El campo proveedor es obligatorio y debe ser el ObjectId de un proveedor de tipo libreria' });
+  }
+  // Validar que el proveedor exista y sea de tipo libreria
+  const proveedor = await Proveedor.findOne({ _id: proveedorId, tipo_proveedor: 'libreria' });
+  if (!proveedor) {
+    return res.status(400).json({ error: 'Proveedor inválido o no es de tipo libreria' });
+  }
   const nuevo = new Libro({
     nombre: req.body.nombre,
     autor: req.body.autor,
     precio: parseFloat(req.body.precio),
     genero: req.body.genero,
-    stock: parseInt(req.body.stock) || 0
+    stock: parseInt(req.body.stock) || 0,
+    proveedor: proveedor._id
   });
   await nuevo.save();
+  await nuevo.populate('proveedor');
   res.status(201).json(nuevo); // Cambiado a status 201 y respuesta JSON
 }
 
@@ -52,7 +65,17 @@ async function guardarEdicion(req, res) {
     libro.stockMinimo = parseInt(req.body.stockMinimo);
     if (isNaN(libro.stockMinimo) || libro.stockMinimo < 0) libro.stockMinimo = 0;
   }
+  // Permitir actualizar el proveedor si viene en el body
+  if (req.body.proveedor) {
+    // Validar que el proveedor exista y sea de tipo libreria
+    const proveedor = await Proveedor.findOne({ _id: req.body.proveedor, tipo_proveedor: 'libreria' });
+    if (!proveedor) {
+      return res.status(400).json({ error: 'Proveedor inválido o no es de tipo libreria' });
+    }
+    libro.proveedor = proveedor._id;
+  }
   await libro.save();
+  await libro.populate('proveedor');
   res.status(200).json(libro); // status 200 explícito
 }
 
@@ -65,7 +88,7 @@ async function vistaEditarLibro(req, res) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send('ID de libro inválido');
   }
-  const libro = await Libro.findById(id);
+  const libro = await Libro.findById(id).populate('proveedor');
   if (!libro) return res.status(404).send('Libro no encontrado');
   res.render('libros/editar_libro', { libro });
 }
@@ -76,7 +99,7 @@ async function obtener(req, res) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: 'ID de libro inválido' });
   }
-  const libro = await Libro.findById(id);
+  const libro = await Libro.findById(id).populate('proveedor');
   if (!libro) {
     return res.status(404).json({ error: 'Libro no encontrado' });
   }
@@ -84,7 +107,7 @@ async function obtener(req, res) {
 }
 
 async function verCatalogo(req, res) {
-  const libros = await Libro.find();
+  const libros = await Libro.find().populate('proveedor');
   res.render('libros/catalogo_libros', { libros, activeMenu: 'catalogo' });
 }
 

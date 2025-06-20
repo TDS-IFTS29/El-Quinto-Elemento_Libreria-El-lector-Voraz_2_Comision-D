@@ -12,9 +12,23 @@ async function crearBaseDeDatos() {
     await mongoose.connect(MONGO_URI);
     console.log('Conectado a MongoDB');
 
+    // --- MIGRACIÓN: Asignar proveedor a libros existentes sin proveedor (antes de borrar nada) ---
+    const proveedoresExistentes = await Proveedor.find({ tipo_proveedor: 'libreria' });
+    if (proveedoresExistentes.length > 0) {
+      const librosSinProveedor = await Libro.find({ $or: [ { proveedor: { $exists: false } }, { proveedor: null } ] });
+      if (librosSinProveedor.length > 0) {
+        for (const libro of librosSinProveedor) {
+          const proveedorAleatorio = proveedoresExistentes[Math.floor(Math.random() * proveedoresExistentes.length)];
+          libro.proveedor = proveedorAleatorio._id;
+          await libro.save();
+        }
+        console.log(`Se asignaron proveedores a ${librosSinProveedor.length} libros que no tenían.`);
+      }
+    }
+
     // Limpiar colecciones
     await Proveedor.deleteMany({});
-    await Libro.deleteMany({});
+    await Libro.deleteMany({}); // <--- Ahora borra todos los libros existentes
     await Venta.deleteMany({});
     await Usuario.deleteMany({});
 
@@ -31,6 +45,9 @@ async function crearBaseDeDatos() {
       { nombre: 'Papelería Central', mail: 'info@papeleriacentral.com', tipo_proveedor: 'utileria', contacto: 'Contacto Papelería Central', telefono: '011-9012-3456', sitio_web: 'https://papeleriacentral.com' }
     ];
     const proveedoresInsertados = await Proveedor.insertMany(proveedores);
+
+    // Filtrar solo proveedores de tipo libreria
+    const proveedoresLibreria = proveedoresInsertados.filter(p => p.tipo_proveedor === 'libreria');
 
     // Libros de ejemplo
     function randomStock() { return Math.floor(Math.random() * 16); }
@@ -56,8 +73,11 @@ async function crearBaseDeDatos() {
       const dias = Math.floor(Math.random() * 400);
       return new Date(Date.now() - dias * 24 * 60 * 60 * 1000);
     }
+    // Asignar proveedor aleatorio de tipo libreria a cada libro
     for (const libro of libros) {
       libro.ultimaVenta = randomUltimaVenta();
+      const proveedorAleatorio = proveedoresLibreria[Math.floor(Math.random() * proveedoresLibreria.length)];
+      libro.proveedor = proveedorAleatorio._id;
     }
     const librosInsertados = await Libro.insertMany(libros);
 

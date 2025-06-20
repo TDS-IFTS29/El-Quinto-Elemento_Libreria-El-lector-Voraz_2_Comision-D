@@ -1,6 +1,20 @@
 const request = require('supertest');
 const app = require('../app');
 
+let proveedorLibreriaId;
+
+beforeAll(async () => {
+  // Crea un proveedor de tipo 'libreria' para usar en los tests de ventas
+  const proveedorRes = await request(app)
+    .post('/api/proveedores')
+    .send({
+      nombre: 'Proveedor Test Ventas',
+      mail: 'ventas@test.com',
+      tipo_proveedor: 'libreria'
+    });
+  proveedorLibreriaId = proveedorRes.body._id;
+});
+
 describe('API de Ventas de Libros', () => {
   // Test para GET /api/ventas (todas las ventas)
   test('GET /api/ventas debería retornar todas las ventas', async () => {
@@ -10,11 +24,11 @@ describe('API de Ventas de Libros', () => {
   });
 
   // Test para POST /api/ventas (registrar venta)
-  test('POST /api/ventas debería registrar una nueva venta de un libro existente y actualizar stock', async () => {
-    // Primero crea un libro de prueba
+  test('POST /api/ventas debería registrar una nueva venta de un libro existente y actualizar stock y ultimaVenta', async () => {
+    // Primero crea un libro de prueba con proveedor válido
     const libroRes = await request(app)
       .post('/api/libros')
-      .send({ nombre: 'Rayuela', autor: 'Julio Cortázar', precio: 100, genero: 'Novela', stock: 20 });
+      .send({ nombre: 'Rayuela', autor: 'Julio Cortázar', precio: 100, genero: 'Novela', stock: 20, proveedor: proveedorLibreriaId });
     const libroId = libroRes.body._id;
 
     const nuevaVenta = {
@@ -37,6 +51,8 @@ describe('API de Ventas de Libros', () => {
     // Verifica que el stock se haya actualizado
     const libroActualizado = await request(app).get(`/api/libros/${libroId}`);
     expect(libroActualizado.body.stock).toBe(15);
+    // Verifica que ultimaVenta se haya actualizado
+    expect(new Date(libroActualizado.body.ultimaVenta).getTime()).toBeGreaterThan(0);
   });
 
   // Test para GET /api/ventas/mas-vendidos

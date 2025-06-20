@@ -209,18 +209,25 @@ async function vistaDashboard(req, res) {
   const ahora = Date.now();
   for (const libro of libros) {
     if (libro.stock === 0) {
-      alertas.push(`Alarma: "${libro.nombre}" - Agotado`);
+      alertas.push(`Libro: "${libro.nombre}" - Agotado`);
     } else if (libro.stock > 0 && libro.stock <= 2) {
-      alertas.push(`Alarma: "${libro.nombre}" - Solo ${libro.stock} unidades`);
+      alertas.push(`Libro: "${libro.nombre}" - Solo ${libro.stock} unidades`);
     }
     // ALERTA: No se vende hace más de 6 meses
     const ultimaVenta = await Venta.findOne({ libro: libro._id }).sort({ fecha: -1 });
     if (!ultimaVenta || (ahora - new Date(ultimaVenta.fecha).getTime() > seisMesesMs)) {
-      alertas.push(`Alarma: "${libro.nombre}" - No se vende hace más de 6 meses`);
+      alertas.push(`Libro: "${libro.nombre}" - No se vende hace más de 6 meses`);
     }
   }
 
-  res.render('dashboard', { ultimasVentas: ultimas, totalVentas: total, alertasStock: alertas });
+  // Ordenar alertas: primero Agotado, luego Solo X unidades, luego No se vende hace más de 6 meses
+  const agotado = alertas.filter(a => a.includes('Agotado'));
+  const pocasUnidades = alertas.filter(a => a.includes('Solo'));
+  const sinVenta = alertas.filter(a => a.includes('No se vende hace más de 6 meses'));
+  const otras = alertas.filter(a => !a.includes('Agotado') && !a.includes('Solo') && !a.includes('No se vende hace más de 6 meses'));
+  const alertasOrdenadas = [...agotado, ...pocasUnidades, ...sinVenta, ...otras];
+
+  res.render('dashboard', { ultimasVentas: ultimas, totalVentas: total, alertasStock: alertasOrdenadas });
 }
 
 module.exports = {

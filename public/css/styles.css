@@ -546,6 +546,15 @@ footer hr {
   display: flex;
   align-items: center;
 }
+.dashboard-actions .dashboard-btn {
+  min-width: 180px;
+  font-size: 1.1rem;
+  padding: 12px 0;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
 @media (max-width: 700px) {
   .dashboard-actions {
     flex-direction: column;

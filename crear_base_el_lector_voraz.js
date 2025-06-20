@@ -77,8 +77,17 @@ async function crearBaseDeDatos() {
       { libro: librosInsertados[9]._id, nombreLibro: librosInsertados[9].nombre, autorLibro: librosInsertados[9].autor, cantidad: 2 },
       { libro: librosInsertados[10]._id, nombreLibro: librosInsertados[10].nombre, autorLibro: librosInsertados[10].autor, cantidad: 1 }
     ];
-    for (const v of ventas) {
-      await new Venta({ ...v, fecha: new Date() }).save();
+    const hoy = new Date();
+    hoy.setHours(10, 0, 0, 0); // hora fija para las ventas de hoy
+    for (let i = 0; i < ventas.length; i++) {
+      let fechaVenta;
+      if (i < 3) {
+        fechaVenta = new Date(hoy); // ventas del día
+      } else {
+        fechaVenta = new Date(hoy);
+        fechaVenta.setDate(hoy.getDate() - (i + 1)); // ventas de días anteriores
+      }
+      await new Venta({ ...ventas[i], fecha: fechaVenta }).save();
     }
 
     console.log('Base de datos el-lector-voraz creada con ejemplos variados.');

@@ -51,9 +51,9 @@ block content
         ul.menu-horizontal
           li: a.button(href="/libros") Catálogo de libros
           li: a.button(href="/libros/nuevo") Agregar libro
-          li: a.button.active(href="/libros/ventas") Listado de ventas
           li: a.button(href="/libros/ventas/nueva") Registrar venta
-          li: a.button(href="/libros/ventas/reportes") Ver reportes de ventas
+          li: a.button.active(href="/libros/ventas") Listado de ventas
+          li: a.button(href="/libros/ventas/reportes") Reporte de ventas
       section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
         .catalogo-header(style="display:flex;justify-content:center;align-items:center;gap:24px;margin-bottom:18px;")
           // Se eliminó el logo de El Lector Voraz aquí
@@ -76,8 +76,6 @@ block content
               tr
                 td(colspan="4") No hay ventas registradas.
         .catalogo-actions(style="display:flex;gap:16px;justify-content:center;margin-top:18px;")
-          a.button(href="/libros/ventas/nueva") Registrar nueva venta
-          a.button(href="/libros/ventas/reportes") Ver reportes de ventas
           a.button(href="/inicio") Volver al inicio
     script(src="/js/libros/catalogo_ventas_libros.js")
     footer

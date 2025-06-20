@@ -2,26 +2,32 @@ extends ../layout
 
 block content
   .container.mt-5
+    .menu-grupo.menu-grupo-horizontal
+      ul.menu-horizontal
+        li: a.button(href="/proveedores") Catálogo de proveedores
+        li: a.button(href="/proveedores/nuevo" class="active") Agregar proveedor
     h2 Nuevo Proveedor
     form#form-nuevo-proveedor(method='POST')
       .mb-3
-        label.form-label(for='nombre') Nombre
+        label.form-label(for='nombre') Nombre:
         input.form-control(type='text', id='nombre', name='nombre', required)
       .mb-3
-        label.form-label(for='mail') Email
+        label.form-label(for='mail') Email:
         input.form-control(type='email', id='mail', name='mail', required)
       .mb-3
-        label.form-label(for='tipo_proveedor') Tipo de Proveedor
+        label.form-label(for='tipo_proveedor') Tipo de proveedor:
         select.form-select(id='tipo_proveedor', name='tipo_proveedor', required)
-          option(value='Libros') Libros
-          option(value='Utilería') Utilería
-          option(value='Cafetería') Cafetería
+          option(value='libreria') Librería
+          option(value='utileria') Utilería
+          option(value='cafeteria') Cafetería
       .mb-3
-        label.form-label(for='telefono') Teléfono
+        label.form-label(for='telefono') Teléfono:
         input.form-control(type='text', id='telefono', name='telefono')
       .mb-3
-        label.form-label(for='sitio_web') Sitio Web
+        label.form-label(for='sitio_web') Sitio web:
         input.form-control(type='url', id='sitio_web', name='sitio_web')
-      button.btn.btn-success(type='submit') Agregar Proveedor
+      button.btn.btn-success(type='submit') Guardar
+    .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+      a.button(href="/inicio") Volver al inicio
     script(src='/js/proveedores/nuevo_proveedor.js')
     link(rel="stylesheet", href="/css/styles.css")

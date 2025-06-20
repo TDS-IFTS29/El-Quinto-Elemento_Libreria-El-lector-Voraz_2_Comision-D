@@ -51,9 +51,8 @@ block content
         ul.menu-horizontal
           li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/libros") Catálogo de libros
           li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/libros/nuevo") Agregar libro
-          li: a.button(class=(activeMenu === 'ventas' ? 'active' : ''), href="/libros/ventas") Listado de ventas
           li: a.button(class=(activeMenu === 'nueva' ? 'active' : ''), href="/libros/ventas/nueva") Registrar venta
-          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/libros/ventas/reportes") Ver reportes de ventas
+          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/libros/ventas/reportes") Reporte de ventas
       section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
         table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
           thead
@@ -69,7 +68,8 @@ block content
           tbody#tabla-libros
             tr
               td(colspan="8") Cargando libros...
-        a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/inicio") Volver al inicio
     script(src="/js/libros/catalogo_libro.js")
     footer
       hr

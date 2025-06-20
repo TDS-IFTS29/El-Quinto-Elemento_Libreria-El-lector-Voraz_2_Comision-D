@@ -51,10 +51,10 @@ block content
         ul.menu-horizontal
           li: a.button(href="/libros") Catálogo de libros
           li: a.button(href="/libros/nuevo") Agregar libro
-          li: a.button(href="/libros/ventas") Listado de ventas
           li: a.button(href="/libros/ventas/nueva") Registrar venta
-          li: a.button.active(href="/libros/ventas/reportes") Ver reportes de ventas
-      section.reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+          li: a.button(href="/libros/ventas") Listado de ventas
+          li: a.button.active(href="/libros/ventas/reportes") Reporte de ventas
+      .reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
         .filtros-ventas(style="text-align:center;margin-bottom:18px;")
           label(for="filtro-fecha" style="font-weight:bold;margin-right:8px;") Filtrar por:
           select#filtro-fecha(style="padding:4px 8px;")
@@ -86,7 +86,8 @@ block content
             tr
               td(colspan="6") Total
               td $#{total_ingresos}
-        a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/inicio") Volver al inicio
     script(src="/js/libros/reportes_ventas_libros.js")
     footer
       hr

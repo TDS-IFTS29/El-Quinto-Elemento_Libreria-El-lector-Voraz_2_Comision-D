@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
               btn = btn.closest('button.delete');
             }
             const id = btn.dataset.id;
-            if (id && confirm('¿Seguro que querés eliminar este proveedor?')) {
+            const fila = btn.closest('tr');
+            const nombreProveedor = fila.querySelector('td').textContent;
+            if (id && confirm(`¿Seguro que querés eliminar este proveedor ${nombreProveedor}?`)) {
               const resp = await fetch(`/api/proveedores/${id}`, { method: 'DELETE' });
               if (resp.ok) {
                 alert('Proveedor eliminado exitosamente');

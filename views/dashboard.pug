@@ -56,7 +56,7 @@ block content
             li: a.button(href="/libros/nuevo") Agregar libro
             li: a.button(href="/libros/ventas") Listado de ventas
             li: a.button(href="/libros/ventas/nueva") Registrar venta
-            li: a.button(href="/libros/ventas/reportes") Ver reportes de ventas
+            li: a.button(href="/libros/ventas/reportes") Reporte de ventas
         .main-header
           h2 Proveedores
       else if proveedores
@@ -97,7 +97,9 @@ block content
                   input(type="url" name="sitio_web" id="sitio_web" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;")
                 div
                   button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
-              script(src="/js/proveedores/nuevo_proveedor.js")
+            .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+              a.button(href="/inicio") Volver al inicio
+            script(src="/js/proveedores/nuevo_proveedor.js")
         else if activeMenu === 'editar'
           .editar-proveedor-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
             .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
@@ -157,7 +159,8 @@ block content
               tbody#tabla-proveedores
                 tr
                   td(colspan="6") Cargando proveedores...
-            a.button(href="/inicio" style="margin-top:18px;") Volver al inicio
+            .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+              a.button(href="/inicio") Volver al inicio
             script(src="/js/proveedores/catalogo_proveedores.js")
       else
         .main-header(style="display:flex;justify-content:space-between;align-items:center;")
@@ -172,13 +175,21 @@ block content
               if alertasStock && alertasStock.length
                 each alerta in alertasStock
                   if alerta.includes('Agotado')
-                    li.venta(style="color:#e57373;background:#ffebee;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")= alerta
+                    li.venta(style="color:#e57373;background:#ffebee;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                      i.fas.fa-book(style="margin-right:6px;color:#c62828;")
+                      | #{alerta.replace('Libro: ', '')}
                   else if alerta.includes('Solo')
-                    li.venta(style="color:#ffb74d;background:#fff3e0;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")= alerta
+                    li.venta(style="color:#ffb74d;background:#fff3e0;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                      i.fas.fa-book(style="margin-right:6px;color:#fbc02d;")
+                      | #{alerta.replace('Libro: ', '')}
                   else if alerta.includes('reposici')
-                    li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")= alerta
+                    li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                      | #{alerta.replace('Libro: ', '')}
                   else if alerta.includes('No se vende hace más de 6 meses')
-                    li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")= alerta
+                    li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                      | #{alerta.replace('Libro: ', '')}
                   else
                     li.venta= alerta
               else
@@ -188,12 +199,13 @@ block content
             ul#ventas-recientes
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas
-                  li.venta Libro: #{v.nombre} - #{v.autor} x#{v.cantidad} ($#{v.monto})
+                  li.venta
+                    | 🛒 #{v.nombre} ×#{v.cantidad} - #{v.autor} ($#{v.monto})
               else
                 li.venta No hay ventas recientes
             .total-ventas Total del día: 
               span.total#total-ventas $#{totalVentas}
-        .dashboard-actions
+        .dashboard-actions(style="display:flex;flex-direction:row;align-items:center;gap:16px;justify-content:center;margin-top:24px;")
           .dropdown
             button.button#ventaRapidaBtn(type="button") Venta Rápida
             ul.dropdown-menu#ventaRapidaMenu(style="display:none;")

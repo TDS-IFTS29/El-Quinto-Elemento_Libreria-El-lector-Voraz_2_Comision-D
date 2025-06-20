@@ -155,38 +155,8 @@ async function vistaNuevaVenta(req, res) {
   res.render('libros/nueva_venta', { libros, libroSeleccionado });
 }
 
-async function vistaReportesVentas(req, res) {
-  // Obtener todas las ventas y agrupar por libro
-  const ventas = await Venta.find().populate('libro');
-  const resumen = {};
-  let total_cantidad_vendida = 0;
-  let total_ingresos = 0;
-
-  ventas.forEach(v => {
-    const id = v.libro ? v.libro._id.toString() : v.nombreLibro;
-    const precio = v.libro && v.libro.precio ? v.libro.precio : (v.precioFicticio || 0);
-    const genero = v.libro && v.libro.genero ? v.libro.genero : '-';
-    if (!resumen[id]) {
-      resumen[id] = {
-        titulo: v.libro ? v.libro.nombre : v.nombreLibro,
-        autor: v.libro ? v.libro.autor : v.autorLibro,
-        genero: genero,
-        precio: precio,
-        cantidad_vendida: 0,
-        ingresos: 0
-      };
-    }
-    resumen[id].cantidad_vendida += v.cantidad;
-    resumen[id].ingresos += precio * v.cantidad;
-    total_cantidad_vendida += v.cantidad;
-    total_ingresos += precio * v.cantidad;
-  });
-
-  res.render('libros/reportes_ventas_libros', {
-    libros: Object.values(resumen),
-    total_cantidad_vendida,
-    total_ingresos
-  });
+async function vistaReportesLibros(req, res) {
+  res.render('libros/reportes_libros');
 }
 
 async function vistaDashboard(req, res) {
@@ -204,7 +174,7 @@ async function vistaDashboard(req, res) {
     nombre: v.libro && v.libro.nombre ? v.libro.nombre : v.nombreLibro,
     autor: v.libro && v.libro.autor ? v.libro.autor : v.autorLibro,
     cantidad: v.cantidad,
-    monto: (v.libro && v.libro.precio ? v.libro.precio : 0) * v.cantidad
+    monto: (v.libro && v.libro.precio ? v.libro.precio : v.precioLibro) * v.cantidad
   }));
   const total = ultimas.reduce((acc, v) => acc + v.monto, 0);
 
@@ -246,6 +216,7 @@ module.exports = {
   vistaEditarLibro,
   obtener,
   verCatalogo,
+  vistaReportesLibros,
   // Ventas de Libros
   listarVentas,
   registrarVenta,
@@ -253,6 +224,5 @@ module.exports = {
   ventasSemana,
   verCatalogoVentas,
   vistaNuevaVenta,
-  vistaReportesVentas,
   vistaDashboard
 };

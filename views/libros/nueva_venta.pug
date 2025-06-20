@@ -50,9 +50,9 @@ block content
         ul.menu-horizontal
           li: a.button(href="/libros") Catálogo de libros
           li: a.button(href="/libros/nuevo") Agregar libro
+          li: a.button(href="/libros/ventas/nueva") Registrar venta
           li: a.button(href="/libros/ventas") Listado de ventas
-          li: a.button.active(href="/libros/ventas/nueva") Registrar venta
-          li: a.button(href="/libros/ventas/reportes") Ver reportes de ventas
+          li: a.button(href="/libros/ventas/reportes") Reporte de ventas
       section.nueva-venta-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
         .form-box.nueva-venta-form(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
           h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Registrar Nueva Venta
@@ -76,7 +76,7 @@ block content
               label(style="color:#675858;font-size:1rem;margin-bottom:4px;") Total:
               input(type="text" id="total-venta" readonly class="input-lg" style="width:100%;background:#eee;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
             div
-              button(type="submit" class="button" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Registrar
+              button(type="submit" class="button" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Registrar venta
         a.button(href="/libros" style="margin-top:18px;") Volver al catálogo
     script(src="/js/libros/nueva_venta.js")
     script(src="/js/libros/nueva_venta_libro.js")

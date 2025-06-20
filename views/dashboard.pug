@@ -167,7 +167,7 @@ block content
             button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
         .dashboard-cards
           .card.card-stock
-            h3 Alertas de Stock
+            h3 Alertas
             ul
               if alertasStock && alertasStock.length
                 each alerta in alertasStock
@@ -188,7 +188,7 @@ block content
             ul#ventas-recientes
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas
-                  li.venta #{v.nombre} - #{v.autor} x#{v.cantidad} ($#{v.monto})
+                  li.venta Libro: #{v.nombre} - #{v.autor} x#{v.cantidad} ($#{v.monto})
               else
                 li.venta No hay ventas recientes
             .total-ventas Total del día: 
@@ -200,9 +200,9 @@ block content
               li: a(href="/libros/ventas/nueva") Vender Libro
               li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Cafetería (próximamente)
               li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Utilería (próximamente)
-          a.button(href="/libros/nuevo") Nuevo Libro
-          a.button(href="#proveedores-nuevo" onclick="mostrarSeccion('proveedores','nuevo');return false;" style="margin-top:18px;") Nuevo Proveedor
-          button.button(type="button") Nuevo Usuario
+          a.button.dashboard-btn(href="/libros/nuevo") Nuevo Libro
+          a.button.dashboard-btn(href="/proveedores") Nuevo Proveedor
+          button.button.dashboard-btn(type="button") Nuevo Usuario
     script.
       const btn = document.getElementById('ventaRapidaBtn');
       const menu = document.getElementById('ventaRapidaMenu');

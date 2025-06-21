@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Gestiona y controla tu utilería de manera eficiente!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Utilería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-pencil-ruler.fa-2x
+        h3 Utilería
+        ul.menu-horizontal
+          li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/utileria") Catálogo de utilería
+          //- Aquí puedes agregar más opciones como agregar utilería, reportes, etc.
+      section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          thead
+            tr
+              th Nombre
+              th Descripción
+              th Precio
+              th Stock
+              th Proveedor
+          tbody#tabla-utileria
+            if utileria.length
+              each item in utileria
+                tr
+                  td= item.nombre
+                  td= item.descripcion
+                  td $#{item.precio}
+                  td= item.stock
+                  td= item.proveedor ? item.proveedor.nombre : ''
+            else
+              tr
+                td(colspan="5") No hay productos de utilería cargados.
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/inicio") Volver al inicio
+    //- script(src="/js/utileria/catalogo_utileria.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

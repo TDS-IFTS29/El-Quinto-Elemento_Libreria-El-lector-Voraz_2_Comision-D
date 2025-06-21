@@ -47,6 +47,9 @@ app.use('/api/ventas', require('./routes/api/ventas'));
 // app.use('/api/ventas', require('./routes/api/ventas'));
 // app.use('/api/debug', require('./routes/debug'));
 
+// Nueva ruta de utilería
+app.use('/utileria', require('./routes/utileria'));
+
 // Puerto
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

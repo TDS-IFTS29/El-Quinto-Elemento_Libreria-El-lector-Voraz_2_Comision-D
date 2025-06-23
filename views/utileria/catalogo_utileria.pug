@@ -50,7 +50,9 @@ block content
         h3 Utilería
         ul.menu-horizontal
           li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/utileria") Catálogo de utilería
-          //- Aquí puedes agregar más opciones como agregar utilería, reportes, etc.
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/utileria/nuevo") Agregar utilería
+          li: a.button(class=(activeMenu === 'venta' ? 'active' : ''), href="/utileria/vender") Registrar venta
+          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/utileria/reportes") Reporte de ventas
       section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
         table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
           thead
@@ -59,22 +61,47 @@ block content
               th Descripción
               th Precio
               th Stock
+              th Stock mínimo
+              th Última venta
               th Proveedor
+              th Acciones
           tbody#tabla-utileria
             if utileria.length
               each item in utileria
+                - var ahora = new Date();
+                - var ultimaVenta = item.ultimaVenta ? new Date(item.ultimaVenta) : null;
+                - var diffMeses = ultimaVenta ? ((ahora.getFullYear() - ultimaVenta.getFullYear()) * 12 + (ahora.getMonth() - ultimaVenta.getMonth())) : 0;
+                - var color = item.stock === 0 ? 'stock-cero' : (item.stock <= (typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null ? item.stockMinimo : 5) ? 'stock-bajo' : 'stock-ok');
+                - if (diffMeses >= 6) { color = 'stock-sin-venta'; }
                 tr
                   td= item.nombre
                   td= item.descripcion
                   td $#{item.precio}
-                  td= item.stock
+                  td
+                    span(class='stock-badge ' + color)= typeof item.stock !== 'undefined' && item.stock !== null ? item.stock : '-'
+                  td= typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null ? item.stockMinimo : 5
+                  td= item.ultimaVenta ? item.ultimaVenta.toLocaleDateString('es-AR') : '-'
                   td= item.proveedor ? item.proveedor.nombre : ''
+                  td(style="text-align:center;display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;")
+                    a(href=`/utileria/vender?utileria=${item._id}` class="icon-btn" title="Vender" style="color:#64b5f6;")
+                      i.fas.fa-cash-register
+                    button(type="button" data-id=item._id class="icon-btn sumar-stock" title="Sumar 1 al stock" style="color:#43a047;")
+                      i.fas.fa-plus-circle
+                    a(href=`/utileria/editar/${item._id}` class="icon-btn" title="Modificar")
+                      i.fas.fa-edit
+                    button(type="button" data-id=item._id class="icon-btn delete" title="Eliminar")
+                      i.fas.fa-trash-alt
             else
               tr
-                td(colspan="5") No hay productos de utilería cargados.
+                td(colspan="9") No hay productos de utilería cargados.
         .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
           a.button(href="/inicio") Volver al inicio
-    //- script(src="/js/utileria/catalogo_utileria.js")
+    script(src="/js/utileria/catalogo_utileria.js")
+    style.
+      .stock-badge.stock-ok { background: #d4edda; color: #155724; border-radius: 6px; padding: 2px 8px; }
+      .stock-badge.stock-bajo { background: #fff3cd; color: #856404; border-radius: 6px; padding: 2px 8px; }
+      .stock-badge.stock-cero { background: #f8d7da; color: #721c24; border-radius: 6px; padding: 2px 8px; }
+      .stock-badge.stock-sin-venta { background: #e3f2fd; color: #1976d2; border-radius: 6px; padding: 2px 8px; }
     footer
       hr
       p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29

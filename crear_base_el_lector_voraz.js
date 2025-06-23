@@ -4,6 +4,7 @@ const Libro = require('./models/Libro');
 const Proveedor = require('./models/Proveedor');
 const Venta = require('./models/Venta');
 const Usuario = require('./models/Usuario');
+const Utileria = require('./models/Utileria');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/el-lector-voraz';
 
@@ -80,6 +81,32 @@ async function crearBaseDeDatos() {
       libro.proveedor = proveedorAleatorio._id;
     }
     const librosInsertados = await Libro.insertMany(libros);
+
+    // --- AGREGAR DATOS DE UTILERÍA ---
+    const proveedoresUtileria = proveedoresInsertados.filter(p => p.tipo_proveedor === 'utileria');
+    function randomStockUtileria() { return Math.floor(Math.random() * 21); }
+    function randomStockMinimoUtileria() { return Math.floor(Math.random() * 11); }
+    function randomUltimaVentaUtileria() {
+      const dias = Math.floor(Math.random() * 400);
+      return new Date(Date.now() - dias * 24 * 60 * 60 * 1000);
+    }
+    const utileria = [
+      { nombre: 'Lápiz HB', descripcion: 'Lápiz negro clásico para escritura y dibujo.', precio: 200, stock: 0, stockMinimo: 3, ultimaReposicion: new Date(), ultimaVenta: hace6Meses, proveedor: proveedoresUtileria[0]._id },
+      { nombre: 'Goma de borrar', descripcion: 'Goma blanca para borrar lápiz.', precio: 150, stock: 0, stockMinimo: 2, ultimaReposicion: new Date(), ultimaVenta: hace6Meses, proveedor: proveedoresUtileria[1]._id },
+      { nombre: 'Cuaderno A4', descripcion: 'Cuaderno rayado de 80 hojas.', precio: 1200, stock: 1, stockMinimo: 4, ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[0]._id },
+      { nombre: 'Resaltador amarillo', descripcion: 'Resaltador color amarillo flúo.', precio: 350, stock: 2, stockMinimo: 5, ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[1]._id },
+      { nombre: 'Bolígrafo azul', descripcion: 'Bolígrafo tinta azul, trazo fino.', precio: 250, stock: 1, stockMinimo: 6, ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[0]._id },
+      { nombre: 'Regla 30cm', descripcion: 'Regla plástica transparente.', precio: 400, stock: randomStockUtileria(), stockMinimo: randomStockMinimoUtileria(), ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[1]._id },
+      { nombre: 'Tijera escolar', descripcion: 'Tijera punta redonda para niños.', precio: 800, stock: randomStockUtileria(), stockMinimo: randomStockMinimoUtileria(), ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[0]._id },
+      { nombre: 'Pegamento en barra', descripcion: 'Adhesivo sólido no tóxico.', precio: 600, stock: randomStockUtileria(), stockMinimo: randomStockMinimoUtileria(), ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[1]._id },
+      { nombre: 'Cartuchera', descripcion: 'Cartuchera de tela con cierre.', precio: 2500, stock: randomStockUtileria(), stockMinimo: randomStockMinimoUtileria(), ultimaReposicion: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000), ultimaVenta: new Date(), proveedor: proveedoresUtileria[0]._id },
+      { nombre: 'Compás metálico', descripcion: 'Compás para dibujo técnico.', precio: 1800, stock: randomStockUtileria(), stockMinimo: randomStockMinimoUtileria(), ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresUtileria[1]._id }
+    ];
+    for (const item of utileria) {
+      item.ultimaVenta = randomUltimaVentaUtileria();
+    }
+    await Utileria.deleteMany({});
+    await Utileria.insertMany(utileria);
 
     // Usuario admin necesario
     await Usuario.create({ nombre: 'admin', email: 'admin', password: '1234' });

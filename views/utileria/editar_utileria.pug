@@ -1,0 +1,77 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box(style="top:20px;right:5vw;max-width:240px;padding:14px 12px;font-size:1rem;")
+      h2(style="font-size:1.1rem;margin:0 0 8px 0;color:#675858;") Editar Utilería
+      p(style="margin:0;color:#675858;") Modifica los datos del producto de utilería.
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Editar Utilería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      section.editar-utileria-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+        .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+          h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Editar Utilería
+          form(method="POST" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+            .form-group
+              label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
+              input(type="text", name="nombre", id="nombre", required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=util.nombre)
+            .form-group
+              label(for="descripcion" style="color:#675858;font-size:1rem;margin-bottom:4px;") Descripción:
+              input(type="text", name="descripcion", id="descripcion", required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=util.descripcion)
+            .form-group
+              label(for="precio" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+              input(type="number", name="precio", id="precio", step="0.01", required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=util.precio)
+            .form-group
+              label(for="stock" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock:
+              input(type="number", name="stock", id="stock", min="0", required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;" value=util.stock)
+            .form-group
+              label(for="stockMinimo" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock mínimo para alerta:
+              input(type="number", name="stockMinimo", id="stockMinimo", min="0", required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;" value=util.stockMinimo)
+            .form-group
+              label(for="ultimaReposicion" style="color:#675858;font-size:1rem;margin-bottom:4px;") Última reposición:
+              input(type="date", name="ultimaReposicion", id="ultimaReposicion", value=util.ultimaReposicion ? util.ultimaReposicion.toISOString().substring(0,10) : '', required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            .form-group
+              label(for="ultimaVenta" style="color:#675858;font-size:1rem;margin-bottom:4px;") Última venta:
+              input(type="date", name="ultimaVenta", id="ultimaVenta", value=util.ultimaVenta ? util.ultimaVenta.toISOString().substring(0,10) : '', required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            .form-group
+              label(for="proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Proveedor:
+              select(name="proveedor", id="proveedor", required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                each prov in proveedores
+                  option(value=prov._id, selected=(util.proveedor && util.proveedor._id.toString() === prov._id.toString()))= prov.nombre
+            button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar Cambios
+        a.button(href="/utileria" style="margin-top:18px;") Volver al catálogo

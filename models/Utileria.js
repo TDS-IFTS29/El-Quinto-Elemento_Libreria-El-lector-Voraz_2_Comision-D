@@ -5,6 +5,9 @@ const utileriaSchema = new mongoose.Schema({
   descripcion: String,
   precio: Number,
   stock: Number,
+  stockMinimo: Number,
+  ultimaVenta: Date,
+  ultimaReposicion: Date,
   proveedor: { type: mongoose.Schema.Types.ObjectId, ref: 'Proveedor' }
 });
 

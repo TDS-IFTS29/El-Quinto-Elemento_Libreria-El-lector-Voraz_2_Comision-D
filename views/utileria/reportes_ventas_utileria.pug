@@ -1,0 +1,83 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Analiza el rendimiento de tu utilería y toma mejores decisiones!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Reportes de Ventas de Utilería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-pencil-ruler.fa-2x
+        h3 Utilería
+        ul.menu-horizontal
+          li: a.button(href="/utileria") Catálogo de utilería
+          li: a.button(href="/utileria/nuevo") Agregar utilería
+          li: a.button(href="/utileria/vender") Registrar venta
+          li: a.button.active(href="/utileria/reportes") Reporte de ventas
+      .reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        if ventas.length
+          table(style="width:100%;max-width:900px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+            thead
+              tr
+                th Producto
+                th Cantidad
+                th Precio unitario
+                th Total
+                th Fecha
+                th Imprimir
+            tbody
+              each venta in ventas
+                tr
+                  td= venta.nombreUtileria || (venta.utileria ? venta.utileria.nombre : '-')
+                  td= venta.cantidad
+                  td $#{venta.precioUtileria}
+                  td $#{venta.precioUtileria * venta.cantidad}
+                  td= venta.fecha ? venta.fecha.toLocaleDateString('es-AR') : '-'
+                  td
+                    button(type="button", class="btn-imprimir", onclick=`imprimirVenta('${venta._id}')`) Imprimir
+        else
+          p(style="text-align:center;margin-top:32px;") No hay ventas registradas de utilería.
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill
+    script(src="/js/utileria/reportes_ventas_utileria.js")

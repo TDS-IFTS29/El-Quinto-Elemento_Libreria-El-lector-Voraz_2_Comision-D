@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box(style="top:20px;right:5vw;max-width:240px;padding:14px 12px;font-size:1rem;")
+      h2(style="font-size:1.1rem;margin:0 0 8px 0;color:#675858;") Registrar venta de utilería
+      p(style="margin:0;color:#675858;") Ingresa los datos para registrar una nueva venta.
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Registrar venta de utilería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-pencil-ruler.fa-2x
+        h3 Utilería
+        ul.menu-horizontal
+          li: a.button(href="/utileria") Catálogo de utilería
+          li: a.button(href="/utileria/nuevo") Agregar utilería
+          li: a.button.active(href="/utileria/vender") Registrar venta
+          li: a.button(href="/utileria/reportes") Reporte de ventas
+      section.nueva-venta-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+        .form-box.nueva-venta-form(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+          h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Registrar Nueva Venta
+          form#form-nueva-venta-utileria(method="post" action="/utileria/vender" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+            div
+              label(for="utileriaId" style="color:#675858;font-size:1rem;margin-bottom:4px;") Utilería:
+              select(name="utileriaId" id="utileriaId" required style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                option(value="") Selecciona un producto
+                each item in utileria
+                  option(value=item._id data-precio=item.precio) #{item.nombre} - #{item.descripcion}
+            div#precio-utileria-box(style="margin-bottom:10px;")
+              label(style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+              input(type="text" id="precio-utileria" readonly class="input-lg" style="width:100%;background:#eee;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="cantidad" style="color:#675858;font-size:1rem;margin-bottom:4px;") Cantidad:
+              input(type="number" name="cantidad" id="cantidad" min="1" required style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div#total-venta-box(style="margin-bottom:10px;")
+              label(style="color:#675858;font-size:1rem;margin-bottom:4px;") Total:
+              input(type="text" id="total-venta" readonly class="input-lg" style="width:100%;background:#eee;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              button(type="submit" class="button" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Registrar venta
+        a.button(href="/utileria" style="margin-top:18px;") Volver al catálogo
+      script(src="/js/utileria/vender_utileria.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

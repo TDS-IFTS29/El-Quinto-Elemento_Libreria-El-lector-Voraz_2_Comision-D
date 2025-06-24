@@ -105,3 +105,14 @@ exports.reportes = async (req, res) => {
     res.status(500).send('Error al cargar reportes de utilería');
   }
 };
+
+// Factura de venta de utilería
+exports.facturaVenta = async (req, res) => {
+  try {
+    const venta = await Venta.findById(req.params.id).populate('utileria');
+    if (!venta) return res.status(404).send('Venta no encontrada');
+    res.render('utileria/factura_venta_utileria', { venta });
+  } catch (err) {
+    res.status(500).send('Error al cargar la factura de venta de utilería');
+  }
+};

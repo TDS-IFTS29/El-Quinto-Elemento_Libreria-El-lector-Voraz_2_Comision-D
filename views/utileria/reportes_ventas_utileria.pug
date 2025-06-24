@@ -73,7 +73,8 @@ block content
                   td $#{venta.precioUtileria * venta.cantidad}
                   td= venta.fecha ? venta.fecha.toLocaleDateString('es-AR') : '-'
                   td
-                    button(type="button", class="btn-imprimir", onclick=`imprimirVenta('${venta._id}')`) Imprimir
+                    a(href=`/utileria/factura/${venta._id}` target="_blank" class="icon-btn" title="Imprimir factura")
+                      i.fas.fa-print
         else
           p(style="text-align:center;margin-top:32px;") No hay ventas registradas de utilería.
     footer

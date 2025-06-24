@@ -17,5 +17,7 @@ router.get('/editar/:id', utileriaController.formEditar);
 router.post('/editar/:id', utileriaController.editar);
 // Eliminar utilería
 router.get('/eliminar/:id', utileriaController.eliminar);
+// Factura de venta de utilería
+router.get('/factura/:id', utileriaController.facturaVenta);
 
 module.exports = router;

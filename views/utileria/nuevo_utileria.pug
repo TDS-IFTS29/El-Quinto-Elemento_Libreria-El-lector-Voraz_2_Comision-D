@@ -77,7 +77,9 @@ block content
               // El JS llenará las opciones
             div
               button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
-        a.button(href="/utileria" style="margin-top:18px;") Volver al catálogo
+          a.button(href="/utileria" style="margin-top:12px;display:inline-flex;align-items:center;gap:8px;font-size:1.08rem;padding:10px 18px 10px 14px;background:#e0e0e0;color:#333;border-radius:6px;border:none;box-shadow:0 1px 4px rgba(60,60,60,0.07);transition:background 0.2s;cursor:pointer;")
+            i.fas.fa-arrow-left(style="font-size:1.1em;")
+            | Volver al catálogo
       script(src="/js/utileria/nuevo_utileria.js")
     footer
       hr

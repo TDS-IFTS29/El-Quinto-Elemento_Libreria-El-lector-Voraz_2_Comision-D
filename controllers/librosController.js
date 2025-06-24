@@ -1,6 +1,7 @@
 const Libro = require('../models/Libro');
 const Venta = require('../models/Venta');
 const Proveedor = require('../models/Proveedor');
+const Utileria = require('../models/Utileria');
 const mongoose = require('mongoose');
 
 // API RESTful
@@ -213,26 +214,46 @@ async function vistaDashboard(req, res) {
   manana.setDate(hoy.getDate() + 1);
   const ventas = await Venta.find({
     fecha: { $gte: hoy, $lt: manana }
-  }).populate('libro');
+  }).populate('libro').populate('utileria');
   // Ordenar por fecha descendente
   ventas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  const ultimas = ventas.map(v => ({
-    nombre: v.libro && v.libro.nombre ? v.libro.nombre : v.nombreLibro,
-    autor: v.libro && v.libro.autor ? v.libro.autor : v.autorLibro,
-    cantidad: v.cantidad,
-    monto: (v.libro && v.libro.precio ? v.libro.precio : v.precioLibro) * v.cantidad
-  }));
+  const ultimas = ventas.map(v => {
+    if (v.libro) {
+      return {
+        nombre: v.libro.nombre,
+        autor: v.libro.autor,
+        cantidad: v.cantidad,
+        monto: v.libro.precio * v.cantidad
+      };
+    } else if (v.utileria) {
+      return {
+        nombre: v.utileria.nombre,
+        autor: '-',
+        cantidad: v.cantidad,
+        monto: v.utileria.precio * v.cantidad
+      };
+    } else {
+      return {
+        nombre: v.nombreLibro || v.nombreUtileria,
+        autor: v.autorLibro || '-',
+        cantidad: v.cantidad,
+        monto: (v.precioLibro || v.precioUtileria || 0) * v.cantidad
+      };
+    }
+  });
   const total = ultimas.reduce((acc, v) => acc + v.monto, 0);
 
   // Alertas de stock y de ventas
   const libros = await Libro.find();
+  const utilerias = await Utileria.find();
   const alertas = [];
   const seisMesesMs = 6 * 30 * 24 * 60 * 60 * 1000;
   const ahora = Date.now();
+  // Libros
   for (const libro of libros) {
     if (libro.stock === 0) {
       alertas.push(`Libro: "${libro.nombre}" - Agotado`);
-    } else if (libro.stock > 0 && libro.stock <= 2) {
+    } else if (libro.stock > 0 && libro.stock <= (libro.stockMinimo ?? 2)) {
       alertas.push(`Libro: "${libro.nombre}" - Solo ${libro.stock} unidades`);
     }
     // ALERTA: No se vende hace más de 6 meses
@@ -241,7 +262,19 @@ async function vistaDashboard(req, res) {
       alertas.push(`Libro: "${libro.nombre}" - No se vende hace más de 6 meses`);
     }
   }
-
+  // Utilería
+  for (const util of utilerias) {
+    if (util.stock === 0) {
+      alertas.push(`Utilería: "${util.nombre}" - Agotado`);
+    } else if (util.stock > 0 && util.stock <= (util.stockMinimo ?? 2)) {
+      alertas.push(`Utilería: "${util.nombre}" - Solo ${util.stock} unidades`);
+    }
+    // ALERTA: No se vende hace más de 6 meses
+    const ultimaVenta = await Venta.findOne({ utileria: util._id }).sort({ fecha: -1 });
+    if (!ultimaVenta || (ahora - new Date(ultimaVenta.fecha).getTime() > seisMesesMs)) {
+      alertas.push(`Utilería: "${util.nombre}" - No se vende hace más de 6 meses`);
+    }
+  }
   // Ordenar alertas: primero Agotado, luego Solo X unidades, luego No se vende hace más de 6 meses
   const agotado = alertas.filter(a => a.includes('Agotado'));
   const pocasUnidades = alertas.filter(a => a.includes('Solo'));

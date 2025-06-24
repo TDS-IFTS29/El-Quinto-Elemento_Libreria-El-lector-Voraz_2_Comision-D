@@ -65,8 +65,12 @@ exports.crear = async (req, res) => {
 // Formulario para registrar venta de utilería
 exports.formVender = async (req, res) => {
   try {
-    const utileria = await Utileria.find().populate('proveedor');
-    res.render('utileria/vender_utileria', { utileria });
+    let utileria = await Utileria.find().populate('proveedor');
+    let utileriaSeleccionada = null;
+    if (req.query.utileria) {
+      utileriaSeleccionada = utileria.find(u => u._id.toString() === req.query.utileria);
+    }
+    res.render('utileria/vender_utileria', { utileria, utileriaSeleccionada });
   } catch (err) {
     res.status(500).send('Error al cargar el formulario de venta');
   }
@@ -77,11 +81,15 @@ exports.vender = async (req, res) => {
   try {
     const { utileriaId, cantidad } = req.body;
     const util = await Utileria.findById(utileriaId);
-    if (!util) return res.status(404).send('Utilería no encontrada');
+    if (!util) {
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(404).json({ error: 'Utilería no encontrada' });
+      }
+      return res.status(404).send('Utilería no encontrada');
+    }
     util.stock = (util.stock || 0) - parseInt(cantidad);
     util.ultimaVenta = new Date();
     await util.save();
-    // Registrar venta en la colección de ventas (campos específicos de utilería)
     await Venta.create({ 
       utileria: util._id, 
       nombreUtileria: util.nombre, 
@@ -89,8 +97,16 @@ exports.vender = async (req, res) => {
       cantidad, 
       fecha: new Date() 
     });
-    res.redirect('/utileria');
+    // Si es AJAX/fetch, responder con JSON
+    if (req.headers['content-type'] === 'application/json') {
+      return res.json({ exito: true });
+    }
+    // Si es submit tradicional, redirigir
+    res.redirect('/utileria/vender?exito=1');
   } catch (err) {
+    if (req.headers['content-type'] === 'application/json') {
+      return res.status(500).json({ error: 'Error al registrar la venta' });
+    }
     res.status(500).send('Error al registrar la venta');
   }
 };

@@ -61,7 +61,10 @@ block content
               select(name="utileriaId" id="utileriaId" required style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
                 option(value="") Selecciona un producto
                 each item in utileria
-                  option(value=item._id data-precio=item.precio) #{item.nombre} - #{item.descripcion}
+                  if utileriaSeleccionada && utileriaSeleccionada._id.toString() === item._id.toString()
+                    option(value=item._id data-precio=item.precio selected) #{item.nombre} - #{item.descripcion}
+                  else
+                    option(value=item._id data-precio=item.precio) #{item.nombre} - #{item.descripcion}
             div#precio-utileria-box(style="margin-bottom:10px;")
               label(style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
               input(type="text" id="precio-utileria" readonly class="input-lg" style="width:100%;background:#eee;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")

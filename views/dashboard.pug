@@ -217,10 +217,14 @@ block content
                 li.venta Sin alertas de stock
           .card.card-ventas
             h3 Ventas Recientes
-            ul#ventas-recientes
+            ul#ventas-recientes(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas
                   li.venta
+                    if v.autor && v.autor !== '-'
+                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                    else
+                      i.fas.fa-pencil-ruler(style="margin-right:6px;color:#1976d2;")
                     | 🛒 #{v.nombre} ×#{v.cantidad} - #{v.autor} ($#{v.monto})
               else
                 li.venta No hay ventas recientes

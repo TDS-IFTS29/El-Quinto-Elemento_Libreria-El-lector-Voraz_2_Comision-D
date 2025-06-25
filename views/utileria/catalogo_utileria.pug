@@ -71,11 +71,12 @@ block content
                 - var ahora = new Date();
                 - var ultimaVenta = item.ultimaVenta ? new Date(item.ultimaVenta) : null;
                 - var diffMeses = ultimaVenta ? ((ahora.getFullYear() - ultimaVenta.getFullYear()) * 12 + (ahora.getMonth() - ultimaVenta.getMonth())) : 0;
-                - var stockMin = (typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null) ? Number(item.stockMinimo) : 5;
+                - var stockMin = Number(item.stockMinimo || 5);
+                - var stockActual = Number(item.stock || 0);
                 - var color = '';
-                - if (item.stock === 0) { color = 'stock-cero'; }
-                - else if (item.stock > 0 && item.stock < stockMin) { color = 'stock-bajo'; }
-                - else if (item.stock >= stockMin) { color = 'stock-ok'; }
+                - if (stockActual === 0) { color = 'stock-cero'; }
+                - else if (stockActual > 0 && stockActual <= stockMin) { color = 'stock-bajo'; }
+                - else if (stockActual > stockMin) { color = 'stock-ok'; }
                 - if (diffMeses >= 6) { color = 'stock-sin-venta'; }
                 tr
                   td= item.nombre
@@ -86,9 +87,10 @@ block content
                   td= typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null ? item.stockMinimo : 5
                   td= item.ultimaVenta ? item.ultimaVenta.toLocaleDateString('es-AR') : '-'
                   td= item.proveedor ? item.proveedor.nombre : ''
-                  td(style="text-align:center;display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;")
-                    a(href=`/utileria/vender?utileria=${item._id}` class="icon-btn" title="Vender" style="color:#64b5f6;")
-                      i.fas.fa-cash-register
+                  td(style="text-align:center;")
+                    a.button.button-vender(href=`/utileria/vender?utileria=${item._id}` title="Vender" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:1rem;padding:7px 18px 7px 14px;font-family:inherit;font-weight:500;background:#64b5f6;color:#fff;border:none;border-radius:6px;box-shadow:0 1px 4px rgba(60,60,60,0.07);transition:background 0.2s;cursor:pointer;")
+                      i.fas.fa-cash-register(style="margin-right:6px;font-size:1.1em;")
+                      | Vender
                     button(type="button" data-id=item._id class="icon-btn sumar-stock" title="Sumar 1 al stock" style="color:#43a047;")
                       i.fas.fa-plus-circle
                     a(href=`/utileria/editar/${item._id}` class="icon-btn" title="Modificar")

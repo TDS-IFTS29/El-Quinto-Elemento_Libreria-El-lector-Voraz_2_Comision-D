@@ -234,10 +234,15 @@ block content
           .dropdown
             button.button#ventaRapidaBtn(type="button") Venta Rápida
             ul.dropdown-menu#ventaRapidaMenu(style="display:none;")
-              li: a(href="/libros/ventas/nueva") Vender Libro
+              li: a(href="/libros/ventas/nueva" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#1976d2;text-decoration:none;")
+                i.fas.fa-book(style="font-size:1.1em;margin-right:4px;")
+                | Vender Libro
+              li: a(href="/utileria/vender" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#1976d2;text-decoration:none;")
+                i.fas.fa-pencil-ruler(style="font-size:1.1em;margin-right:4px;")
+                | Vender Utilería
               li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Cafetería (próximamente)
-              li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Utilería (próximamente)
           a.button.dashboard-btn(href="/libros/nuevo") Nuevo Libro
+          a.button.dashboard-btn(href="/utileria/nuevo") Nuevo Utilería
           a.button.dashboard-btn(href="/proveedores") Nuevo Proveedor
           button.button.dashboard-btn(type="button") Nuevo Usuario
     script.

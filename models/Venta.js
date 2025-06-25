@@ -1,13 +1,20 @@
 const mongoose = require('mongoose');
-// Registrar el modelo correcto para las ventas de libros
+// Registrar el modelo correcto para las ventas de libros y utilería
 const Libro = require('./Libro');
+const Utileria = require('./Utileria');
 
 const ventaSchema = new mongoose.Schema({
-  libro: { type: mongoose.Schema.Types.ObjectId, ref: 'Libro', required: true },
-  nombreLibro: { type: String, required: true },
-  autorLibro: { type: String, required: true },
-  generoLibro: { type: String, required: true },
-  precioLibro: { type: Number, required: true },
+  // --- LIBROS ---
+  libro: { type: mongoose.Schema.Types.ObjectId, ref: 'Libro', required: false },
+  nombreLibro: { type: String },
+  autorLibro: { type: String },
+  generoLibro: { type: String },
+  precioLibro: { type: Number },
+  // --- UTILERÍA ---
+  utileria: { type: mongoose.Schema.Types.ObjectId, ref: 'Utileria', required: false },
+  nombreUtileria: { type: String },
+  precioUtileria: { type: Number },
+  // --- GENERAL ---
   cantidad: { type: Number, required: true },
   fecha: { type: Date, default: Date.now }
 });

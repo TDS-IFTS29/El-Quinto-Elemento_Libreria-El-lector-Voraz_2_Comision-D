@@ -1,0 +1,87 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Agrega nuevos artículos de utilería y amplía tu stock!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Nueva Utilería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-pencil-ruler.fa-2x
+        h3 Utilería
+        ul.menu-horizontal
+          li: a.button(href="/utileria") Catálogo de utilería
+          li: a.button.active(href="/utileria/nuevo") Agregar utilería
+      section.nuevo-libro-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+        .form-box.nuevo-libro-form(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+          h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Agregar Utilería
+          form#form-nueva-utileria(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+            div
+              label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
+              input(type="text" name="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="descripcion" style="color:#675858;font-size:1rem;margin-bottom:4px;") Descripción:
+              input(type="text" name="descripcion" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="stock" style="color:#675858;font-size:1rem;margin-bottom:4px;") Cantidad:
+              input(type="number" name="stock" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="stockMinimo" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock mínimo:
+              input(type="number" name="stockMinimo" min="0" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="precio" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+              input(type="number" name="precio" step="0.01" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Proveedor:
+              select(name="proveedor" id="proveedor" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                option(value="") Selecciona un proveedor
+              // El JS llenará las opciones
+            div
+              button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
+          a.button(href="/utileria" style="margin-top:12px;display:inline-flex;align-items:center;gap:8px;font-size:1.08rem;padding:10px 18px 10px 14px;background:#e0e0e0;color:#333;border-radius:6px;border:none;box-shadow:0 1px 4px rgba(60,60,60,0.07);transition:background 0.2s;cursor:pointer;")
+            i.fas.fa-arrow-left(style="font-size:1.1em;")
+            | Volver al catálogo
+      script(src="/js/utileria/nuevo_utileria.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

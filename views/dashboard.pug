@@ -29,7 +29,7 @@ block content
               i.fas.fa-mug-hot(style="margin-right:8px;")
               | Cafetería
           li
-            a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
+            a(href="/utileria")
               i.fas.fa-pencil-ruler(style="margin-right:8px;")
               | Utilería
           if user && user.rol === 'admin'
@@ -285,35 +285,61 @@ block content
         .dashboard-cards
           .card.card-stock
             h3 Alertas
-            ul
+            ul(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if alertasStock && alertasStock.length
                 each alerta in alertasStock
-                  if alerta.includes('Agotado')
-                    li.venta(style="color:#e57373;background:#ffebee;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
-                      i.fas.fa-book(style="margin-right:6px;color:#c62828;")
-                      | #{alerta.replace('Libro: ', '')}
-                  else if alerta.includes('Solo')
-                    li.venta(style="color:#ffb74d;background:#fff3e0;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
-                      i.fas.fa-book(style="margin-right:6px;color:#fbc02d;")
-                      | #{alerta.replace('Libro: ', '')}
-                  else if alerta.includes('reposici')
-                    li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
-                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
-                      | #{alerta.replace('Libro: ', '')}
-                  else if alerta.includes('No se vende hace más de 6 meses')
-                    li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
-                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
-                      | #{alerta.replace('Libro: ', '')}
+                  if alerta.includes('Libro:')
+                    if alerta.includes('Agotado')
+                      li.venta(style="color:#e57373;background:#ffebee;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-book(style="margin-right:6px;color:#c62828;")
+                        | #{alerta.replace('Libro: ', '')}
+                    else if alerta.includes('Solo')
+                      li.venta(style="color:#ffb74d;background:#fff3e0;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-book(style="margin-right:6px;color:#fbc02d;")
+                        | #{alerta.replace('Libro: ', '')}
+                    else if alerta.includes('reposici')
+                      li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                        | #{alerta.replace('Libro: ', '')}
+                    else if alerta.includes('No se vende hace más de 6 meses')
+                      li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                        | #{alerta.replace('Libro: ', '')}
+                    else
+                      li.venta= alerta
+                  else if alerta.includes('Utilería:')
+                    if alerta.includes('Agotado')
+                      li.venta(style="color:#e57373;background:#ffebee;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-pencil-ruler(style="margin-right:6px;color:#c62828;")
+                        | #{alerta.replace('Utilería: ', '')}
+                    else if alerta.includes('Solo')
+                      li.venta(style="color:#ffb74d;background:#fff3e0;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-pencil-ruler(style="margin-right:6px;color:#fbc02d;")
+                        | #{alerta.replace('Utilería: ', '')}
+                    else if alerta.includes('reposici')
+                      li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-pencil-ruler(style="margin-right:6px;color:#1976d2;")
+                        | #{alerta.replace('Utilería: ', '')}
+                    else if alerta.includes('No se vende hace más de 6 meses')
+                      li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-pencil-ruler(style="margin-right:6px;color:#1976d2;")
+                        | #{alerta.replace('Utilería: ', '')}
+                    else
+                      li.venta= alerta
                   else
                     li.venta= alerta
               else
                 li.venta Sin alertas de stock
           .card.card-ventas
             h3 Ventas Recientes
-            ul#ventas-recientes
+            ul#ventas-recientes(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas
                   li.venta
+                    if v.autor && v.autor !== '-'
+                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                    else
+                      i.fas.fa-pencil-ruler(style="margin-right:6px;color:#1976d2;")
                     | 🛒 #{v.nombre} ×#{v.cantidad} - #{v.autor} ($#{v.monto})
               else
                 li.venta No hay ventas recientes
@@ -323,10 +349,15 @@ block content
           .dropdown
             button.button#ventaRapidaBtn(type="button") Venta Rápida
             ul.dropdown-menu#ventaRapidaMenu(style="display:none;")
-              li: a(href="/libros/ventas/nueva") Vender Libro
+              li: a(href="/libros/ventas/nueva" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#1976d2;text-decoration:none;")
+                i.fas.fa-book(style="font-size:1.1em;margin-right:4px;")
+                | Vender Libro
+              li: a(href="/utileria/vender" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#1976d2;text-decoration:none;")
+                i.fas.fa-pencil-ruler(style="font-size:1.1em;margin-right:4px;")
+                | Vender Utilería
               li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Cafetería (próximamente)
-              li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Utilería (próximamente)
           a.button.dashboard-btn(href="/libros/nuevo") Nuevo Libro
+          a.button.dashboard-btn(href="/utileria/nuevo") Nuevo Utilería
           a.button.dashboard-btn(href="/proveedores") Nuevo Proveedor
           button.button.dashboard-btn(type="button" onclick="window.location.href='/usuarios/nuevo'") Nuevo Usuario
     script.

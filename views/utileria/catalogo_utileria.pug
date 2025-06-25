@@ -1,0 +1,114 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Gestiona y controla tu utilería de manera eficiente!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Utilería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-pencil-ruler.fa-2x
+        h3 Utilería
+        ul.menu-horizontal
+          li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/utileria") Catálogo de utilería
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/utileria/nuevo") Agregar utilería
+          li: a.button(class=(activeMenu === 'venta' ? 'active' : ''), href="/utileria/vender") Registrar venta
+          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/utileria/reportes") Reporte de ventas
+      section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          thead
+            tr
+              th Nombre
+              th Descripción
+              th Precio
+              th Stock
+              th Stock mínimo
+              th Última venta
+              th Proveedor
+              th Acciones
+          tbody#tabla-utileria
+            if utileria.length
+              each item in utileria
+                - var ahora = new Date();
+                - var ultimaVenta = item.ultimaVenta ? new Date(item.ultimaVenta) : null;
+                - var diffMeses = ultimaVenta ? ((ahora.getFullYear() - ultimaVenta.getFullYear()) * 12 + (ahora.getMonth() - ultimaVenta.getMonth())) : 0;
+                - var stockMin = Number(item.stockMinimo || 5);
+                - var stockActual = Number(item.stock || 0);
+                - var color = '';
+                - if (stockActual === 0) { color = 'stock-cero'; }
+                - else if (stockActual > 0 && stockActual <= stockMin) { color = 'stock-bajo'; }
+                - else if (stockActual > stockMin) { color = 'stock-ok'; }
+                - if (diffMeses >= 6) { color = 'stock-sin-venta'; }
+                tr
+                  td= item.nombre
+                  td= item.descripcion
+                  td $#{item.precio}
+                  td
+                    span(class='stock-badge ' + color)= typeof item.stock !== 'undefined' && item.stock !== null ? item.stock : '-'
+                  td= typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null ? item.stockMinimo : 5
+                  td= item.ultimaVenta ? item.ultimaVenta.toLocaleDateString('es-AR') : '-'
+                  td= item.proveedor ? item.proveedor.nombre : ''
+                  td(style="text-align:center;")
+                    a.button.button-vender(href=`/utileria/vender?utileria=${item._id}` title="Vender" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:1rem;padding:7px 18px 7px 14px;font-family:inherit;font-weight:500;background:#64b5f6;color:#fff;border:none;border-radius:6px;box-shadow:0 1px 4px rgba(60,60,60,0.07);transition:background 0.2s;cursor:pointer;")
+                      i.fas.fa-cash-register(style="margin-right:6px;font-size:1.1em;")
+                      | Vender
+                    button(type="button" data-id=item._id class="icon-btn sumar-stock" title="Sumar 1 al stock" style="color:#43a047;")
+                      i.fas.fa-plus-circle
+                    a(href=`/utileria/editar/${item._id}` class="icon-btn" title="Modificar")
+                      i.fas.fa-edit
+                    button(type="button" data-id=item._id class="icon-btn delete" title="Eliminar")
+                      i.fas.fa-trash-alt
+            else
+              tr
+                td(colspan="9") No hay productos de utilería cargados.
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/inicio") Volver al inicio
+    script(src="/js/utileria/catalogo_utileria.js")
+    style.
+      .stock-badge.stock-ok { background: #d4edda; color: #155724; border-radius: 6px; padding: 2px 8px; }
+      .stock-badge.stock-bajo { background: #fff3cd; color: #856404; border-radius: 6px; padding: 2px 8px; }
+      .stock-badge.stock-cero { background: #f8d7da; color: #721c24; border-radius: 6px; padding: 2px 8px; }
+      .stock-badge.stock-sin-venta { background: #e3f2fd; color: #1976d2; border-radius: 6px; padding: 2px 8px; }
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

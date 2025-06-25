@@ -81,8 +81,65 @@ async function crearBaseDeDatos() {
     }
     const librosInsertados = await Libro.insertMany(libros);
 
-    // Usuario admin necesario
-    await Usuario.create({ nombre: 'admin', email: 'admin', password: '1234' });
+    // Usuarios iniciales del sistema
+    // 1 Administrador (Juan Pérez) + 3 Empleados (Antonio Gill, Cristian Descosido, Damian Clausi)
+    // + 1 Admin adicional para compatibilidad con el sistema existente
+    // TODAS LAS CONTRASEÑAS SON: 1234 (se cifran automáticamente)
+    const usuarios = [
+      {
+        nombre: 'Juan Pérez',
+        email: 'juan.perez@lectorvoraz.com',
+        password: '1234',
+        rol: 'admin',
+        telefono: '11-2345-6789',
+        activo: true
+      },
+      {
+        nombre: 'Antonio Gill',
+        email: 'antonio.gill@lectorvoraz.com',
+        password: '1234',
+        rol: 'empleado',
+        telefono: '11-3456-7890',
+        activo: true
+      },
+      {
+        nombre: 'Cristian Descosido',
+        email: 'cristian.descosido@lectorvoraz.com',
+        password: '1234',
+        rol: 'empleado',
+        telefono: '11-4567-8901',
+        activo: true
+      },
+      {
+        nombre: 'Damian Clausi',
+        email: 'damian.clausi@lectorvoraz.com',
+        password: '1234',
+        rol: 'empleado',
+        telefono: '11-5678-9012',
+        activo: true
+      },
+      // Usuario admin original para compatibilidad
+      {
+        nombre: 'admin',
+        email: 'admin',
+        password: '1234',
+        rol: 'admin',
+        activo: true
+      }
+    ];
+
+    // Crear usuarios uno por uno para que se active el middleware de cifrado
+    const usuariosInsertados = [];
+    for (const usuarioData of usuarios) {
+      const usuario = new Usuario(usuarioData);
+      await usuario.save(); // Esto activa el middleware pre('save') para cifrar la contraseña
+      usuariosInsertados.push(usuario);
+    }
+    
+    console.log(`Usuarios creados: ${usuariosInsertados.length}`);
+    usuariosInsertados.forEach(usuario => {
+      console.log(`   - ${usuario.nombre} (${usuario.email}) - Rol: ${usuario.rol}`);
+    });
 
     // Ventas de ejemplo (solo con libros válidos)
     // Solo crear ventas para los libros a partir del índice 2 (los demás tendrán ventas recientes)
@@ -110,7 +167,21 @@ async function crearBaseDeDatos() {
       await new Venta({ ...ventas[i], fecha: fechaVenta }).save();
     }
 
-    console.log('Base de datos el-lector-voraz creada con ejemplos variados.');
+    console.log('Base de datos el-lector-voraz creada exitosamente con:');
+    console.log(`   Libros: ${librosInsertados.length}`);
+    console.log(`   Proveedores: ${proveedoresInsertados.length}`);
+    console.log(`   Usuarios: ${usuariosInsertados.length}`);
+    console.log(`   Ventas de ejemplo: ${ventas.length}`);
+    console.log('');
+    console.log('Usuarios creados (TODAS LAS CONTRASEÑAS: 1234):');
+    console.log('   Admin: Juan Perez (juan.perez@lectorvoraz.com)');
+    console.log('   Empleado: Antonio Gill (antonio.gill@lectorvoraz.com)');
+    console.log('   Empleado: Cristian Descosido (cristian.descosido@lectorvoraz.com)');
+    console.log('   Empleado: Damian Clausi (damian.clausi@lectorvoraz.com)');
+    console.log('   Admin: admin (admin) - (compatibilidad)');
+    console.log('   Todas las contraseñas están cifradas en la base de datos');
+    console.log('');
+    console.log('Puedes acceder al sistema en: http://localhost:3000');
     await mongoose.disconnect();
     process.exit(0);
   } catch (err) {

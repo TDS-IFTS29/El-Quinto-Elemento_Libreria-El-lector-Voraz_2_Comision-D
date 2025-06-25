@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const librosController = require('../../../controllers/librosController');
+const librosController = require('../../controllers/librosController');
 
 // API REST para libros
 router.get('/', librosController.listar);
@@ -9,7 +9,7 @@ router.patch('/:id', librosController.guardarEdicion);
 router.delete('/:id', librosController.eliminar);
 router.get('/:id', librosController.obtener);
 router.patch('/:id/sumar-stock', async (req, res) => {
-  const Libro = require('../../../models/Libro');
+  const Libro = require('../../models/Libro');
   const id = req.params.id;
   try {
     const libro = await Libro.findById(id);

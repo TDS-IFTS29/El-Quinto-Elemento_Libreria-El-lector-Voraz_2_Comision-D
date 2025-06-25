@@ -28,21 +28,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Rutas de vistas
-app.use('/', require('./routes/usuarios')); // login en "/"
+app.use('/', require('./routes/auth')); // login en "/"
 app.use('/inicio', require('./routes/home')); // home en "/inicio"
 
 // app.use('/catalogo', (req, res) => res.render('catalogo_libros'));
 app.use('/libros', require('./routes/libros'));
 app.use('/proveedores', require('./routes/proveedores'));
+app.use('/usuarios', require('./routes/usuarios')); // CRUD de usuarios
 
 // Ruta para la documentación de la API
 app.use('/api-docs', require('./routes/apiDocs'));
 
 // Rutas API RESTful
 // app.use('/api/productos', require('./routes/api/productos'));
-app.use('/api/proveedores', require('./routes/api/proveedores/index.js'));
+app.use('/api/proveedores', require('./routes/api/proveedores'));
 app.use('/api/libros', require('./routes/api/libros'));
 app.use('/api/ventas', require('./routes/api/ventas'));
+app.use('/api/usuarios', require('./routes/api/usuarios')); // API de usuarios
 // app.use('/api/proveedores_libros', require('./routes/api/proveedores_libros'));
 // app.use('/api/ventas', require('./routes/api/ventas'));
 // app.use('/api/debug', require('./routes/debug'));

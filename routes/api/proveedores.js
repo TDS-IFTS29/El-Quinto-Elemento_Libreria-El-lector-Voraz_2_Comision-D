@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const proveedoresController = require('../../../controllers/proveedoresController');
+const proveedoresController = require('../../controllers/proveedoresController');
 
 // API REST para proveedores
 router.get('/', proveedoresController.listar);

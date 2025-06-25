@@ -3,16 +3,22 @@ html
   head
     title Documentación de la API
     style.
-      body { font-family: sans-serif; line-height: 1.6; margin: 20px; }
+      body { font-family: sans-serif; line-height: 1.6; margin: 20px; background-color: #f8f9fa; }
       h1, h2, h3 { color: #333; }
-      pre { background-color: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+      h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+      h2 { color: #34495e; margin-top: 30px; }
+      pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; border-left: 4px solid #3498db; }
       code { font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; }
-      .endpoint { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
-      .method { font-weight: bold; margin-right: 10px; }
-      .get { color: green; }
-      .post { color: blue; }
-      .patch { color: orange; }
-      .delete { color: red; }
+      .endpoint { margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+      .method { font-weight: bold; margin-right: 10px; padding: 4px 8px; border-radius: 4px; color: white; }
+      .get { background-color: #28a745; }
+      .post { background-color: #007bff; }
+      .put { background-color: #ffc107; color: #212529; }
+      .patch { background-color: #fd7e14; }
+      .delete { background-color: #dc3545; }
+      ul { margin-left: 20px; }
+      li { margin-bottom: 5px; }
+      strong { color: #2c3e50; }
 
   body
     h1 Documentación de la API
@@ -140,6 +146,166 @@ html
       pre
         code.
           DELETE /api/proveedores/ID_DEL_PROVEEDOR
+
+    .endpoint
+      h2 Usuarios API
+
+      h3
+        span.method.get GET
+        | /api/usuarios
+      p Obtiene una lista de todos los usuarios del sistema.
+      pre
+        code.
+          GET /api/usuarios
+      p Respuesta de ejemplo:
+      pre
+        code.
+          [
+            {
+              "_id": "ID_DEL_USUARIO",
+              "nombre": "Juan Pérez",
+              "email": "juan@ejemplo.com",
+              "rol": "empleado",
+              "telefono": "11-1234-5678",
+              "activo": true,
+              "fechaCreacion": "2025-06-25T10:30:21.893Z"
+            }
+          ]
+
+      h3
+        span.method.get GET
+        | /api/usuarios/:id
+      p Obtiene un usuario específico por su ObjectId.
+      pre
+        code.
+          GET /api/usuarios/ID_DEL_USUARIO
+
+      h3
+        span.method.post POST
+        | /api/usuarios
+      p Crea un nuevo usuario. Los campos <code>nombre</code>, <code>email</code> y <code>password</code> son obligatorios. La contraseña se cifra automáticamente con bcrypt.
+      pre
+        code.
+          POST /api/usuarios
+          Content-Type: application/json
+          {
+            "nombre": "Juan Pérez",
+            "email": "juan@ejemplo.com",
+            "password": "miContraseña123",
+            "rol": "empleado",
+            "telefono": "11-1234-5678",
+            "activo": true
+          }
+      p Respuesta exitosa (201):
+      pre
+        code.
+          {
+            "mensaje": "Usuario creado exitosamente",
+            "usuario": {
+              "_id": "ID_DEL_USUARIO",
+              "nombre": "Juan Pérez",
+              "email": "juan@ejemplo.com",
+              "password": "$2b$10$hash_cifrado_de_la_contraseña",
+              "rol": "empleado",
+              "telefono": "11-1234-5678",
+              "activo": true,
+              "fechaCreacion": "2025-06-25T10:30:21.893Z"
+            }
+          }
+
+      h3
+        span.method.put PUT
+        | /api/usuarios/:id
+      p Actualiza un usuario existente. Si se proporciona el campo <code>password</code>, se cifra automáticamente. No es necesario enviar todos los campos, solo los que se desean actualizar.
+      pre
+        code.
+          PUT /api/usuarios/ID_DEL_USUARIO
+          Content-Type: application/json
+          {
+            "nombre": "Juan Carlos Pérez",
+            "email": "juancarlos@ejemplo.com",
+            "rol": "vendedor",
+            "telefono": "11-9876-5432",
+            "activo": false
+          }
+      p Para cambiar contraseña:
+      pre
+        code.
+          PUT /api/usuarios/ID_DEL_USUARIO
+          Content-Type: application/json
+          {
+            "password": "nuevaContraseña456"
+          }
+      p Respuesta exitosa (200):
+      pre
+        code.
+          {
+            "mensaje": "Usuario actualizado exitosamente",
+            "usuario": {
+              "_id": "ID_DEL_USUARIO",
+              "nombre": "Juan Carlos Pérez",
+              "email": "juancarlos@ejemplo.com",
+              "password": "$2b$10$nuevo_hash_cifrado",
+              "rol": "vendedor",
+              "telefono": "11-9876-5432",
+              "activo": false,
+              "fechaCreacion": "2025-06-25T10:30:21.893Z"
+            }
+          }
+
+      h3
+        span.method.delete DELETE
+        | /api/usuarios/:id
+      p Elimina un usuario por su ObjectId.
+      pre
+        code.
+          DELETE /api/usuarios/ID_DEL_USUARIO
+      p Respuesta exitosa (200):
+      pre
+        code.
+          {
+            "mensaje": "Usuario eliminado exitosamente"
+          }
+
+      h4 Roles de Usuario Disponibles
+      ul
+        li
+          strong admin
+          | : Administrador del sistema con todos los permisos
+        li
+          strong empleado
+          | : Empleado con permisos básicos (valor por defecto)
+        li
+          strong vendedor
+          | : Vendedor con permisos de ventas
+
+      h4 Validaciones de Usuario
+      ul
+        li El email debe ser único en el sistema
+        li La contraseña se cifra automáticamente con bcrypt (salt rounds: 10)
+        li Los campos nombre, email y password son obligatorios
+        li El campo activo es booleano (true por defecto)
+        li Se genera automáticamente la fechaCreacion al crear el usuario
+
+      h4 Errores Comunes
+      p Error 400 - Datos faltantes:
+      pre
+        code.
+          {
+            "error": "Nombre, email y contraseña son campos requeridos"
+          }
+      p Error 400 - Email duplicado:
+      pre
+        code.
+          {
+            "error": "Ya existe un usuario con ese email"
+          }
+      p Error 404 - Usuario no encontrado:
+      pre
+        code.
+          {
+            "error": "Usuario no encontrado"
+          }
 
     .endpoint
       h2 Ventas API
@@ -270,20 +436,39 @@ html
     .endpoint
       h2 Notas y Consideraciones
       ul
-        li Todas las rutas requieren Content-Type: application/json para los métodos POST y PATCH.
+        li Todas las rutas requieren Content-Type: application/json para los métodos POST, PUT y PATCH.
         li Los IDs deben ser válidos de MongoDB (ObjectId).
         li El endpoint de ventas está anidado bajo /api/libros/ventas para mantener la relación con los libros.
-        li Si necesitas endpoints adicionales (reportes, filtros, etc.), agrégalos según la necesidad del sistema.
-        li Las fechas se devuelven en formato ISO 8601 (ejemplo: 2025-06-18T12:34:56.789Z).
+        li Las contraseñas de usuarios se cifran automáticamente con bcrypt antes de almacenarse.
+        li Las fechas se devuelven en formato ISO 8601 (ejemplo: 2025-06-25T10:30:21.893Z).
+        li En el frontend, las fechas se muestran en formato dd/mm/yyyy para mejor legibilidad.
         li Para reportes o listados personalizados, se recomienda implementar endpoints específicos en el backend.
 
     .endpoint
       h2 Autenticación y Seguridad
-      p Actualmente, la API no requiere autenticación. Para entornos productivos, se recomienda implementar autenticación JWT o sesiones para proteger los endpoints sensibles (crear, editar, eliminar).
+      p La API implementa las siguientes medidas de seguridad:
       ul
-        li Para agregar autenticación, utiliza middleware como passport.js o express-jwt.
-        li Protege los endpoints POST, PATCH y DELETE para evitar modificaciones no autorizadas.
-        li Considera agregar roles de usuario (admin, vendedor, etc.) según las necesidades del sistema.
+        li
+          strong Cifrado de contraseñas
+          | : Todas las contraseñas se cifran con bcrypt (salt rounds: 10)
+        li
+          strong Validación de email único
+          | : El sistema previene emails duplicados en usuarios
+        li
+          strong Validación de campos requeridos
+          | : Se validan los campos obligatorios antes de crear/actualizar
+        li
+          strong Manejo de errores robusto
+          | : Códigos de estado HTTP apropiados (200, 201, 400, 404, 500)
+      p
+        strong Recomendaciones para producción:
+      ul
+        li Implementar autenticación JWT o sesiones para proteger endpoints sensibles
+        li Proteger los endpoints POST, PUT y DELETE con middleware de autenticación
+        li Considerar agregar middleware de autorización basado en roles
+        li Implementar rate limiting para prevenir ataques de fuerza bruta
+        li Agregar validación de complejidad de contraseñas
+        li Implementar logs de auditoría para operaciones sensibles
 
     .endpoint
       h2 Ejemplo de Respuesta de Error

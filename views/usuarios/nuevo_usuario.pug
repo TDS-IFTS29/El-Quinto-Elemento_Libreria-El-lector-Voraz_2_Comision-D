@@ -1,0 +1,90 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Nuevo Usuario
+      p ¡Agrega un nuevo usuario al sistema!
+  
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz        
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="/usuarios" class="active")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Usuarios
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-users.fa-2x
+        h3 Usuarios
+        ul.menu-horizontal
+          li: a.button(href="/usuarios") Catálogo de usuarios
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/usuarios/nuevo") Agregar usuario
+      
+      .nuevo-usuario-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+        .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+          h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Nuevo Usuario
+          form#form-nuevo-usuario(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+            div
+              label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
+              input(type="text" name="nombre" id="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="email" style="color:#675858;font-size:1rem;margin-bottom:4px;") Email:
+              input(type="email" name="email" id="email" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="password" style="color:#675858;font-size:1rem;margin-bottom:4px;") Contraseña:
+              input(type="password" name="password" id="password" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="confirmarPassword" style="color:#675858;font-size:1rem;margin-bottom:4px;") Confirmar Contraseña:
+              input(type="password" name="confirmarPassword" id="confirmarPassword" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div
+              label(for="rol" style="color:#675858;font-size:1rem;margin-bottom:4px;") Rol:
+              select(name="rol" id="rol" required class="input-lg" style="width:100%;margin-bottom:10px;")
+                option(value="empleado") Empleado
+                option(value="vendedor") Vendedor
+                option(value="admin") Administrador
+            div
+              label(for="telefono" style="color:#675858;font-size:1rem;margin-bottom:4px;") Teléfono:
+              input(type="text" name="telefono" id="telefono" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+            div(style="display:flex;align-items:center;margin-bottom:18px;")
+              input(type="checkbox" name="activo" id="activo" checked style="margin-right:8px;")
+              label(for="activo" style="color:#675858;font-size:1rem;") Usuario activo
+            div
+              button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/usuarios") Volver al catálogo
+          
+  script(src="/js/usuarios/nuevo_usuario.js")

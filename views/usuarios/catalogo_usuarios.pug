@@ -1,0 +1,74 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Gestión de Usuarios
+      p ¡Administra los usuarios del sistema de forma eficiente!
+  
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz        
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          li
+            a(href="/proveedores")
+              i.fas.fa-truck(style="margin-right:8px;")
+              | Proveedores
+          li
+            a(href="/usuarios" class="active")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Usuarios
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          span Admin
+          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+      
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-users.fa-2x
+        h3 Usuarios
+        ul.menu-horizontal
+          li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/usuarios") Catálogo de usuarios
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/usuarios/nuevo") Agregar usuario
+      
+      section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          thead
+            tr
+              th Nombre
+              th Email
+              th Rol
+              th Teléfono
+              th Estado
+              th Fecha Creación
+              th Acciones
+          tbody#tabla-usuarios
+            tr
+              td(colspan="7") Cargando usuarios...
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/inicio") Volver al inicio
+        
+        script(src="/js/usuarios/catalogo_usuarios.js")

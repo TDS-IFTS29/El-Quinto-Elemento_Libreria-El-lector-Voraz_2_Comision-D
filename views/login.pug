@@ -8,11 +8,12 @@ html
       img(src="/img/logo-lector-voraz.png" alt="El Lector Voraz Logo" style="width:240px; margin-bottom:24px;")            
 
       if error
-        p(style="color: red") Usuario o contraseña incorrectos
+        .error-message(style="color: #d32f2f; background: #ffebee; padding: 12px; border-radius: 6px; margin-bottom: 16px; border: 1px solid #ffcdd2;")
+          p(style="margin: 0; font-weight: bold;") ❌ Usuario o contraseña incorrectos
 
       form(action="/login" method="POST")
-        label(for="usuario") Usuario:
-        input(type="text" name="usuario" required value=usuario)
+        label(for="usuario") Usuario/Email:
+        input(type="text" name="usuario" required value=usuario placeholder="Ingresa tu usuario o email")
         label(for="contrasena") Contraseña:
-        input(type="password" name="contrasena" required)
+        input(type="password" name="contrasena" required placeholder="Ingresa tu contraseña")
         button(type="submit" class="button") Ingresar

@@ -49,7 +49,7 @@ app.use('/api/ventas', require('./routes/api/ventas'));
 
 // Nueva ruta de utilería
 app.use('/utileria', require('./routes/utileria'));
-app.use('/api/utileria', require('./routes/api/utileria'));
+app.use('/api/utileria', require('./routes/api/utileria/index.js'));
 
 // Puerto
 const PORT = process.env.PORT || 3000;

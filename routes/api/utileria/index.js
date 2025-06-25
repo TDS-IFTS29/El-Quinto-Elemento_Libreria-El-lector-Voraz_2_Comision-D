@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Utileria = require('../../models/Utileria');
+const Utileria = require('../../../models/Utileria');
 
 // Obtener todos los productos de utilería
 router.get('/', async (req, res) => {
@@ -43,6 +43,33 @@ router.delete('/:id', async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ error: 'Error al eliminar utilería' });
+  }
+});
+
+// Obtener un producto de utilería por ID
+router.get('/:id', async (req, res) => {
+  try {
+    const util = await Utileria.findById(req.params.id).populate('proveedor');
+    if (!util) return res.status(404).json({ error: 'No encontrado' });
+    res.json(util);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al obtener utilería' });
+  }
+});
+
+// Editar producto de utilería
+router.patch('/:id', async (req, res) => {
+  try {
+    const { nombre, descripcion, precio, stock, stockMinimo, proveedor } = req.body;
+    const util = await Utileria.findByIdAndUpdate(
+      req.params.id,
+      { nombre, descripcion, precio, stock, stockMinimo, proveedor },
+      { new: true }
+    );
+    if (!util) return res.status(404).json({ error: 'No encontrado' });
+    res.json(util);
+  } catch (err) {
+    res.status(500).json({ error: 'Error al editar utilería' });
   }
 });
 

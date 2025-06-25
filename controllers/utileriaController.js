@@ -87,6 +87,13 @@ exports.vender = async (req, res) => {
       }
       return res.status(404).send('Utilería no encontrada');
     }
+    if (parseInt(cantidad) > util.stock) {
+      const msg = 'No hay suficiente stock disponible para realizar la venta.';
+      if (req.headers['content-type'] === 'application/json') {
+        return res.status(400).json({ error: msg });
+      }
+      return res.status(400).send(msg);
+    }
     util.stock = (util.stock || 0) - parseInt(cantidad);
     util.ultimaVenta = new Date();
     await util.save();

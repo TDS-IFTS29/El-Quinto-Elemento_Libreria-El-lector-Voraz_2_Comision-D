@@ -71,7 +71,11 @@ block content
                 - var ahora = new Date();
                 - var ultimaVenta = item.ultimaVenta ? new Date(item.ultimaVenta) : null;
                 - var diffMeses = ultimaVenta ? ((ahora.getFullYear() - ultimaVenta.getFullYear()) * 12 + (ahora.getMonth() - ultimaVenta.getMonth())) : 0;
-                - var color = item.stock === 0 ? 'stock-cero' : (item.stock <= (typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null ? item.stockMinimo : 5) ? 'stock-bajo' : 'stock-ok');
+                - var stockMin = (typeof item.stockMinimo !== 'undefined' && item.stockMinimo !== null) ? Number(item.stockMinimo) : 5;
+                - var color = '';
+                - if (item.stock === 0) { color = 'stock-cero'; }
+                - else if (item.stock > 0 && item.stock < stockMin) { color = 'stock-bajo'; }
+                - else if (item.stock >= stockMin) { color = 'stock-ok'; }
                 - if (diffMeses >= 6) { color = 'stock-sin-venta'; }
                 tr
                   td= item.nombre

@@ -1,5 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function() {
+  let currentUser = null;
+  
   try {
+    // First get current user info to check permissions
+    const userResponse = await fetch('/api/usuarios/me');
+    if (userResponse.ok) {
+      currentUser = await userResponse.json();
+    }
+    
     const response = await fetch('/api/usuarios');
     if (!response.ok) throw new Error('Error al cargar usuarios');
     
@@ -22,21 +30,42 @@ document.addEventListener('DOMContentLoaded', async function() {
       const estadoTexto = usuario.activo ? 'Activo' : 'Inactivo';
       const estadoClase = usuario.activo ? 'estado-activo' : 'estado-inactivo';
       
+      // Determine what actions are available based on permissions
+      let acciones = '';
+      
+      if (currentUser) {
+        const isAdmin = currentUser.rol === 'admin';
+        const isOwnUser = currentUser._id === usuario._id;
+        
+        if (isAdmin || isOwnUser) {
+          // Edit button - admin can edit anyone, employee can edit themselves
+          acciones += `<button class="button-edit" onclick="editarUsuario('${usuario._id}')" title="Editar usuario">
+              <i class="fas fa-edit"></i>
+            </button>`;
+        }
+        
+        if (isAdmin && !isOwnUser) {
+          // Delete button - only admin can delete, and not themselves
+          acciones += `<button class="button-delete" onclick="eliminarUsuario('${usuario._id}', '${usuario.nombre}')" title="Eliminar usuario">
+              <i class="fas fa-trash"></i>
+            </button>`;
+        }
+      }
+      
+      if (!acciones) {
+        acciones = '<span style="color: #666;">Sin acciones</span>';
+      }
+      
       return `
         <tr>
           <td>${usuario.nombre}</td>
           <td>${usuario.email}</td>
-          <td>${usuario.rol}</td>
+          <td>${usuario.rol === 'admin' ? 'Administrador' : 'Empleado'}</td>
           <td>${usuario.telefono || '-'}</td>
           <td><span class="${estadoClase}">${estadoTexto}</span></td>
           <td>${fechaFormateada}</td>
           <td class="acciones-col">
-            <button class="button-edit" onclick="editarUsuario('${usuario._id}')" title="Editar usuario">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="button-delete" onclick="eliminarUsuario('${usuario._id}', '${usuario.nombre}')" title="Eliminar usuario">
-              <i class="fas fa-trash"></i>
-            </button>
+            ${acciones}
           </td>
         </tr>
       `;

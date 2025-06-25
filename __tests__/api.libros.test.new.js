@@ -25,6 +25,7 @@ beforeAll(async () => {
       mail: 'libros@test.com',
       tipo_proveedor: 'libreria'
     });
+  
   proveedorLibreriaId = proveedorRes.body._id;
 });
 
@@ -186,6 +187,7 @@ describe('API Libros', () => {
     const patchRes = await adminAgent
       .patch(`/api/libros/${libroId}`)
       .send(datosActualizados);
+    
     expect(patchRes.statusCode).toBe(200);
     expect(patchRes.body.precio).toBe(datosActualizados.precio);
     expect(patchRes.body.stock).toBe(datosActualizados.stock);
@@ -230,6 +232,7 @@ describe('API Libros', () => {
     const libroId = createRes.body._id;
 
     const deleteRes = await adminAgent.delete(`/api/libros/${libroId}`);
+    
     expect(deleteRes.statusCode).toBe(200);
     expect(deleteRes.body).toHaveProperty('mensaje');
   });

@@ -14,10 +14,18 @@ async function login(req, res) {
     }
     
     if (existe && await existe.compararPassword(contrasena)) {
-      console.log(`✅ Login exitoso: ${existe.nombre} (${existe.email})`);
+      // Crear sesión con datos del usuario
+      req.session.user = {
+        _id: existe._id.toString(),
+        nombre: existe.nombre,
+        email: existe.email,
+        rol: existe.rol,
+        activo: existe.activo
+      };
+      
+      console.log(`✅ Login exitoso: Usuario ${existe.nombre} (${existe.email}) - Rol: ${existe.rol}`);
       res.redirect('/inicio');
     } else {
-      console.log(`❌ Login fallido para: ${usuario}`);
       res.redirect(`/login?error=1&usuario=${encodeURIComponent(usuario)}`);
     }
   } catch (error) {
@@ -26,16 +34,35 @@ async function login(req, res) {
   }
 }
 
-function vistaLogin(req, res) {
-  const error = req.query.error === '1';
-  const usuarioIngresado = req.query.usuario || '';
-  res.render('login', { error, usuario: usuarioIngresado });
+function logout(req, res) {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+    res.redirect('/login');
+  });
 }
 
-// Función para mostrar el catálogo de usuarios
+function vistaLogin(req, res) {
+  const error = req.query.error === '1';
+  const errorAuth = req.query.error === '2';
+  const usuarioIngresado = req.query.usuario || '';
+  const mensaje = req.query.mensaje || '';
+  
+  res.render('login', { 
+    error, 
+    errorAuth,
+    usuario: usuarioIngresado,
+    mensaje 
+  });
+}
+
+// Función para mostrar el catálogo de usuarios (solo admin)
 async function verCatalogo(req, res) {
   try {
-    const usuarios = await Usuario.find({}).sort({ fechaCreacion: -1 });
+    // Solo admin puede acceder (verificado por middleware), mostrar todos los usuarios
+    const usuarios = await Usuario.find({}).select('-password').sort({ fechaCreacion: -1 });
+    
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener usuarios' });
@@ -68,7 +95,10 @@ async function crear(req, res) {
     });
 
     await nuevoUsuario.save();
-    res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: nuevoUsuario });
+    
+    // Retornar usuario sin contraseña
+    const usuarioSinPassword = await Usuario.findById(nuevoUsuario._id).select('-password');
+    res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: usuarioSinPassword });
   } catch (error) {
     res.status(500).json({ error: 'Error al crear usuario: ' + error.message });
   }
@@ -77,53 +107,83 @@ async function crear(req, res) {
 // Función para obtener un usuario por ID
 async function obtenerPorId(req, res) {
   try {
-    const usuario = await Usuario.findById(req.params.id);
+    const usuario = await Usuario.findById(req.params.id).select('-password');
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
     res.json(usuario);
   } catch (error) {
+    console.error('Error en obtenerPorId:', error);
     res.status(500).json({ error: 'Error al obtener usuario' });
   }
 }
 
-// Función para actualizar un usuario
+// Función para actualizar un usuario (empleado solo puede cambiar su propia contraseña)
 async function actualizar(req, res) {
   try {
     const { nombre, email, password, rol, telefono, activo } = req.body;
+    const usuarioId = req.params.id;
     
     // Buscar el usuario primero
-    const usuario = await Usuario.findById(req.params.id);
+    const usuario = await Usuario.findById(usuarioId);
     if (!usuario) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
     
-    // Verificar si existe otro usuario con el mismo email
-    const usuarioConEmail = await Usuario.findOne({ 
-      email, 
-      _id: { $ne: req.params.id } 
-    });
+    // Si es empleado, solo puede modificar sus propios datos básicos
+    if (req.usuario.rol === 'empleado') {
+      if (req.usuario._id.toString() !== usuarioId.toString()) {
+        return res.status(403).json({ error: 'Solo puede modificar sus propios datos' });
+      }
+      
+      // Empleado puede cambiar nombre, email y contraseña, pero no rol ni activo
+      if (nombre !== undefined) usuario.nombre = nombre;
+      if (email !== undefined) usuario.email = email;
+      if (password && password.trim() !== '') {
+        usuario.password = password;
+      }
+      
+      await usuario.save();
+      // Retornar usuario sin contraseña
+      const usuarioSinPassword = await Usuario.findById(usuarioId).select('-password');
+      return res.json(usuarioSinPassword);
+    }
     
-    if (usuarioConEmail) {
-      return res.status(400).json({ error: 'Ya existe otro usuario con ese email' });
+    // Solo admin puede modificar todos los campos de cualquier usuario
+    if (req.usuario.rol === 'admin') {
+      // Verificar si existe otro usuario con el mismo email (solo si se cambió el email)
+      if (email && email !== usuario.email) {
+        const usuarioConEmail = await Usuario.findOne({ 
+          email, 
+          _id: { $ne: usuarioId } 
+        });
+        
+        if (usuarioConEmail) {
+          return res.status(400).json({ error: 'Ya existe otro usuario con ese email' });
+        }
+      }
+
+      // Actualizar los campos solo si se proporcionan
+      if (nombre !== undefined) usuario.nombre = nombre;
+      if (email !== undefined) usuario.email = email;
+      if (rol !== undefined) usuario.rol = rol;
+      if (telefono !== undefined) usuario.telefono = telefono;
+      if (activo !== undefined) usuario.activo = activo;
+
+      // Solo actualizar password si se proporciona
+      if (password && password.trim() !== '') {
+        usuario.password = password;
+      }
+
+      // Guardar con .save() para activar el middleware de cifrado
+      await usuario.save();
+
+      // Retornar usuario sin contraseña
+      const usuarioSinPassword = await Usuario.findById(usuarioId).select('-password');
+      res.json(usuarioSinPassword);
+    } else {
+      return res.status(403).json({ error: 'No tiene permisos para realizar esta acción' });
     }
-
-    // Actualizar los campos
-    usuario.nombre = nombre;
-    usuario.email = email;
-    usuario.rol = rol;
-    usuario.telefono = telefono;
-    usuario.activo = activo;
-
-    // Solo actualizar password si se proporciona
-    if (password && password.trim() !== '') {
-      usuario.password = password; // Esto activará el middleware pre('save') para cifrar
-    }
-
-    // Guardar con .save() para activar el middleware de cifrado
-    await usuario.save();
-
-    res.json({ mensaje: 'Usuario actualizado exitosamente', usuario });
   } catch (error) {
     res.status(500).json({ error: 'Error al actualizar usuario: ' + error.message });
   }
@@ -144,6 +204,7 @@ async function eliminar(req, res) {
 
 module.exports = {
   login,
+  logout,
   vistaLogin,
   verCatalogo,
   crear,

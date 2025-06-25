@@ -58,15 +58,30 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     
     const formData = new FormData(form);
-    const usuario = {
-      nombre: formData.get('nombre'),
-      email: formData.get('email'),
-      rol: formData.get('rol'),
-      telefono: formData.get('telefono'),
-      activo: formData.get('activo') === 'on'
-    };
     
-    // Solo incluir password si se ha proporcionado
+    // Get current user to check permissions
+    let currentUser = null;
+    try {
+      const userResponse = await fetch('/api/usuarios/me');
+      if (userResponse.ok) {
+        currentUser = await userResponse.json();
+      }
+    } catch (error) {
+      console.error('Error getting current user:', error);
+    }
+    
+    const usuario = {};
+    
+    // If user is admin, they can update all fields
+    if (currentUser && currentUser.rol === 'admin') {
+      usuario.nombre = formData.get('nombre');
+      usuario.email = formData.get('email');
+      usuario.rol = formData.get('rol');
+      usuario.telefono = formData.get('telefono');
+      usuario.activo = formData.get('activo') === 'on';
+    }
+    
+    // Both admin and employee can change password
     const password = formData.get('password');
     const confirmarPassword = formData.get('confirmarPassword');
     
@@ -80,22 +95,30 @@ document.addEventListener('DOMContentLoaded', function() {
       usuario.password = password.trim();
     }
     
-    // Validación básica
-    if (!usuario.nombre || !usuario.email) {
-      alert('Por favor completa todos los campos obligatorios');
-      return;
-    }
-    
-    // Validación de email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(usuario.email)) {
-      alert('Por favor ingresa un email válido');
-      return;
+    // Validación básica - only for admins updating full profile
+    if (currentUser && currentUser.rol === 'admin') {
+      if (!usuario.nombre || !usuario.email) {
+        alert('Por favor completa todos los campos obligatorios');
+        return;
+      }
+      
+      // Validación de email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(usuario.email)) {
+        alert('Por favor ingresa un email válido');
+        return;
+      }
     }
     
     // Validación de contraseña si se ha proporcionado
     if (usuario.password && usuario.password.length < 6) {
       alert('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+    
+    // If employee is only changing password and no password provided, show message
+    if (currentUser && currentUser.rol !== 'admin' && !usuario.password) {
+      alert('Debes ingresar una nueva contraseña para actualizar tu perfil');
       return;
     }
     

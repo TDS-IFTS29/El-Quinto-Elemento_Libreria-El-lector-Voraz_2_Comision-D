@@ -1,5 +1,16 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const tabla = document.getElementById('tabla-libros');
+  
+  // Obtener información del usuario actual para verificar permisos
+  let currentUser = null;
+  try {
+    const userResponse = await fetch('/api/usuarios/me');
+    if (userResponse.ok) {
+      currentUser = await userResponse.json();
+    }
+  } catch (error) {
+    console.error('Error getting current user:', error);
+  }
 
   fetch('/api/libros')
     .then(res => res.json())
@@ -23,6 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
             alerta += `<span class="libro-alerta"><i class='fas fa-book' style='color:#1976d2;margin-right:4px;'></i>"${l.nombre}" - No se vende hace más de 6 meses</span>`;
           }
         }
+        
+        // Determinar qué acciones están disponibles según el rol del usuario
+        let acciones = '';
+        
+        // Todos pueden ver el botón de comprar
+        acciones += `<a href="/libros/ventas/nueva?libro=${l._id}" class="icon-btn" title="Comprar" style="color:#64b5f6;"><i class="fas fa-shopping-cart"></i></a>`;
+        
+        // Solo admin puede sumar stock
+        if (currentUser && currentUser.rol === 'admin') {
+          acciones += `<button data-id="${l._id}" class="icon-btn sumar-stock" title="Sumar 1 al stock" style="color:#43a047;"><i class="fas fa-plus-circle"></i></button>`;
+          acciones += `<a href="/libros/editar/${l._id}" class="icon-btn" title="Modificar"><i class="fas fa-edit"></i></a>`;
+          acciones += `<button data-id="${l._id}" class="icon-btn delete" title="Eliminar"><i class="fas fa-trash-alt"></i></button>`;
+        } else {
+          // Los empleados solo ven mensaje informativo o acciones limitadas
+          acciones += `<span style="color:#666;font-size:0.8em;font-style:italic;">Solo lectura</span>`;
+        }
+        
         fila.innerHTML = `
           <td>${l.nombre}</td>
           <td>${l.autor}</td>
@@ -33,10 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${l.ultimaVenta ? new Date(l.ultimaVenta).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-'}</td>
           <td>${l.proveedor && l.proveedor.nombre ? l.proveedor.nombre : '-'}</td>
           <td style="text-align:center;display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;">
-            <a href="/libros/ventas/nueva?libro=${l._id}" class="icon-btn" title="Comprar" style="color:#64b5f6;"><i class="fas fa-shopping-cart"></i></a>
-            <button data-id="${l._id}" class="icon-btn sumar-stock" title="Sumar 1 al stock" style="color:#43a047;"><i class="fas fa-plus-circle"></i></button>
-            <a href="/libros/editar/${l._id}" class="icon-btn" title="Modificar"><i class="fas fa-edit"></i></a>
-            <button data-id="${l._id}" class="icon-btn delete" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
+            ${acciones}
           </td>
         `;
         tabla.appendChild(fila);

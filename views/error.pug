@@ -1,0 +1,60 @@
+extends layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Acceso Denegado
+      p No tiene permisos para acceder a esta página
+  
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz        
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          if usuario && usuario.rol === 'admin'
+            li
+              a(href="/libros")
+                i.fas.fa-book(style="margin-right:8px;")
+                | Libros
+            li
+              a(href="/proveedores")
+                i.fas.fa-truck(style="margin-right:8px;")
+                | Proveedores
+            li
+              a(href="/usuarios")
+                i.fas.fa-users(style="margin-right:8px;")
+                | Usuarios
+          else
+            li
+              a(href="/libros")
+                i.fas.fa-book(style="margin-right:8px;")
+                | Libros
+            li
+              a(href="/usuarios")
+                i.fas.fa-users(style="margin-right:8px;")
+                | Mi Perfil
+    
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Error de Permisos
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          if usuario
+            span= usuario.nombre + ' (' + usuario.rol + ')'
+          button.logout-btn(type="button" onclick="window.location.href='/logout'") Cerrar Sesión
+      
+      .error-content(style="background:#F2F0EC;padding:32px;text-align:center;")
+        .error-box(style="background:#fff;border-radius:10px;padding:40px;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          i.fas.fa-exclamation-triangle(style="font-size:64px;color:#dc3545;margin-bottom:20px;")
+          h2(style="color:#dc3545;margin-bottom:20px;") Acceso Denegado
+          p(style="font-size:18px;margin-bottom:30px;")= mensaje || 'No tiene permisos para acceder a esta página.'
+          .actions
+            a.button(href="/inicio" style="background-color:#007bff;color:white;padding:12px 24px;text-decoration:none;border-radius:5px;margin-right:10px;") Volver al Inicio
+            if usuario && usuario.rol === 'empleado'
+              a.button(href="/usuarios" style="background-color:#28a745;color:white;padding:12px 24px;text-decoration:none;border-radius:5px;") Mi Perfil

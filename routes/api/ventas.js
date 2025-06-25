@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { requireRole } = require('../../middleware/auth');
 const ventasController = require('../../controllers/ventasController');
 
 // Obtener los libros más vendidos
@@ -20,7 +21,7 @@ router.post('/', ventasController.createVenta);
 // Actualizar una venta existente
 router.put('/:id', ventasController.updateVenta);
 
-// Eliminar una venta
-router.delete('/:id', ventasController.deleteVenta);
+// Eliminar una venta (solo admin)
+router.delete('/:id', requireRole(['admin']), ventasController.deleteVenta);
 
 module.exports = router;

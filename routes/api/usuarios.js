@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { requireRole, requireOwnerOrAdmin } = require('../../middleware/auth');
 const {
   verCatalogo,
   crear,
@@ -8,19 +9,28 @@ const {
   eliminar
 } = require('../../controllers/usuariosController');
 
-// GET /api/usuarios - Obtener todos los usuarios
-router.get('/', verCatalogo);
+// GET /api/usuarios - Obtener todos los usuarios (solo admin)
+router.get('/', requireRole(['admin']), verCatalogo);
 
-// POST /api/usuarios - Crear nuevo usuario
-router.post('/', crear);
+// GET /api/usuarios/me - Obtener información del usuario actual
+router.get('/me', (req, res) => {
+  if (req.session.user) {
+    res.json(req.session.user);
+  } else {
+    res.status(401).json({ error: 'No autorizado' });
+  }
+});
 
-// GET /api/usuarios/:id - Obtener usuario por ID
-router.get('/:id', obtenerPorId);
+// POST /api/usuarios - Crear nuevo usuario (solo admin)
+router.post('/', requireRole(['admin']), crear);
 
-// PUT /api/usuarios/:id - Actualizar usuario
-router.put('/:id', actualizar);
+// GET /api/usuarios/:id - Obtener usuario por ID (propietario o admin)
+router.get('/:id', requireOwnerOrAdmin, obtenerPorId);
 
-// DELETE /api/usuarios/:id - Eliminar usuario
-router.delete('/:id', eliminar);
+// PUT /api/usuarios/:id - Actualizar usuario (propietario puede cambiar password, admin todo)
+router.put('/:id', requireOwnerOrAdmin, actualizar);
+
+// DELETE /api/usuarios/:id - Eliminar usuario (solo admin)
+router.delete('/:id', requireRole(['admin']), eliminar);
 
 module.exports = router;

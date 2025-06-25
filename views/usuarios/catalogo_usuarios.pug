@@ -30,10 +30,11 @@ block content
             a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
               i.fas.fa-pencil-ruler(style="margin-right:8px;")
               | Utilería
-          li
-            a(href="/proveedores")
-              i.fas.fa-truck(style="margin-right:8px;")
-              | Proveedores
+          if user && user.rol === 'admin'
+            li
+              a(href="/proveedores")
+                i.fas.fa-truck(style="margin-right:8px;")
+                | Proveedores
           li
             a(href="/usuarios" class="active")
               i.fas.fa-users(style="margin-right:8px;")
@@ -43,8 +44,11 @@ block content
       .main-header(style="display:flex;justify-content:space-between;align-items:center;")
         h1 Usuarios
         .user-info(style="display:flex;align-items:center;gap:12px;")
-          span Admin
-          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+          if user
+            span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+          else
+            span Usuario
+          button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
       
       .menu-grupo.menu-grupo-horizontal
         .menu-icon
@@ -52,7 +56,8 @@ block content
         h3 Usuarios
         ul.menu-horizontal
           li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/usuarios") Catálogo de usuarios
-          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/usuarios/nuevo") Agregar usuario
+          if user && user.rol === 'admin'
+            li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/usuarios/nuevo") Agregar usuario
       
       section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
         table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")

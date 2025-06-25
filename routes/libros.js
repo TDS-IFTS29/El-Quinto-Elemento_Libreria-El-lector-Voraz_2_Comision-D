@@ -13,25 +13,54 @@ const {
   vistaDashboard
 } = require('../controllers/librosController');
 
+// Middleware para verificar que solo admin puede crear/editar libros
+function requireAdminForLibroManagement(req, res, next) {
+  if (req.usuario.rol !== 'admin') {
+    return res.status(403).render('error', { 
+      mensaje: 'Solo los administradores pueden crear y editar libros.',
+      user: req.usuario 
+    });
+  }
+  next();
+}
+
 // Solo renderiza dashboard/layout para navegación visual
 router.get('/', (req, res) => {
-  res.render('libros/catalogo_libros', { activeMenu: 'catalogo' });
+  res.render('libros/catalogo_libros', { 
+    activeMenu: 'catalogo',
+    user: req.usuario 
+  });
 });
-router.get('/nuevo', (req, res) => {
-  res.render('libros/nuevo_libro', { activeMenu: 'nuevo' });
+router.get('/nuevo', requireAdminForLibroManagement, (req, res) => {
+  res.render('libros/nuevo_libro', { 
+    activeMenu: 'nuevo',
+    user: req.usuario 
+  });
 });
-router.get('/editar/:id', (req, res) => {
-  res.render('libros/editar_libro', { activeMenu: 'editar', libroId: req.params.id });
+router.get('/editar/:id', requireAdminForLibroManagement, (req, res) => {
+  res.render('libros/editar_libro', { 
+    activeMenu: 'editar', 
+    libroId: req.params.id,
+    user: req.usuario 
+  });
 });
 router.get('/ventas/editar/:id', (req, res) => {
-  res.render('libros/editar_venta', { ventaId: req.params.id });
+  res.render('libros/editar_venta', { 
+    ventaId: req.params.id,
+    user: req.usuario 
+  });
 });
 router.get('/ventas/nueva', (req, res) => {
-  res.render('libros/nueva_venta', { libros: [] });
+  res.render('libros/nueva_venta', { 
+    libros: [],
+    user: req.usuario 
+  });
 });
 router.get('/ventas/reportes', require('../controllers/librosController').vistaReportesVentas);
 router.get('/ventas', (req, res) => {
-  res.render('libros/catalogo_ventas_libros');
+  res.render('libros/catalogo_ventas_libros', {
+    user: req.usuario 
+  });
 });
 router.get('/ventas/factura/:id', async (req, res) => {
   const ventaId = req.params.id;

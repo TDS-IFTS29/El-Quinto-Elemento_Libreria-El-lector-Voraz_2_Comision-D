@@ -10,73 +10,87 @@ async function listar(req, res) {
 }
 
 async function crear(req, res) {
-  // Validar que se envíe proveedor
-  let proveedorId = req.body.proveedor;
-  if (!proveedorId) {
-    return res.status(400).json({ error: 'El campo proveedor es obligatorio y debe ser el ObjectId de un proveedor de tipo libreria' });
-  }
-  // Validar que el proveedor exista y sea de tipo libreria
-  const proveedor = await Proveedor.findOne({ _id: proveedorId, tipo_proveedor: 'libreria' });
-  if (!proveedor) {
-    return res.status(400).json({ error: 'Proveedor inválido o no es de tipo libreria' });
-  }
-  const nuevo = new Libro({
-    nombre: req.body.nombre,
-    autor: req.body.autor,
-    precio: parseFloat(req.body.precio),
-    genero: req.body.genero,
-    stock: parseInt(req.body.stock) || 0,
-    proveedor: proveedor._id
-  });
-  await nuevo.save();
-  await nuevo.populate('proveedor');
-  res.status(201).json(nuevo); // Cambiado a status 201 y respuesta JSON
-}
-
-async function eliminar(req, res) {
-  const id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'ID de libro inválido' });
-  }
-  const result = await Libro.findByIdAndDelete(id);
-  if (!result) {
-    return res.status(404).json({ error: 'Libro no encontrado' });
-  }
-  res.status(200).json({ mensaje: 'Libro eliminado correctamente' }); // status 200 explícito
-}
-
-async function guardarEdicion(req, res) {
-  const id = req.params.id;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ error: 'ID de libro inválido' });
-  }
-  const libro = await Libro.findById(id);
-  if (!libro) {
-    return res.status(404).json({ error: 'Libro no encontrado' });
-  }
-  libro.nombre = req.body.nombre ?? libro.nombre;
-  libro.autor = req.body.autor ?? libro.autor;
-  libro.precio = req.body.precio ?? libro.precio;
-  if (req.body.stock !== undefined) {
-    libro.stock = parseInt(req.body.stock);
-    if (isNaN(libro.stock) || libro.stock < 0) libro.stock = 0;
-  }
-  if (req.body.stockMinimo !== undefined) {
-    libro.stockMinimo = parseInt(req.body.stockMinimo);
-    if (isNaN(libro.stockMinimo) || libro.stockMinimo < 0) libro.stockMinimo = 0;
-  }
-  // Permitir actualizar el proveedor si viene en el body
-  if (req.body.proveedor) {
+  try {
+    // Validar que se envíe proveedor
+    let proveedorId = req.body.proveedor;
+    if (!proveedorId) {
+      return res.status(400).json({ error: 'El campo proveedor es obligatorio y debe ser el ObjectId de un proveedor de tipo libreria' });
+    }
     // Validar que el proveedor exista y sea de tipo libreria
-    const proveedor = await Proveedor.findOne({ _id: req.body.proveedor, tipo_proveedor: 'libreria' });
+    const proveedor = await Proveedor.findOne({ _id: proveedorId, tipo_proveedor: 'libreria' });
     if (!proveedor) {
       return res.status(400).json({ error: 'Proveedor inválido o no es de tipo libreria' });
     }
-    libro.proveedor = proveedor._id;
+    const nuevo = new Libro({
+      nombre: req.body.nombre,
+      autor: req.body.autor,
+      precio: parseFloat(req.body.precio),
+      genero: req.body.genero,
+      stock: parseInt(req.body.stock) || 0,
+      proveedor: proveedor._id
+    });
+    await nuevo.save();
+    await nuevo.populate('proveedor');
+    res.status(201).json(nuevo); // Cambiado a status 201 y respuesta JSON
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor al crear el libro' });
   }
-  await libro.save();
-  await libro.populate('proveedor');
-  res.status(200).json(libro); // status 200 explícito
+}
+
+async function eliminar(req, res) {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'ID de libro inválido' });
+    }
+    const result = await Libro.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+    res.status(200).json({ mensaje: 'Libro eliminado correctamente' }); // status 200 explícito
+  } catch (error) {
+    console.error('Error deleting book:', error);
+    res.status(500).json({ error: 'Error interno del servidor al eliminar el libro' });
+  }
+}
+
+async function guardarEdicion(req, res) {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'ID de libro inválido' });
+    }
+    const libro = await Libro.findById(id);
+    if (!libro) {
+      return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+    libro.nombre = req.body.nombre ?? libro.nombre;
+    libro.autor = req.body.autor ?? libro.autor;
+    libro.precio = req.body.precio ?? libro.precio;
+    if (req.body.stock !== undefined) {
+      libro.stock = parseInt(req.body.stock);
+      if (isNaN(libro.stock) || libro.stock < 0) libro.stock = 0;
+    }
+    if (req.body.stockMinimo !== undefined) {
+      libro.stockMinimo = parseInt(req.body.stockMinimo);
+      if (isNaN(libro.stockMinimo) || libro.stockMinimo < 0) libro.stockMinimo = 0;
+    }
+    // Permitir actualizar el proveedor si viene en el body
+    if (req.body.proveedor) {
+      // Validar que el proveedor exista y sea de tipo libreria
+      const proveedor = await Proveedor.findOne({ _id: req.body.proveedor, tipo_proveedor: 'libreria' });
+      if (!proveedor) {
+        return res.status(400).json({ error: 'Proveedor inválido o no es de tipo libreria' });
+      }
+      libro.proveedor = proveedor._id;
+    }
+    await libro.save();
+    await libro.populate('proveedor');
+    res.status(200).json(libro); // status 200 explícito
+  } catch (error) {
+    console.error('Error updating book:', error);
+    res.status(500).json({ error: 'Error interno del servidor al actualizar el libro' });
+  }
 }
 
 async function vistaNuevoLibro(req, res) {
@@ -249,7 +263,12 @@ async function vistaDashboard(req, res) {
   const otras = alertas.filter(a => !a.includes('Agotado') && !a.includes('Solo') && !a.includes('No se vende hace más de 6 meses'));
   const alertasOrdenadas = [...agotado, ...pocasUnidades, ...sinVenta, ...otras];
 
-  res.render('dashboard', { ultimasVentas: ultimas, totalVentas: total, alertasStock: alertasOrdenadas });
+  res.render('dashboard', { 
+    ultimasVentas: ultimas, 
+    totalVentas: total, 
+    alertasStock: alertasOrdenadas,
+    user: req.usuario // Pasar datos del usuario a la vista (cambiado a 'user' para consistencia)
+  });
 }
 
 module.exports = {

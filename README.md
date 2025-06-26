@@ -16,6 +16,13 @@ git clone git@github.com:TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_
 npm install
 ```
 
+### 3. Crear .env en el directorio raiz con los siguientes datos para pruebas locales
+
+```bash
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/el-lector-voraz
+```
+
 ### 3. Iniciar MongoDB localmente
 
 Debe tener instalado MongoDB localmente e iniciado.

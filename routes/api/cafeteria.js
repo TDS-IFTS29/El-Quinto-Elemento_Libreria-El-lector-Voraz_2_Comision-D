@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Cafeteria = require('../../../models/Cafeteria');
-const Proveedor = require('../../../models/Proveedor');
-const { requireAuth, requireRole } = require('../../../middleware/auth');
+const Cafeteria = require('../../models/Cafeteria');
+const Proveedor = require('../../models/Proveedor');
+const { requireAuth, requireRole } = require('../../middleware/auth');
 
 // Todas las rutas de API requieren autenticación
 router.use(requireAuth);

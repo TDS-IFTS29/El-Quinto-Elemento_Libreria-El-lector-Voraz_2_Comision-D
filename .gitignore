@@ -1,5 +1,5 @@
 node_modules/
-# .env NO ignorado por fines prácticos y educativos
+.env
 *.log
 *.bak
 dump/

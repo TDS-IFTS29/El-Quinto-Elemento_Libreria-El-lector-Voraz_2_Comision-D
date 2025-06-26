@@ -186,34 +186,83 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 
 ## Rutas Principales
 
+### Autenticación
+
 | Método | Ruta                              | Descripción                              |
 |--------|------------------------------------|------------------------------------------|
-| GET    | /                                | Página principal                         |
-| GET    | /libros/catalogo_libros          | Vista de catálogo de libros (Pug)        |
+| GET    | /auth/login                      | Vista de login                           |
+| POST   | /auth/login                      | Procesar login                           |
+| POST   | /auth/logout                     | Cerrar sesión                            |
+| GET    | /auth/logout                     | Cerrar sesión (método GET)               |
+
+### Dashboard y Principal
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /                                | Dashboard principal                      |
+
+### Libros
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /libros/                         | Vista de catálogo de libros (Pug)        |
 | GET    | /libros/nuevo                    | Formulario nuevo libro                   |
 | GET    | /libros/editar/:id               | Formulario de edición de libro           |
-| GET    | /proveedores/catalogo_proveedores  | Vista de proveedores con acciones        |
-| GET    | /proveedores/nuevo_proveedor       | Formulario nuevo proveedor               |
-| GET    | /proveedores/editar_proveedor/:id  | Formulario de edición de proveedor       |
 | GET    | /libros/ventas                   | Historial de ventas de libros            |
 | GET    | /libros/ventas/nueva             | Formulario registrar venta de libro      |
 | GET    | /libros/ventas/reportes          | Vista con reportes dinámicos             |
-| GET    | /api/libros                      | Listar libros (JSON)                     |
-| GET    | /api/libros/:id                  | Obtener un libro                         |
-| POST   | /api/libros                      | Crear libro                              |
-| PATCH  | /api/libros/:id                  | Actualizar libro                         |
-| DELETE | /api/libros/:id                  | Eliminar libro                           |
-| GET    | /api/proveedores                 | Listar proveedores (JSON)                |
-| GET    | /api/proveedores/:id             | Obtener proveedor                        |
-| POST   | /api/proveedores                 | Crear proveedor                          |
-| PATCH  | /api/proveedores/:id             | Actualizar proveedor                     |
-| DELETE | /api/proveedores/:id             | Eliminar proveedor                       |
-| GET    | /api/libros/ventas               | Listar ventas de libros (JSON)           |
-| POST   | /api/libros/ventas               | Registrar nueva venta de libro           |
-| GET    | /api/libros/ventas/mas-vendidos  | JSON con los libros más vendidos         |
-| GET    | /api/libros/ventas/ventas-semana | JSON con ventas de la última semana      |
+| GET    | /libros/ventas/editar/:id        | Formulario editar venta                  |
+| GET    | /libros/ventas/factura/:id       | Factura de venta de libro                |
+
+### Proveedores
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /proveedores/                    | Vista de proveedores con acciones        |
+| GET    | /proveedores/nuevo               | Formulario nuevo proveedor               |
+| GET    | /proveedores/editar/:id          | Formulario de edición de proveedor       |
+
+### Usuarios
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /usuarios/catalogo               | Catálogo de usuarios                     |
+| GET    | /usuarios/nuevo                  | Formulario nuevo usuario                 |
+| GET    | /usuarios/editar/:id             | Formulario editar usuario                |
+
+### Cafetería
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /cafeteria/                      | Catálogo de productos de cafetería       |
+| GET    | /cafeteria/nuevo                 | Formulario nuevo producto de cafetería   |
+| GET    | /cafeteria/editar/:id            | Formulario editar producto de cafetería  |
+| GET    | /cafeteria/vender                | Formulario vender producto de cafetería  |
+| GET    | /cafeteria/reportes              | Reportes de ventas de cafetería          |
+| GET    | /cafeteria/factura/:ventaId      | Factura de venta de cafetería            |
+
+### Utilería
+
+| Método | Ruta                              | Descripción                              |
+|--------|------------------------------------|------------------------------------------|
+| GET    | /utileria/                       | Catálogo de productos de utilería        |
+| GET    | /utileria/nuevo                  | Formulario nuevo producto de utilería    |
+| GET    | /utileria/editar/:id             | Formulario editar producto de utilería   |
+| GET    | /utileria/vender                 | Formulario vender producto de utilería   |
+| GET    | /utileria/reportes               | Reportes de ventas de utilería           |
+| GET    | /utileria/factura/:id            | Factura de venta de utilería             |
 
 ## Endpoints RESTful principales
+
+### Autenticación API
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| POST   | /auth/login                 | Iniciar sesión en el sistema                |
+| POST   | /auth/logout                | Cerrar sesión del usuario actual            |
+| GET    | /auth/logout                | Cerrar sesión (método GET)                  |
+
+### Libros API
 
 | Método | Ruta                        | Descripción                                 |
 |--------|-----------------------------|---------------------------------------------|
@@ -221,18 +270,68 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 | GET    | /api/libros/:id             | Obtener un libro                            |
 | POST   | /api/libros                 | Crear libro (incluye `stockMinimo`)         |
 | PATCH  | /api/libros/:id             | Actualizar libro (incluye `stockMinimo`)    |
-| PATCH  | /api/libros/:id/sumar-stock | Sumar 1 al stock de un libro                |
-| DELETE | /api/libros/:id             | Eliminar libro                              |
-| GET    | /api/proveedores            | Listar proveedores                          |
+| PATCH  | /api/libros/:id/sumar-stock | Sumar 1 al stock de un libro (solo admin)   |
+| DELETE | /api/libros/:id             | Eliminar libro (solo admin)                 |
+
+### Proveedores API
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| GET    | /api/proveedores            | Listar proveedores (filtrar por tipo)       |
 | GET    | /api/proveedores/:id        | Obtener proveedor                           |
-| POST   | /api/proveedores            | Crear proveedor                             |
-| PATCH  | /api/proveedores/:id        | Actualizar proveedor                        |
-| DELETE | /api/proveedores/:id        | Eliminar proveedor                          |
-| GET    | /api/ventas                 | Listar ventas                               |
-| GET    | /api/ventas/:id             | Obtener venta                               |
-| POST   | /api/ventas                 | Registrar nueva venta                       |
-| PUT    | /api/ventas/:id             | Editar venta                                |
-| DELETE | /api/ventas/:id             | Eliminar venta                              |
+| POST   | /api/proveedores            | Crear proveedor (solo admin)                |
+| PATCH  | /api/proveedores/:id        | Actualizar proveedor (solo admin)           |
+| DELETE | /api/proveedores/:id        | Eliminar proveedor (solo admin)             |
+
+### Usuarios API
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| GET    | /api/usuarios               | Listar usuarios (solo admin)                |
+| GET    | /api/usuarios/me            | Obtener datos del usuario actual            |
+| GET    | /api/usuarios/:id           | Obtener usuario (propietario o admin)       |
+| POST   | /api/usuarios               | Crear usuario (solo admin)                  |
+| PUT    | /api/usuarios/:id           | Actualizar usuario (propietario o admin)    |
+| DELETE | /api/usuarios/:id           | Eliminar usuario (solo admin)               |
+
+### Ventas API
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| GET    | /api/ventas                 | Listar ventas de libros                     |
+| GET    | /api/ventas/:id             | Obtener venta específica                    |
+| POST   | /api/ventas                 | Registrar nueva venta de libro              |
+| PUT    | /api/ventas/:id             | Editar venta existente                      |
+| DELETE | /api/ventas/:id             | Eliminar venta (solo admin)                 |
+| GET    | /api/ventas/mas-vendidos    | Libros más vendidos (con filtro período)    |
+| GET    | /api/ventas/ventas-semana   | Ventas por día de la semana actual          |
+
+### Utilería API
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| GET    | /api/utileria               | Listar productos de utilería                |
+| GET    | /api/utileria/:id           | Obtener producto de utilería                |
+| POST   | /api/utileria               | Crear producto de utilería (solo admin)     |
+| PATCH  | /api/utileria/:id           | Actualizar producto de utilería (solo admin)|
+| DELETE | /api/utileria/:id           | Eliminar producto de utilería (solo admin)  |
+| PATCH  | /api/utileria/:id/sumar-stock | Sumar 1 al stock (solo admin)             |
+| POST   | /api/utileria/vender        | Registrar venta de utilería                 |
+| GET    | /api/utileria/ventas        | Historial de ventas de utilería             |
+| GET    | /api/utileria/ventas/mas-vendidos | Productos más vendidos con filtro    |
+
+### Cafetería API
+
+| Método | Ruta                        | Descripción                                 |
+|--------|-----------------------------|---------------------------------------------|
+| GET    | /api/cafeteria              | Listar productos de cafetería               |
+| GET    | /api/cafeteria/:id          | Obtener producto de cafetería               |
+| POST   | /api/cafeteria              | Crear producto de cafetería (solo admin)    |
+| PATCH  | /api/cafeteria/:id          | Actualizar producto de cafetería (solo admin)|
+| DELETE | /api/cafeteria/:id          | Eliminar producto de cafetería (solo admin) |
+| POST   | /api/cafeteria/vender       | Registrar venta de cafetería                |
+| GET    | /api/cafeteria/ventas       | Historial de ventas de cafetería            |
+| GET    | /api/cafeteria/ventas/mas-vendidos | Productos más vendidos con filtro   |
 
 ## Sistema de Permisos Basados en Roles
 

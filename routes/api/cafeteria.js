@@ -190,7 +190,7 @@ router.post('/vender', async (req, res) => {
     }
 
     // Crear venta
-    const Venta = require('../../../models/Venta');
+    const Venta = require('../../models/Venta');
     const venta = new Venta({
       tipo: 'cafeteria',
       cafeteria: cafeteriaId,
@@ -253,7 +253,7 @@ router.post('/:id/vender', async (req, res) => {
     }
 
     // Crear venta
-    const Venta = require('../../../models/Venta');
+    const Venta = require('../../models/Venta');
     const venta = new Venta({
       tipo: 'cafeteria',
       cafeteria: itemId,
@@ -312,7 +312,7 @@ router.get('/reportes/:periodo', async (req, res) => {
         return res.status(400).json({ error: 'Período inválido. Use: diario, semanal, o mensual' });
     }
 
-    const Venta = require('../../../models/Venta');
+    const Venta = require('../../models/Venta');
     const ventas = await Venta.find({
       tipo: 'cafeteria',
       fecha: { $gte: fechaInicio, $lte: ahora }

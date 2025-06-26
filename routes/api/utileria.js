@@ -9,7 +9,7 @@ router.post('/', requireRole(['admin']), utileriaController.crear); // Solo admi
 router.patch('/:id', requireRole(['admin']), utileriaController.guardarEdicion); // Solo admin puede editar
 router.delete('/:id', requireRole(['admin']), utileriaController.eliminar); // Solo admin puede eliminar
 router.get('/:id', utileriaController.obtener); // Todos pueden ver un producto específico
-router.patch('/:id/sumar-stock', async (req, res) => {
+router.patch('/:id/sumar-stock', requireRole(['admin']), async (req, res) => {
   const Utileria = require('../../models/Utileria');
   const id = req.params.id;
   try {

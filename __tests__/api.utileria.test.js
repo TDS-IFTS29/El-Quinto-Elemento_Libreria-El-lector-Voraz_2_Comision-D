@@ -192,7 +192,8 @@ describe('API de Utilería', () => {
   describe('Permisos de eliminación - Solo admin', () => {
     test('DELETE /api/utileria/:id debería eliminar un item (admin)', async () => {
       const response = await adminAgent
-        .delete(`/api/utileria/${testUtileria._id}`);
+        .delete(`/api/utileria/${testUtileria._id}`)
+        .set('Accept', 'application/json');
 
       expect(response.status).toBe(200);
       expect(response.body.ok).toBe(true);
@@ -224,7 +225,7 @@ describe('API de Utilería', () => {
         .get(`/api/utileria/${idInexistente}`);
 
       expect(response.status).toBe(404);
-      expect(response.body.error).toContain('No encontrado');
+      expect(response.body.error).toContain('Producto de utilería no encontrado');
     });
 
     test('PATCH /api/utileria/:id debería retornar 404 para item inexistente (admin)', async () => {
@@ -235,14 +236,15 @@ describe('API de Utilería', () => {
         .send({ nombre: 'Test' });
 
       expect(response.status).toBe(404);
-      expect(response.body.error).toContain('No encontrado');
+      expect(response.body.error).toContain('Producto de utilería no encontrado');
     });
 
     test('DELETE /api/utileria/:id debería funcionar silenciosamente para item inexistente (admin)', async () => {
       const idInexistente = new mongoose.Types.ObjectId();
       
       const response = await adminAgent
-        .delete(`/api/utileria/${idInexistente}`);
+        .delete(`/api/utileria/${idInexistente}`)
+        .set('Accept', 'application/json');
 
       expect(response.status).toBe(200);
       expect(response.body.ok).toBe(true);

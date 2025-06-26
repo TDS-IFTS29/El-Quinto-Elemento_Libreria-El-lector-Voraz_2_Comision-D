@@ -47,9 +47,19 @@ exports.editar = async (req, res) => {
 
 exports.eliminar = async (req, res) => {
   try {
-    await Utileria.findByIdAndDelete(req.params.id);
+    const utileria = await Utileria.findByIdAndDelete(req.params.id);
+    
+    // Si es una llamada API
+    if (req.headers['content-type']?.includes('application/json') || req.headers.accept?.includes('application/json')) {
+      return res.json({ ok: true });
+    }
+    
+    // Si es un formulario tradicional
     res.redirect('/utileria');
   } catch (err) {
+    if (req.headers['content-type']?.includes('application/json') || req.headers.accept?.includes('application/json')) {
+      return res.status(500).json({ error: 'Error al eliminar utilería' });
+    }
     res.status(500).send('Error al eliminar utilería');
   }
 };
@@ -71,9 +81,21 @@ exports.formNuevo = async (req, res) => {
 exports.crear = async (req, res) => {
   try {
     const { nombre, descripcion, precio, stock, stockMinimo, proveedor } = req.body;
+    
+    // Si es una llamada API (Content-Type: application/json)
+    if (req.headers['content-type']?.includes('application/json')) {
+      const utileria = await Utileria.create({ nombre, descripcion, precio, stock, stockMinimo, proveedor });
+      const utileriaCompleta = await Utileria.findById(utileria._id).populate('proveedor');
+      return res.status(201).json(utileriaCompleta);
+    }
+    
+    // Si es un formulario tradicional
     await Utileria.create({ nombre, descripcion, precio, stock, stockMinimo, proveedor });
     res.redirect('/utileria');
   } catch (err) {
+    if (req.headers['content-type']?.includes('application/json')) {
+      return res.status(500).json({ error: 'Error al crear utilería' });
+    }
     res.status(500).send('Error al crear utilería');
   }
 };

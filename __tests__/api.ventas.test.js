@@ -89,6 +89,7 @@ describe('API de Ventas de Libros', () => {
     const res = await adminAgent
       .post('/api/ventas')
       .send(nuevaVenta);
+    
     expect(res.statusCode).toBe(201);
     // Ahora se espera el objeto venta con los campos históricos
     expect(res.body).toHaveProperty('libro', libroId);
@@ -120,6 +121,7 @@ describe('API de Ventas de Libros', () => {
     const res = await empleadoAgent
       .post('/api/ventas')
       .send(nuevaVenta);
+    
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('libro', libroId);
     expect(res.body).toHaveProperty('nombreLibro', 'Cien años de soledad Test');

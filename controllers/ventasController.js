@@ -41,13 +41,21 @@ exports.createVenta = async (req, res) => {
     libroDoc.stock -= cantidad;
     libroDoc.ultimaVenta = new Date(); // Actualiza la fecha de última venta
     await libroDoc.save();
+    
+    const precioUnitario = libroDoc.precio;
+    const total = precioUnitario * cantidad;
+    
     const nuevaVenta = new Venta({
+      tipo: 'libro',
       libro,
       nombreLibro: libroDoc.nombre,
       autorLibro: libroDoc.autor,
       generoLibro: libroDoc.genero,
       precioLibro: libroDoc.precio,
-      cantidad
+      cantidad,
+      precioUnitario,
+      total,
+      vendedor: req.user?.nombre || 'Vendedor genérico'
     });
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);

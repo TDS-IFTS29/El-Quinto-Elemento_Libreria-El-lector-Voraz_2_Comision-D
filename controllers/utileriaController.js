@@ -6,7 +6,12 @@ const Venta = require('../models/Venta');
 exports.catalogo = async (req, res) => {
   try {
     const utileria = await Utileria.find().populate('proveedor');
-    res.render('utileria/catalogo_utileria', { utileria });
+    res.render('utileria/catalogo_utileria', { 
+      title: 'Catálogo de Utilería',
+      utileria, 
+      user: req.usuario,
+      activeMenu: 'catalogo'
+    });
   } catch (err) {
     res.status(500).send('Error al obtener utilería');
   }
@@ -16,7 +21,13 @@ exports.formEditar = async (req, res) => {
   try {
     const util = await Utileria.findById(req.params.id).populate('proveedor');
     const proveedores = await Proveedor.find({ tipo_proveedor: 'utileria' });
-    res.render('utileria/editar_utileria', { util, proveedores });
+    res.render('utileria/editar_utileria', { 
+      title: 'Editar Utilería',
+      util, 
+      proveedores, 
+      user: req.usuario,
+      activeMenu: 'catalogo'
+    });
   } catch (err) {
     res.status(500).send('Error al cargar el formulario de edición');
   }
@@ -46,7 +57,12 @@ exports.eliminar = async (req, res) => {
 exports.formNuevo = async (req, res) => {
   try {
     const proveedores = await Proveedor.find({ tipo_proveedor: 'utileria' });
-    res.render('utileria/nuevo_utileria', { proveedores });
+    res.render('utileria/nuevo_utileria', { 
+      title: 'Nueva Utilería',
+      proveedores, 
+      user: req.usuario,
+      activeMenu: 'nuevo'
+    });
   } catch (err) {
     res.status(500).send('Error al cargar el formulario de nueva utilería');
   }
@@ -70,7 +86,13 @@ exports.formVender = async (req, res) => {
     if (req.query.utileria) {
       utileriaSeleccionada = utileria.find(u => u._id.toString() === req.query.utileria);
     }
-    res.render('utileria/vender_utileria', { utileria, utileriaSeleccionada });
+    res.render('utileria/vender_utileria', { 
+      title: 'Vender Utilería',
+      utileria, 
+      utileriaSeleccionada, 
+      user: req.usuario,
+      activeMenu: 'venta'
+    });
   } catch (err) {
     res.status(500).send('Error al cargar el formulario de venta');
   }
@@ -123,7 +145,12 @@ exports.reportes = async (req, res) => {
   try {
     // Buscar solo ventas de utilería
     const ventas = await Venta.find({ utileria: { $exists: true, $ne: null } }).populate('utileria');
-    res.render('utileria/reportes_ventas_utileria', { ventas });
+    res.render('utileria/reportes_ventas_utileria', { 
+      title: 'Reportes de Ventas de Utilería',
+      ventas, 
+      user: req.usuario,
+      activeMenu: 'reportes'
+    });
   } catch (err) {
     res.status(500).send('Error al cargar reportes de utilería');
   }
@@ -134,8 +161,60 @@ exports.facturaVenta = async (req, res) => {
   try {
     const venta = await Venta.findById(req.params.id).populate('utileria');
     if (!venta) return res.status(404).send('Venta no encontrada');
-    res.render('utileria/factura_venta_utileria', { venta });
+    res.render('utileria/factura_venta_utileria', { 
+      title: 'Factura de Venta',
+      venta, 
+      user: req.usuario 
+    });
   } catch (err) {
     res.status(500).send('Error al cargar la factura de venta de utilería');
+  }
+};
+
+// API functions for REST endpoints
+
+// Listar todos los productos de utilería (para API)
+exports.listar = async (req, res) => {
+  try {
+    const utileria = await Utileria.find().populate('proveedor');
+    res.json(utileria);
+  } catch (error) {
+    console.error('Error al listar utilería:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// Obtener un producto específico (para API)
+exports.obtener = async (req, res) => {
+  try {
+    const utileria = await Utileria.findById(req.params.id).populate('proveedor');
+    if (!utileria) {
+      return res.status(404).json({ error: 'Producto de utilería no encontrado' });
+    }
+    res.json(utileria);
+  } catch (error) {
+    console.error('Error al obtener utilería:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+// Guardar edición (para API)
+exports.guardarEdicion = async (req, res) => {
+  try {
+    const { nombre, descripcion, precio, stock, stockMinimo, proveedor } = req.body;
+    const utileria = await Utileria.findByIdAndUpdate(
+      req.params.id,
+      { nombre, descripcion, precio, stock, stockMinimo, proveedor },
+      { new: true }
+    ).populate('proveedor');
+    
+    if (!utileria) {
+      return res.status(404).json({ error: 'Producto de utilería no encontrado' });
+    }
+    
+    res.json(utileria);
+  } catch (error) {
+    console.error('Error al editar utilería:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

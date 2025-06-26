@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${item.cantidad_vendida}</td>
         <td>$${item.ingresos.toFixed(2)}</td>
         <td style="text-align:center;">
-          <a href="/utileria/factura/${item.id}" target="_blank" title="Imprimir">
-            <i class="fas fa-print" style="color:#675858;font-size:1.2em;"></i>
+          <a href="/utileria/factura/${item.id}" title="Ver Factura">
+            <i class="fas fa-file-invoice" style="color:#007bff;font-size:1.2em;"></i>
           </a>
         </td>
       `;

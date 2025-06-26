@@ -25,7 +25,7 @@ block content
               i.fas.fa-book(style="margin-right:8px;")
               | Libros
           li
-            a(href="javascript:void(0)" class="inactivo" tabindex="-1" aria-disabled="true")
+            a(href="/cafeteria")
               i.fas.fa-mug-hot(style="margin-right:8px;")
               | Cafetería
           li
@@ -285,12 +285,12 @@ block content
         .main-header(style="display:flex;justify-content:space-between;align-items:center;")
           h1 Utilería
           .user-info(style="display:flex;align-items:center;gap:12px;")
-            if user
-              span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
-            else
-              span Usuario
-            button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
-        .menu-grupo.menu-grupo-horizontal
+              if user
+                span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+              else
+                span Usuario
+              button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
+          .menu-grupo.menu-grupo-horizontal
           .menu-icon
             i.fas.fa-pencil-ruler.fa-2x
           h3 Utilería
@@ -491,7 +491,8 @@ block content
             button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
         .dashboard-cards
           .card.card-stock
-            h3 Alertas
+            h3 Alertas 
+              i.fas.fa-exclamation-triangle(style="margin-left:8px;color:#ff6b35;")
             ul(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if alertasStock && alertasStock.length
                 each alerta in alertasStock
@@ -505,8 +506,8 @@ block content
                         i.fas.fa-book(style="margin-right:6px;color:#fbc02d;")
                         | #{alerta.replace('Libro: ', '')}
                     else if alerta.includes('reposici')
-                      li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
-                        i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                      li.venta(style="color:#ba68c8;background:#f3e5f5;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-book(style="margin-right:6px;color:#8e24aa;")
                         | #{alerta.replace('Libro: ', '')}
                     else if alerta.includes('No se vende hace más de 6 meses')
                       li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
@@ -533,40 +534,79 @@ block content
                         | #{alerta.replace('Utilería: ', '')}
                     else
                       li.venta= alerta
+                  else if alerta.includes('Cafetería:')
+                    if alerta.includes('Agotado')
+                      li.venta(style="color:#e57373;background:#ffebee;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-mug-hot(style="margin-right:6px;color:#c62828;")
+                        | #{alerta.replace('Cafetería: ', '')}
+                    else if alerta.includes('Solo')
+                      li.venta(style="color:#ffb74d;background:#fff3e0;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-mug-hot(style="margin-right:6px;color:#fbc02d;")
+                        | #{alerta.replace('Cafetería: ', '')}
+                    else if alerta.includes('reposici')
+                      li.venta(style="color:#81c784;background:#e8f5e8;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-mug-hot(style="margin-right:6px;color:#4caf50;")
+                        | #{alerta.replace('Cafetería: ', '')}
+                    else if alerta.includes('No se vende hace más de 6 meses')
+                      li.venta(style="color:#64b5f6;background:#e3f2fd;border-radius:6px;padding:4px 8px;margin-bottom:4px;font-weight:bold;")
+                        i.fas.fa-mug-hot(style="margin-right:6px;color:#1976d2;")
+                        | #{alerta.replace('Cafetería: ', '')}
+                    else
+                      li.venta= alerta
                   else
                     li.venta= alerta
               else
                 li.venta Sin alertas de stock
           .card.card-ventas
-            h3 Ventas Recientes
+            h3 Ventas Recientes 
+              i.fas.fa-shopping-cart(style="margin-left:8px;color:#000;")
             ul#ventas-recientes(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas
                   li.venta
-                    if v.autor && v.autor !== '-'
-                      i.fas.fa-book(style="margin-right:6px;color:#1976d2;")
+                    if v.tipo === 'libro' || v.tipo === 'Libro' || (v.autor && v.autor !== '-')
+                      i.fas.fa-book(style="margin-right:6px;color:#000;")
+                      | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
+                    else if v.tipo === 'cafeteria' || v.tipo === 'Cafetería'
+                      i.fas.fa-mug-hot(style="margin-right:6px;color:#000;")
+                      | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
                     else
-                      i.fas.fa-pencil-ruler(style="margin-right:6px;color:#1976d2;")
-                    | 🛒 #{v.nombre} ×#{v.cantidad} - #{v.autor} ($#{v.monto})
+                      i.fas.fa-pencil-ruler(style="margin-right:6px;color:#000;")
+                      | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
               else
                 li.venta No hay ventas recientes
             .total-ventas Total del día: 
               span.total#total-ventas $#{totalVentas}
         .dashboard-actions(style="display:flex;flex-direction:row;align-items:center;gap:16px;justify-content:center;margin-top:24px;")
           .dropdown
-            button.button#ventaRapidaBtn(type="button") Venta Rápida
+            button.button#ventaRapidaBtn(type="button") 
+              i.fas.fa-bolt(style="margin-right:6px;color:#ff6b35;")
+              | Venta Rápida
             ul.dropdown-menu#ventaRapidaMenu(style="display:none;")
-              li: a(href="/libros/ventas/nueva" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#1976d2;text-decoration:none;")
+              li: a(href="/libros/ventas/nueva" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#8b4513;text-decoration:none;")
                 i.fas.fa-book(style="font-size:1.1em;margin-right:4px;")
                 | Vender Libro
-              li: a(href="/utileria/vender" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#1976d2;text-decoration:none;")
+              li: a(href="/utileria/vender" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#8b4513;text-decoration:none;")
                 i.fas.fa-pencil-ruler(style="font-size:1.1em;margin-right:4px;")
                 | Vender Utilería
-              li: a.button.inactivo(href="#" tabindex="-1" aria-disabled="true") Cafetería (próximamente)
-          a.button.dashboard-btn(href="/libros/nuevo") Nuevo Libro
-          a.button.dashboard-btn(href="/utileria/nuevo") Nuevo Utilería
-          a.button.dashboard-btn(href="/proveedores") Nuevo Proveedor
-          button.button.dashboard-btn(type="button" onclick="window.location.href='/usuarios/nuevo'") Nuevo Usuario
+              li: a(href="/cafeteria/vender" style="display:flex;align-items:center;gap:8px;font-size:1rem;padding:8px 18px;font-family:inherit;font-weight:500;color:#8b4513;text-decoration:none;")
+                i.fas.fa-mug-hot(style="font-size:1.1em;margin-right:4px;")
+                | Vender Cafetería
+          a.button.dashboard-btn(href="/libros/nuevo") 
+            i.fas.fa-book-open(style="margin-right:6px;color:#8e24aa;")
+            | Nuevo Libro
+          a.button.dashboard-btn(href="/cafeteria/nuevo") 
+            i.fas.fa-coffee(style="margin-right:6px;color:#8b4513;")
+            | Nuevo Cafetería
+          a.button.dashboard-btn(href="/utileria/nuevo") 
+            i.fas.fa-pen(style="margin-right:6px;color:#1976d2;")
+            | Nuevo Utilería
+          a.button.dashboard-btn(href="/proveedores") 
+            i.fas.fa-truck-loading(style="margin-right:6px;color:#4caf50;")
+            | Nuevo Proveedor
+          button.button.dashboard-btn(type="button" onclick="window.location.href='/usuarios/nuevo'") 
+            i.fas.fa-user-plus(style="margin-right:6px;color:#ff9800;")
+            | Nuevo Usuario
     script.
       const btn = document.getElementById('ventaRapidaBtn');
       const menu = document.getElementById('ventaRapidaMenu');

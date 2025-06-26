@@ -1,0 +1,113 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Gestiona tu cafetería de manera eficiente!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="/cafeteria")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          if user && user.rol === 'admin'
+            li
+              a(href="/proveedores")
+                i.fas.fa-truck(style="margin-right:8px;")
+                | Proveedores
+          li
+            a(href="/usuarios")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Cafetería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          if user
+            span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+          else
+            span Usuario
+          button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
+
+        .container
+          .row.justify-content-center
+            .col-md-8
+              .card
+                .card-header
+                  h4
+                    i.fas.fa-edit.me-2
+                    | Editar Item de Cafetería
+                .card-body
+            if error
+              .alert.alert-danger= error
+            
+            form(action=`/cafeteria/editar/${item._id}` method="POST")
+              .row
+                .col-md-6
+                  .mb-3
+                    label.form-label(for="nombre") Nombre del Item *
+                    input.form-control(type="text" id="nombre" name="nombre" value=item.nombre required maxlength="100")
+                
+                .col-md-6
+                  .mb-3
+                    label.form-label(for="categoria") Categoría *
+                    select.form-control(id="categoria" name="categoria" required)
+                      option(value="bebidas" selected=item.categoria === 'bebidas') Bebidas
+                      option(value="comidas" selected=item.categoria === 'comidas') Comidas
+                      option(value="snacks" selected=item.categoria === 'snacks') Snacks
+                      option(value="postres" selected=item.categoria === 'postres') Postres
+              
+              .mb-3
+                label.form-label(for="descripcion") Descripción *
+                textarea.form-control(id="descripcion" name="descripcion" rows="3" required maxlength="500")= item.descripcion
+              
+              .row
+                .col-md-4
+                  .mb-3
+                    label.form-label(for="precio") Precio *
+                    .input-group
+                      span.input-group-text $
+                      input.form-control(type="number" id="precio" name="precio" step="0.01" min="0" value=item.precio required)
+                
+                .col-md-4
+                  .mb-3
+                    label.form-label(for="stock") Stock Actual
+                    input.form-control(type="number" id="stock" name="stock" min="0" value=item.stock)
+                
+                .col-md-4
+                  .mb-3
+                    label.form-label(for="stockMinimo") Stock Mínimo
+                    input.form-control(type="number" id="stockMinimo" name="stockMinimo" min="1" value=item.stockMinimo)
+              
+              .mb-3
+                label.form-label(for="proveedor") Proveedor
+                select.form-control(id="proveedor" name="proveedor")
+                  option(value="") Sin proveedor
+                  each proveedor in proveedores
+                    option(value=proveedor._id selected=(item.proveedor && item.proveedor._id.toString() === proveedor._id.toString()))= proveedor.nombre
+              
+              .d-flex.justify-content-between
+                a.btn.btn-secondary(href="/cafeteria") Cancelar
+                button.type-submit.btn.btn-primary Actualizar Item
+
+  script(src="/js/cafeteria/editar_cafeteria.js")

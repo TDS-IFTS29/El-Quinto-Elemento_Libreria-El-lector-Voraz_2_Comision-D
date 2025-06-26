@@ -78,10 +78,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           <td><span class="stock-badge ${colorStock}">${stock} unidades</span></td>
           <td>${stockMinimo}</td>
           <td>${l.ultimaVenta ? new Date(l.ultimaVenta).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '-'}</td>
-          <td>${l.proveedor && l.proveedor.nombre ? l.proveedor.nombre : '-'}</td>
-          <td style="text-align:center;display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;">
-            ${acciones}
-          </td>
+          <td>${l.proveedor && l.proveedor.nombre ? l.proveedor.nombre : '-'}</td>            <td style="text-align:center;">
+              <div style="display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;">
+                ${acciones}
+              </div>
+            </td>
         `;
         tabla.appendChild(fila);
       });

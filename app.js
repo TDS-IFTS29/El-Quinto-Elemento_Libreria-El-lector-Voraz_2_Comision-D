@@ -49,6 +49,8 @@ app.use('/inicio', requireAuth, require('./routes/home')); // home en "/inicio" 
 
 // app.use('/catalogo', (req, res) => res.render('catalogo_libros'));
 app.use('/libros', requireAuth, require('./routes/libros')); // requiere autenticación
+app.use('/utileria', requireAuth, require('./routes/utileria')); // requiere autenticación
+app.use('/cafeteria', requireAuth, require('./routes/cafeteria')); // requiere autenticación
 app.use('/proveedores', requireAuth, require('./routes/proveedores')); // requiere autenticación
 app.use('/usuarios', requireAuth, require('./routes/usuarios')); // CRUD de usuarios - requiere autenticación
 
@@ -59,15 +61,13 @@ app.use('/api-docs', require('./routes/apiDocs'));
 // app.use('/api/productos', require('./routes/api/productos'));
 app.use('/api/proveedores', requireAuth, require('./routes/api/proveedores'));
 app.use('/api/libros', requireAuth, require('./routes/api/libros'));
+app.use('/api/utileria', requireAuth, require('./routes/api/utileria'));
+app.use('/api/cafeteria', requireAuth, require('./routes/api/cafeteria'));
 app.use('/api/ventas', requireAuth, require('./routes/api/ventas'));
 app.use('/api/usuarios', requireAuth, require('./routes/api/usuarios')); // API de usuarios
 // app.use('/api/proveedores_libros', require('./routes/api/proveedores_libros'));
 // app.use('/api/ventas', require('./routes/api/ventas'));
 // app.use('/api/debug', require('./routes/debug'));
-
-// Nueva ruta de utilería
-app.use('/utileria', requireAuth, require('./routes/utileria')); // requiere autenticación
-app.use('/api/utileria', requireAuth, require('./routes/api/utileria/index.js'));
 
 // Puerto
 const PORT = process.env.PORT || 3000;

@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         <td>${libro.cantidad_vendida}</td>
         <td>$${libro.ingresos}</td>
         <td style="text-align:center;">
-          <a href="/libros/ventas/factura/${libro.id}" target="_blank" title="Imprimir">
-            <i class="fas fa-print" style="color:#675858;font-size:1.2em;"></i>
+          <a href="/libros/ventas/factura/${libro.id}" title="Ver Factura">
+            <i class="fas fa-file-invoice" style="color:#007bff;font-size:1.2em;"></i>
           </a>
         </td>
       `;

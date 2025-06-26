@@ -5,6 +5,7 @@ const Proveedor = require('./models/Proveedor');
 const Venta = require('./models/Venta');
 const Usuario = require('./models/Usuario');
 const Utileria = require('./models/Utileria');
+const Cafeteria = require('./models/Cafeteria');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/el-lector-voraz';
 
@@ -31,6 +32,7 @@ async function crearBaseDeDatos() {
     await Proveedor.deleteMany({});
     await Libro.deleteMany({}); // <--- Ahora borra todos los libros existentes
     await Utileria.deleteMany({});
+    await Cafeteria.deleteMany({});
     await Venta.deleteMany({});
     await Usuario.deleteMany({});
 
@@ -171,15 +173,114 @@ async function crearBaseDeDatos() {
     // Ventas de ejemplo (solo con libros válidos)
     // Solo crear ventas para los libros a partir del índice 2 (los demás tendrán ventas recientes)
     const ventas = [
-      { libro: librosInsertados[2]._id, nombreLibro: librosInsertados[2].nombre, autorLibro: librosInsertados[2].autor, generoLibro: librosInsertados[2].genero, precioLibro: librosInsertados[2].precio, cantidad: 3 },
-      { libro: librosInsertados[3]._id, nombreLibro: librosInsertados[3].nombre, autorLibro: librosInsertados[3].autor, generoLibro: librosInsertados[3].genero, precioLibro: librosInsertados[3].precio, cantidad: 2 },
-      { libro: librosInsertados[4]._id, nombreLibro: librosInsertados[4].nombre, autorLibro: librosInsertados[4].autor, generoLibro: librosInsertados[4].genero, precioLibro: librosInsertados[4].precio, cantidad: 1 },
-      { libro: librosInsertados[5]._id, nombreLibro: librosInsertados[5].nombre, autorLibro: librosInsertados[5].autor, generoLibro: librosInsertados[5].genero, precioLibro: librosInsertados[5].precio, cantidad: 4 },
-      { libro: librosInsertados[6]._id, nombreLibro: librosInsertados[6].nombre, autorLibro: librosInsertados[6].autor, generoLibro: librosInsertados[6].genero, precioLibro: librosInsertados[6].precio, cantidad: 2 },
-      { libro: librosInsertados[7]._id, nombreLibro: librosInsertados[7].nombre, autorLibro: librosInsertados[7].autor, generoLibro: librosInsertados[7].genero, precioLibro: librosInsertados[7].precio, cantidad: 1 },
-      { libro: librosInsertados[8]._id, nombreLibro: librosInsertados[8].nombre, autorLibro: librosInsertados[8].autor, generoLibro: librosInsertados[8].genero, precioLibro: librosInsertados[8].precio, cantidad: 3 },
-      { libro: librosInsertados[9]._id, nombreLibro: librosInsertados[9].nombre, autorLibro: librosInsertados[9].autor, generoLibro: librosInsertados[9].genero, precioLibro: librosInsertados[9].precio, cantidad: 2 },
-      { libro: librosInsertados[10]._id, nombreLibro: librosInsertados[10].nombre, autorLibro: librosInsertados[10].autor, generoLibro: librosInsertados[10].genero, precioLibro: librosInsertados[10].precio, cantidad: 1 }
+      { 
+        libro: librosInsertados[2]._id, 
+        nombreLibro: librosInsertados[2].nombre, 
+        autorLibro: librosInsertados[2].autor, 
+        generoLibro: librosInsertados[2].genero, 
+        precioLibro: librosInsertados[2].precio, 
+        cantidad: 3,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[2].precio,
+        total: librosInsertados[2].precio * 3,
+        vendedor: 'Juan Pérez'
+      },
+      { 
+        libro: librosInsertados[3]._id, 
+        nombreLibro: librosInsertados[3].nombre, 
+        autorLibro: librosInsertados[3].autor, 
+        generoLibro: librosInsertados[3].genero, 
+        precioLibro: librosInsertados[3].precio, 
+        cantidad: 2,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[3].precio,
+        total: librosInsertados[3].precio * 2,
+        vendedor: 'Antonio Gill'
+      },
+      { 
+        libro: librosInsertados[4]._id, 
+        nombreLibro: librosInsertados[4].nombre, 
+        autorLibro: librosInsertados[4].autor, 
+        generoLibro: librosInsertados[4].genero, 
+        precioLibro: librosInsertados[4].precio, 
+        cantidad: 1,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[4].precio,
+        total: librosInsertados[4].precio * 1,
+        vendedor: 'Cristian Descosido'
+      },
+      { 
+        libro: librosInsertados[5]._id, 
+        nombreLibro: librosInsertados[5].nombre, 
+        autorLibro: librosInsertados[5].autor, 
+        generoLibro: librosInsertados[5].genero, 
+        precioLibro: librosInsertados[5].precio, 
+        cantidad: 4,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[5].precio,
+        total: librosInsertados[5].precio * 4,
+        vendedor: 'Damian Clausi'
+      },
+      { 
+        libro: librosInsertados[6]._id, 
+        nombreLibro: librosInsertados[6].nombre, 
+        autorLibro: librosInsertados[6].autor, 
+        generoLibro: librosInsertados[6].genero, 
+        precioLibro: librosInsertados[6].precio, 
+        cantidad: 2,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[6].precio,
+        total: librosInsertados[6].precio * 2,
+        vendedor: 'Juan Pérez'
+      },
+      { 
+        libro: librosInsertados[7]._id, 
+        nombreLibro: librosInsertados[7].nombre, 
+        autorLibro: librosInsertados[7].autor, 
+        generoLibro: librosInsertados[7].genero, 
+        precioLibro: librosInsertados[7].precio, 
+        cantidad: 1,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[7].precio,
+        total: librosInsertados[7].precio * 1,
+        vendedor: 'Antonio Gill'
+      },
+      { 
+        libro: librosInsertados[8]._id, 
+        nombreLibro: librosInsertados[8].nombre, 
+        autorLibro: librosInsertados[8].autor, 
+        generoLibro: librosInsertados[8].genero, 
+        precioLibro: librosInsertados[8].precio, 
+        cantidad: 3,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[8].precio,
+        total: librosInsertados[8].precio * 3,
+        vendedor: 'Cristian Descosido'
+      },
+      { 
+        libro: librosInsertados[9]._id, 
+        nombreLibro: librosInsertados[9].nombre, 
+        autorLibro: librosInsertados[9].autor, 
+        generoLibro: librosInsertados[9].genero, 
+        precioLibro: librosInsertados[9].precio, 
+        cantidad: 2,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[9].precio,
+        total: librosInsertados[9].precio * 2,
+        vendedor: 'Damian Clausi'
+      },
+      { 
+        libro: librosInsertados[10]._id, 
+        nombreLibro: librosInsertados[10].nombre, 
+        autorLibro: librosInsertados[10].autor, 
+        generoLibro: librosInsertados[10].genero, 
+        precioLibro: librosInsertados[10].precio, 
+        cantidad: 1,
+        tipo: 'libro',
+        precioUnitario: librosInsertados[10].precio,
+        total: librosInsertados[10].precio * 1,
+        vendedor: 'Juan Pérez'
+      }
     ];
     const hoy = new Date();
     hoy.setHours(10, 0, 0, 0); // hora fija para las ventas de hoy
@@ -201,14 +302,22 @@ async function crearBaseDeDatos() {
         nombreUtileria: utileriaInsertada[5].nombre,
         precioUtileria: utileriaInsertada[5].precio,
         cantidad: 2,
-        fecha: new Date(hoy)
+        fecha: new Date(hoy),
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[5].precio,
+        total: utileriaInsertada[5].precio * 2,
+        vendedor: 'Juan Pérez'
       },
       { 
         utileria: utileriaInsertada[6]._id, // Tijera escolar
         nombreUtileria: utileriaInsertada[6].nombre,
         precioUtileria: utileriaInsertada[6].precio,
         cantidad: 1,
-        fecha: new Date(hoy)
+        fecha: new Date(hoy),
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[6].precio,
+        total: utileriaInsertada[6].precio * 1,
+        vendedor: 'Antonio Gill'
       }
     ];
 
@@ -219,42 +328,66 @@ async function crearBaseDeDatos() {
         nombreUtileria: utileriaInsertada[0].nombre,
         precioUtileria: utileriaInsertada[0].precio,
         cantidad: 5,
-        fecha: new Date(2025, 4, 15, 14, 30) // 15 de mayo 2025
+        fecha: new Date(2025, 4, 15, 14, 30), // 15 de mayo 2025
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[0].precio,
+        total: utileriaInsertada[0].precio * 5,
+        vendedor: 'Cristian Descosido'
       },
       {
         utileria: utileriaInsertada[1]._id, // Goma de borrar
         nombreUtileria: utileriaInsertada[1].nombre,
         precioUtileria: utileriaInsertada[1].precio,
         cantidad: 3,
-        fecha: new Date(2025, 4, 22, 10, 15) // 22 de mayo 2025
+        fecha: new Date(2025, 4, 22, 10, 15), // 22 de mayo 2025
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[1].precio,
+        total: utileriaInsertada[1].precio * 3,
+        vendedor: 'Damian Clausi'
       },
       {
         utileria: utileriaInsertada[2]._id, // Cuaderno A4
         nombreUtileria: utileriaInsertada[2].nombre,
         precioUtileria: utileriaInsertada[2].precio,
         cantidad: 2,
-        fecha: new Date(2025, 3, 18, 16, 45) // 18 de abril 2025
+        fecha: new Date(2025, 3, 18, 16, 45), // 18 de abril 2025
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[2].precio,
+        total: utileriaInsertada[2].precio * 2,
+        vendedor: 'Juan Pérez'
       },
       {
-        utileria: utileriaInsertada[3]._id, // Marcador negro
+        utileria: utileriaInsertada[3]._id, // Resaltador amarillo
         nombreUtileria: utileriaInsertada[3].nombre,
         precioUtileria: utileriaInsertada[3].precio,
         cantidad: 4,
-        fecha: new Date(2025, 3, 25, 11, 20) // 25 de abril 2025
+        fecha: new Date(2025, 3, 25, 11, 20), // 25 de abril 2025
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[3].precio,
+        total: utileriaInsertada[3].precio * 4,
+        vendedor: 'Antonio Gill'
       },
       {
-        utileria: utileriaInsertada[4]._id, // Pegamento en barra
+        utileria: utileriaInsertada[4]._id, // Bolígrafo azul
         nombreUtileria: utileriaInsertada[4].nombre,
         precioUtileria: utileriaInsertada[4].precio,
         cantidad: 1,
-        fecha: new Date(2025, 2, 12, 13, 0) // 12 de marzo 2025
+        fecha: new Date(2025, 2, 12, 13, 0), // 12 de marzo 2025
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[4].precio,
+        total: utileriaInsertada[4].precio * 1,
+        vendedor: 'Cristian Descosido'
       },
       {
-        utileria: utileriaInsertada[7]._id, // Resaltador amarillo
+        utileria: utileriaInsertada[7]._id, // Pegamento en barra
         nombreUtileria: utileriaInsertada[7].nombre,
         precioUtileria: utileriaInsertada[7].precio,
         cantidad: 3,
-        fecha: new Date(2025, 2, 28, 15, 30) // 28 de marzo 2025
+        fecha: new Date(2025, 2, 28, 15, 30), // 28 de marzo 2025
+        tipo: 'utileria',
+        precioUnitario: utileriaInsertada[7].precio,
+        total: utileriaInsertada[7].precio * 3,
+        vendedor: 'Damian Clausi'
       }
     ];
 
@@ -281,13 +414,280 @@ async function crearBaseDeDatos() {
     await Utileria.findByIdAndUpdate(utileriaInsertada[7]._id, { ultimaVenta: new Date(2025, 2, 28) });
     await Utileria.findByIdAndUpdate(utileriaInsertada[6]._id, { ultimaVenta: new Date(hoy) });
 
+    // --- AGREGAR DATOS DE CAFETERÍA ---
+    const proveedoresCafeteria = proveedoresInsertados.filter(p => p.tipo_proveedor === 'cafeteria');
+    function randomStockCafeteria() { return Math.floor(Math.random() * 31); } // 0-30
+    function randomStockMinimoCafeteria() { return Math.floor(Math.random() * 11); } // 0-10
+    function randomUltimaVentaCafeteria() {
+      const dias = Math.floor(Math.random() * 400);
+      return new Date(Date.now() - dias * 24 * 60 * 60 * 1000);
+    }
+    const cafeteria = [
+      { nombre: 'Café Americano', descripcion: 'Café negro clásico preparado con granos premium.', precio: 800, stock: 0, stockMinimo: 5, categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: hace6Meses, proveedor: proveedoresCafeteria[0]._id },
+      { nombre: 'Café con Leche', descripcion: 'Café con leche cremosa y espuma suave.', precio: 950, stock: 0, stockMinimo: 4, categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: hace6Meses, proveedor: proveedoresCafeteria[1]._id },
+      { nombre: 'Cappuccino', descripcion: 'Espresso con leche vaporizada y espuma densa.', precio: 1100, stock: 2, stockMinimo: 6, categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[0]._id },
+      { nombre: 'Latte', descripcion: 'Espresso suave con abundante leche vaporizada.', precio: 1200, stock: 1, stockMinimo: 5, categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[1]._id },
+      { nombre: 'Espresso', descripcion: 'Café concentrado de sabor intenso.', precio: 700, stock: 3, stockMinimo: 8, categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[0]._id },
+      { nombre: 'Mocha', descripcion: 'Café con chocolate y crema batida.', precio: 1350, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[1]._id },
+      { nombre: 'Frappé', descripcion: 'Café frío batido con hielo y crema.', precio: 1500, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[0]._id },
+      { nombre: 'Té Negro', descripcion: 'Té premium con bergamota y especias.', precio: 600, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'bebidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[1]._id },
+      { nombre: 'Chocolate Caliente', descripcion: 'Bebida de chocolate cremosa con marshmallows.', precio: 1100, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'bebidas', ultimaReposicion: new Date(Date.now() - 200 * 24 * 60 * 60 * 1000), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[0]._id },
+      { nombre: 'Croissant', descripcion: 'Medialuna francesa rellena de dulce de leche.', precio: 850, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'comidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[1]._id },
+      { nombre: 'Muffin de Arándanos', descripcion: 'Panecillo esponjoso con arándanos frescos.', precio: 950, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'postres', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[0]._id },
+      { nombre: 'Tostado de Jamón y Queso', descripcion: 'Sándwich tostado clásico con jamón y queso.', precio: 1800, stock: randomStockCafeteria(), stockMinimo: randomStockMinimoCafeteria(), categoria: 'comidas', ultimaReposicion: new Date(), ultimaVenta: new Date(), proveedor: proveedoresCafeteria[1]._id }
+    ];
+    for (const item of cafeteria) {
+      item.ultimaVenta = randomUltimaVentaCafeteria();
+    }
+    const cafeteriaInsertada = await Cafeteria.insertMany(cafeteria);
+
+    // Ventas de cafetería del día de hoy (1 venta)
+    const ventasCafeteria = [
+      { 
+        cafeteria: cafeteriaInsertada[5]._id, // Mocha
+        nombreCafeteria: cafeteriaInsertada[5].nombre,
+        precioCafeteria: cafeteriaInsertada[5].precio,
+        cantidad: 2,
+        fecha: new Date(hoy),
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[5].precio,
+        total: cafeteriaInsertada[5].precio * 2,
+        vendedor: 'Juan Pérez'
+      }
+    ];
+
+    // Ventas de cafetería de esta semana (2 ventas adicionales)
+    const estaSemana = new Date(hoy);
+    estaSemana.setDate(hoy.getDate() - 2); // Hace 2 días
+    const estaSemana2 = new Date(hoy);
+    estaSemana2.setDate(hoy.getDate() - 4); // Hace 4 días
+
+    const ventasCafeteriaSemana = [
+      { 
+        cafeteria: cafeteriaInsertada[6]._id, // Frappé
+        nombreCafeteria: cafeteriaInsertada[6].nombre,
+        precioCafeteria: cafeteriaInsertada[6].precio,
+        cantidad: 1,
+        fecha: new Date(estaSemana),
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[6].precio,
+        total: cafeteriaInsertada[6].precio * 1,
+        vendedor: 'Antonio Gill'
+      },
+      { 
+        cafeteria: cafeteriaInsertada[9]._id, // Croissant
+        nombreCafeteria: cafeteriaInsertada[9].nombre,
+        precioCafeteria: cafeteriaInsertada[9].precio,
+        cantidad: 3,
+        fecha: new Date(estaSemana2),
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[9].precio,
+        total: cafeteriaInsertada[9].precio * 3,
+        vendedor: 'Cristian Descosido'
+      }
+    ];
+
+    // Ventas de cafetería de este mes (5 ventas adicionales)
+    const esteMes1 = new Date(hoy.getFullYear(), hoy.getMonth(), 5, 10, 30);
+    const esteMes2 = new Date(hoy.getFullYear(), hoy.getMonth(), 8, 14, 15);
+    const esteMes3 = new Date(hoy.getFullYear(), hoy.getMonth(), 12, 16, 45);
+    const esteMes4 = new Date(hoy.getFullYear(), hoy.getMonth(), 18, 11, 20);
+    const esteMes5 = new Date(hoy.getFullYear(), hoy.getMonth(), 22, 13, 10);
+
+    const ventasCafeteriaMes = [
+      {
+        cafeteria: cafeteriaInsertada[0]._id, // Café Americano
+        nombreCafeteria: cafeteriaInsertada[0].nombre,
+        precioCafeteria: cafeteriaInsertada[0].precio,
+        cantidad: 2,
+        fecha: esteMes1,
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[0].precio,
+        total: cafeteriaInsertada[0].precio * 2,
+        vendedor: 'Damian Clausi'
+      },
+      {
+        cafeteria: cafeteriaInsertada[1]._id, // Café con Leche
+        nombreCafeteria: cafeteriaInsertada[1].nombre,
+        precioCafeteria: cafeteriaInsertada[1].precio,
+        cantidad: 1,
+        fecha: esteMes2,
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[1].precio,
+        total: cafeteriaInsertada[1].precio * 1,
+        vendedor: 'Juan Pérez'
+      },
+      {
+        cafeteria: cafeteriaInsertada[2]._id, // Cappuccino
+        nombreCafeteria: cafeteriaInsertada[2].nombre,
+        precioCafeteria: cafeteriaInsertada[2].precio,
+        cantidad: 3,
+        fecha: esteMes3,
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[2].precio,
+        total: cafeteriaInsertada[2].precio * 3,
+        vendedor: 'Antonio Gill'
+      },
+      {
+        cafeteria: cafeteriaInsertada[3]._id, // Latte
+        nombreCafeteria: cafeteriaInsertada[3].nombre,
+        precioCafeteria: cafeteriaInsertada[3].precio,
+        cantidad: 2,
+        fecha: esteMes4,
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[3].precio,
+        total: cafeteriaInsertada[3].precio * 2,
+        vendedor: 'Cristian Descosido'
+      },
+      {
+        cafeteria: cafeteriaInsertada[7]._id, // Té Negro
+        nombreCafeteria: cafeteriaInsertada[7].nombre,
+        precioCafeteria: cafeteriaInsertada[7].precio,
+        cantidad: 1,
+        fecha: esteMes5,
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[7].precio,
+        total: cafeteriaInsertada[7].precio * 1,
+        vendedor: 'Damian Clausi'
+      }
+    ];
+
+    // Ventas de cafetería de otros meses (8 adicionales)
+    const ventasCafeteriaOtrosMeses = [
+      {
+        cafeteria: cafeteriaInsertada[0]._id, // Café Americano
+        nombreCafeteria: cafeteriaInsertada[0].nombre,
+        precioCafeteria: cafeteriaInsertada[0].precio,
+        cantidad: 4,
+        fecha: new Date(2025, 4, 12, 9, 15), // 12 de mayo 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[0].precio,
+        total: cafeteriaInsertada[0].precio * 4,
+        vendedor: 'Damian Clausi'
+      },
+      {
+        cafeteria: cafeteriaInsertada[1]._id, // Café con Leche
+        nombreCafeteria: cafeteriaInsertada[1].nombre,
+        precioCafeteria: cafeteriaInsertada[1].precio,
+        cantidad: 3,
+        fecha: new Date(2025, 4, 18, 11, 30), // 18 de mayo 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[1].precio,
+        total: cafeteriaInsertada[1].precio * 3,
+        vendedor: 'Juan Pérez'
+      },
+      {
+        cafeteria: cafeteriaInsertada[2]._id, // Cappuccino
+        nombreCafeteria: cafeteriaInsertada[2].nombre,
+        precioCafeteria: cafeteriaInsertada[2].precio,
+        cantidad: 2,
+        fecha: new Date(2025, 3, 22, 16, 0), // 22 de abril 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[2].precio,
+        total: cafeteriaInsertada[2].precio * 2,
+        vendedor: 'Antonio Gill'
+      },
+      {
+        cafeteria: cafeteriaInsertada[3]._id, // Latte
+        nombreCafeteria: cafeteriaInsertada[3].nombre,
+        precioCafeteria: cafeteriaInsertada[3].precio,
+        cantidad: 5,
+        fecha: new Date(2025, 3, 28, 14, 45), // 28 de abril 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[3].precio,
+        total: cafeteriaInsertada[3].precio * 5,
+        vendedor: 'Cristian Descosido'
+      },
+      {
+        cafeteria: cafeteriaInsertada[4]._id, // Espresso
+        nombreCafeteria: cafeteriaInsertada[4].nombre,
+        precioCafeteria: cafeteriaInsertada[4].precio,
+        cantidad: 2,
+        fecha: new Date(2025, 2, 15, 10, 20), // 15 de marzo 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[4].precio,
+        total: cafeteriaInsertada[4].precio * 2,
+        vendedor: 'Damian Clausi'
+      },
+      {
+        cafeteria: cafeteriaInsertada[7]._id, // Té Negro
+        nombreCafeteria: cafeteriaInsertada[7].nombre,
+        precioCafeteria: cafeteriaInsertada[7].precio,
+        cantidad: 1,
+        fecha: new Date(2025, 2, 25, 15, 10), // 25 de marzo 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[7].precio,
+        total: cafeteriaInsertada[7].precio * 1,
+        vendedor: 'Juan Pérez'
+      },
+      {
+        cafeteria: cafeteriaInsertada[10]._id, // Muffin de Arándanos
+        nombreCafeteria: cafeteriaInsertada[10].nombre,
+        precioCafeteria: cafeteriaInsertada[10].precio,
+        cantidad: 3,
+        fecha: new Date(2025, 1, 20, 13, 30), // 20 de febrero 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[10].precio,
+        total: cafeteriaInsertada[10].precio * 3,
+        vendedor: 'Antonio Gill'
+      },
+      {
+        cafeteria: cafeteriaInsertada[11]._id, // Tostado de Jamón y Queso
+        nombreCafeteria: cafeteriaInsertada[11].nombre,
+        precioCafeteria: cafeteriaInsertada[11].precio,
+        cantidad: 2,
+        fecha: new Date(2025, 1, 28, 12, 45), // 28 de febrero 2025
+        tipo: 'cafeteria',
+        precioUnitario: cafeteriaInsertada[11].precio,
+        total: cafeteriaInsertada[11].precio * 2,
+        vendedor: 'Cristian Descosido'
+      }
+    ];
+
+    // Insertar ventas de cafetería del día de hoy
+    for (const ventaCafeteria of ventasCafeteria) {
+      await new Venta(ventaCafeteria).save();
+    }
+
+    // Insertar ventas de cafetería de esta semana
+    for (const ventaCafeteria of ventasCafeteriaSemana) {
+      await new Venta(ventaCafeteria).save();
+    }
+
+    // Insertar ventas de cafetería de este mes
+    for (const ventaCafeteria of ventasCafeteriaMes) {
+      await new Venta(ventaCafeteria).save();
+    }
+
+    // Insertar ventas de cafetería de otros meses
+    for (const ventaCafeteria of ventasCafeteriaOtrosMeses) {
+      await new Venta(ventaCafeteria).save();
+    }
+
+    // Actualizar la ultimaVenta de los items de cafetería vendidos hoy
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[5]._id, { ultimaVenta: new Date(hoy) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[6]._id, { ultimaVenta: new Date(hoy) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[9]._id, { ultimaVenta: new Date(hoy) });
+
+    // Actualizar la ultimaVenta de los items vendidos en otros meses
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[0]._id, { ultimaVenta: new Date(2025, 4, 18) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[1]._id, { ultimaVenta: new Date(2025, 4, 18) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[2]._id, { ultimaVenta: new Date(2025, 3, 22) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[3]._id, { ultimaVenta: new Date(2025, 3, 28) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[4]._id, { ultimaVenta: new Date(2025, 2, 15) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[7]._id, { ultimaVenta: new Date(2025, 2, 25) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[10]._id, { ultimaVenta: new Date(2025, 1, 20) });
+    await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[11]._id, { ultimaVenta: new Date(2025, 1, 28) });
+
     console.log('Base de datos el-lector-voraz creada exitosamente con:');
     console.log(`   Libros: ${librosInsertados.length}`);
     console.log(`   Utilería: ${utileriaInsertada.length}`);
+    console.log(`   Cafetería: ${cafeteriaInsertada.length}`);
     console.log(`   Proveedores: ${proveedoresInsertados.length}`);
     console.log(`   Usuarios: ${usuariosInsertados.length}`);
     console.log(`   Ventas de libros: ${ventas.length}`);
     console.log(`   Ventas de utilería: ${ventasUtileria.length + ventasUtileriaOtrosMeses.length} (${ventasUtileria.length} del día de hoy, ${ventasUtileriaOtrosMeses.length} de otros meses)`);
+    console.log(`   Ventas de cafetería: ${ventasCafeteria.length + ventasCafeteriaSemana.length + ventasCafeteriaMes.length + ventasCafeteriaOtrosMeses.length} (${ventasCafeteria.length} del día de hoy, ${ventasCafeteriaSemana.length} de esta semana, ${ventasCafeteriaMes.length} de este mes, ${ventasCafeteriaOtrosMeses.length} de otros meses)`);
     console.log('');
     console.log('Usuarios creados (TODAS LAS CONTRASEÑAS: 1234):');
     console.log('   Admin: Juan Perez (juan.perez@lectorvoraz.com)');

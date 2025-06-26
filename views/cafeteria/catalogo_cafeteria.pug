@@ -1,0 +1,81 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Gestiona tu cafetería de manera eficiente!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="/cafeteria")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          if user && user.rol === 'admin'
+            li
+              a(href="/proveedores")
+                i.fas.fa-truck(style="margin-right:8px;")
+                | Proveedores
+          li
+            a(href="/usuarios")
+              i.fas.fa-users(style="margin-right:8px;")
+              | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Cafetería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          if user
+            span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+          else
+            span Usuario
+          button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-mug-hot.fa-2x
+        h3 Cafetería
+        ul.menu-horizontal
+          li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/cafeteria") Catálogo de cafetería
+          li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/cafeteria/nuevo") Agregar item
+          li: a.button(class=(activeMenu === 'venta' ? 'active' : ''), href="/cafeteria/vender") Registrar venta
+          li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/cafeteria/reportes") Reporte de ventas
+      section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          thead
+            tr
+              th Nombre
+              th Descripción
+              th Categoría
+              th Precio
+              th Stock
+              th Stock Mínimo
+              th Proveedor
+              th Acciones
+          tbody#tabla-cafeteria
+            tr
+              td(colspan="8") Cargando productos de cafetería...
+        .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+          a.button(href="/inicio") Volver al inicio
+    script(src="/js/cafeteria/catalogo_cafeteria.js")
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+      p Grupo "El Quinto Elemento" -  Clausi, Descosido, Gill

@@ -71,7 +71,7 @@ block content
               th Precio
               th Cantidad Vendida
               th Ingresos
-              th Imprimir
+              th Factura
           tbody
             each libro, idx in libros
               tr
@@ -83,7 +83,7 @@ block content
                 td= libro.cantidad_vendida
                 td $#{libro.ingresos}
                 td(style="text-align:center;")
-                  a(href=`/libros/ventas/factura/${libro.id || idx}` target="_blank" title="Imprimir")
+                  a(href=`/libros/ventas/factura/${libro.id || idx}` title="Imprimir")
                     i.fas.fa-print(style="color:#675858;font-size:1.2em;")
           tfoot
             tr

@@ -65,20 +65,45 @@ router.get('/ventas', (req, res) => {
 router.get('/ventas/factura/:id', async (req, res) => {
   const ventaId = req.params.id;
   try {
+    console.log('=== INVOICE REQUEST ===');
+    console.log('Buscando venta con ID:', ventaId);
+    console.log('ID válido:', require('mongoose').Types.ObjectId.isValid(ventaId));
+    
     const venta = await Venta.findById(ventaId).populate('libro');
-    if (!venta) return res.render('libros/factura_venta', { venta: null });
-    // Adaptar los campos para la vista
-    const datos = {
+    console.log('Venta encontrada:', venta ? 'Sí' : 'No');
+    
+    if (!venta) {
+      console.log('Venta no encontrada para ID:', ventaId);
+      return res.render('libros/factura_venta', { venta: null });
+    }
+    
+    // Asegurar que tenga los campos necesarios para la vista
+    venta.cliente = venta.cliente || 'Cliente genérico';
+    venta.vendedor = venta.vendedor || 'Vendedor';
+    
+    console.log('Datos de venta completos:', {
+      id: venta._id,
+      tipo: venta.tipo,
       fecha: venta.fecha,
-      titulo: venta.nombreLibro || (venta.libro && venta.libro.nombre),
-      autor: venta.autorLibro || (venta.libro && venta.libro.autor),
-      genero: venta.generoLibro || (venta.libro && venta.libro.genero),
-      precio: venta.precioLibro,
+      cliente: venta.cliente,
+      vendedor: venta.vendedor,
+      libro_poblado: venta.libro ? {
+        nombre: venta.libro.nombre,
+        autor: venta.libro.autor,
+        precio: venta.libro.precio
+      } : null,
+      campos_legacy: {
+        nombreLibro: venta.nombreLibro,
+        autorLibro: venta.autorLibro,
+        precioLibro: venta.precioLibro
+      },
       cantidad: venta.cantidad,
-      ingresos: venta.precioLibro * venta.cantidad
-    };
-    res.render('libros/factura_venta', { venta: datos });
+      total: venta.total
+    });
+    
+    res.render('libros/factura_venta', { venta: venta });
   } catch (e) {
+    console.error('Error al buscar venta:', e);
     res.render('libros/factura_venta', { venta: null });
   }
 });

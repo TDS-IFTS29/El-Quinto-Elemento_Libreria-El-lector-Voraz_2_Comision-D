@@ -1,0 +1,86 @@
+extends ../layout
+
+block content
+  .banner
+    img(src="/img/banner-libreria.webp" alt="Banner librería" class="banner-img")
+    .bienvenida-box
+      h2 Bienvenido a El Lector Voraz
+      p(style="margin-bottom:0;")
+        | ¡Analiza el rendimiento de tu cafetería y toma mejores decisiones!
+  .dashboard-container
+    aside.sidebar
+      .sidebar-header
+        img(src="/img/logo-lector-voraz.png", alt="Logo", class="sidebar-logo" style="display:block;margin:0 auto 12px auto;width:90px;")
+        h2 El Lector Voraz
+      nav.sidebar-nav
+        ul
+          li
+            a(href="/inicio")
+              i.fas.fa-home(style="margin-right:8px;")
+              | Inicio
+          li
+            a(href="/libros")
+              i.fas.fa-book(style="margin-right:8px;")
+              | Libros
+          li
+            a(href="/cafeteria")
+              i.fas.fa-mug-hot(style="margin-right:8px;")
+              | Cafetería
+          li
+            a(href="/utileria")
+              i.fas.fa-pencil-ruler(style="margin-right:8px;")
+              | Utilería
+          if user && user.rol === 'admin'
+            li
+              a(href="/proveedores")
+                i.fas.fa-truck(style="margin-right:8px;")
+                | Proveedores
+            li
+              a(href="/usuarios")
+                i.fas.fa-users(style="margin-right:8px;")
+                | Usuarios
+    main.main-panel
+      .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+        h1 Reportes de Ventas de Cafetería
+        .user-info(style="display:flex;align-items:center;gap:12px;")
+          if user
+            span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+          else
+            span Usuario
+          button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
+      .menu-grupo.menu-grupo-horizontal
+        .menu-icon
+          i.fas.fa-mug-hot.fa-2x
+        h3 Cafetería
+        ul.menu-horizontal
+          li: a.button(href="/cafeteria") Catálogo de cafetería
+          li: a.button(href="/cafeteria/nuevo") Agregar producto
+          li: a.button(href="/cafeteria/vender") Registrar venta
+          li: a.button.active(href="/cafeteria/reportes") Reporte de ventas
+      .reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+        .filtros-container(style="text-align:center;margin-bottom:24px;")
+          label(for="filtro-fecha" style="margin-right:8px;font-weight:600;") Filtrar por:
+          select#filtro-fecha(style="padding:8px 12px;border:1px solid #ddd;border-radius:4px;")
+            option(value="todo") Todo
+            option(value="dia") Hoy
+            option(value="semana") Esta semana
+            option(value="mes") Este mes
+        table(style="width:100%;max-width:900px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+          thead
+            tr
+              th Fecha
+              th Producto
+              th Categoría
+              th Precio
+              th Cantidad
+              th Total
+              th Factura
+          tbody
+            // Esto será poblado por JavaScript
+          tfoot
+            // Footer será agregado por JavaScript
+    footer
+      hr
+      p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29
+
+  script(src="/js/cafeteria/reportes_ventas_cafeteria.js")

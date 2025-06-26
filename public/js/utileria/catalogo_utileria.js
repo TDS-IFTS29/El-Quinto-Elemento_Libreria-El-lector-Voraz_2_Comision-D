@@ -64,9 +64,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td>$${u.precio}</td>
             <td>${badge}</td>
             <td>${u.stockMinimo ?? 5}</td>
+            <td>${u.ultimaVenta ? new Date(u.ultimaVenta).toLocaleDateString('es-AR') : '-'}</td>
             <td>${u.proveedor && u.proveedor.nombre ? u.proveedor.nombre : '-'}</td>
-            <td style="text-align:center;display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;">
-              ${acciones}
+            <td style="text-align:center;">
+              <div style="display:flex;flex-direction:row;align-items:center;gap:4px;justify-content:center;">
+                ${acciones}
+              </div>
             </td>
           </tr>
         `;

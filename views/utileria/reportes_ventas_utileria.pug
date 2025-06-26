@@ -23,27 +23,31 @@ block content
               i.fas.fa-book(style="margin-right:8px;")
               | Libros
           li
-            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
+            a(href="/cafeteria")
               i.fas.fa-mug-hot(style="margin-right:8px;")
               | Cafetería
           li
             a(href="/utileria")
               i.fas.fa-pencil-ruler(style="margin-right:8px;")
               | Utilería
-          li
-            a(href="/proveedores")
-              i.fas.fa-truck(style="margin-right:8px;")
-              | Proveedores
-          li
-            a(href="#" class="inactivo" tabindex="-1" aria-disabled="true")
-              i.fas.fa-users(style="margin-right:8px;")
-              | Usuarios
+          if user && user.rol === 'admin'
+            li
+              a(href="/proveedores")
+                i.fas.fa-truck(style="margin-right:8px;")
+                | Proveedores
+            li
+              a(href="/usuarios")
+                i.fas.fa-users(style="margin-right:8px;")
+                | Usuarios
     main.main-panel
       .main-header(style="display:flex;justify-content:space-between;align-items:center;")
         h1 Reportes de Ventas de Utilería
         .user-info(style="display:flex;align-items:center;gap:12px;")
-          span Admin
-          button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+          if user
+            span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+          else
+            span Usuario
+          button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
       .menu-grupo.menu-grupo-horizontal
         .menu-icon
           i.fas.fa-pencil-ruler.fa-2x
@@ -70,7 +74,7 @@ block content
               th Precio unitario
               th Cantidad
               th Total
-              th Imprimir
+              th Facturas
           tbody
             // Esto será poblado por JavaScript
           tfoot

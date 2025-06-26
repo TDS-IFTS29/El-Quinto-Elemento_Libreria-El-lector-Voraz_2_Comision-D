@@ -8,7 +8,7 @@ require('dotenv').config();
 
 // Conexión a MongoDB
 const mongoose = require('mongoose');
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/el-lector-voraz';
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose.connect(MONGO_URI)
   .then(() => console.log('Conectado a MongoDB'))
@@ -19,7 +19,7 @@ mongoose.connect(MONGO_URI)
 
 // Configurar sesiones
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'el-lector-voraz-secret-key',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { 
@@ -70,7 +70,7 @@ app.use('/api/usuarios', requireAuth, require('./routes/api/usuarios')); // API 
 // app.use('/api/debug', require('./routes/debug'));
 
 // Puerto
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

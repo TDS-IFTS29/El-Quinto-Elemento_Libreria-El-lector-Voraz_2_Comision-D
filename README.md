@@ -21,6 +21,7 @@ npm install
 ```bash
 PORT=3000
 MONGO_URI=mongodb://localhost:27017/el-lector-voraz
+SESSION_SECRET=el-lector-voraz-super-secret-key-2024
 ```
 
 ### 4. Iniciar MongoDB localmente

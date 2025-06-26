@@ -24,6 +24,132 @@ html
     h1 Documentación de la API
 
     .endpoint
+      h2 Autenticación API
+
+      h3
+        span.method.post POST
+        | /auth/login
+      p Inicia sesión en el sistema. Crea una sesión para el usuario autenticado.
+      pre
+        code.
+          POST /auth/login
+          Content-Type: application/json
+          {
+            "email": "juan.perez@lectorvoraz.com",
+            "password": "1234"
+          }
+      p Respuesta exitosa (200):
+      pre
+        code.
+          {
+            "mensaje": "Login exitoso",
+            "usuario": {
+              "_id": "ID_DEL_USUARIO",
+              "nombre": "Juan Pérez",
+              "email": "juan.perez@lectorvoraz.com",
+              "rol": "admin"
+            }
+          }
+      p Error de autenticación (401):
+      pre
+        code.
+          {
+            "error": "Credenciales inválidas"
+          }
+
+      h3
+        span.method.post POST
+        | /auth/logout
+      p Cierra la sesión del usuario actual.
+      pre
+        code.
+          POST /auth/logout
+      p Respuesta exitosa (200):
+      pre
+        code.
+          {
+            "mensaje": "Logout exitoso"
+          }
+
+      h3
+        span.method.get GET
+        | /auth/logout
+      p Cierra la sesión del usuario actual (método GET para enlaces).
+      pre
+        code.
+          GET /auth/logout
+
+    .endpoint
+      h2 Sistema de Permisos y Roles
+
+      h4 Roles Disponibles
+      ul
+        li
+          strong admin
+          | : Acceso completo a todos los recursos y operaciones
+        li
+          strong empleado
+          | : Acceso limitado según las reglas de negocio
+
+      h4 Reglas de Permisos por Módulo
+      p
+        strong Usuarios:
+      ul
+        li
+          strong Admin
+          | : Crear, leer, actualizar, eliminar cualquier usuario
+        li
+          strong Empleado
+          | : Solo puede ver y editar su propio perfil
+
+      p
+        strong Libros:
+      ul
+        li
+          strong Admin
+          | : Crear, leer, actualizar, eliminar cualquier libro
+        li
+          strong Empleado
+          | : Solo puede ver libros (sin crear, editar o eliminar)
+
+      p
+        strong Proveedores:
+      ul
+        li
+          strong Admin
+          | : Crear, leer, actualizar, eliminar cualquier proveedor
+        li
+          strong Empleado
+          | : Sin acceso (no aparece en el menú)
+
+      p
+        strong Ventas:
+      ul
+        li
+          strong Admin
+          | : Leer, crear reportes y estadísticas, eliminar ventas
+        li
+          strong Empleado
+          | : Crear ventas, ver reportes y estadísticas
+
+      p
+        strong Utilería y Cafetería:
+      ul
+        li
+          strong Admin
+          | : Acceso completo (CRUD + gestión de stock)
+        li
+          strong Empleado
+          | : Ver productos y realizar ventas
+
+      h4 Autenticación Requerida
+      p Los siguientes endpoints requieren que el usuario esté autenticado:
+      ul
+        li Todos los endpoints que comienzan con /api/ (excepto documentación)
+        li Todas las vistas del dashboard y formularios
+        li El sistema usa sesiones con Express Session
+
+    .endpoint
       h2 Libros API
 
       h3
@@ -81,10 +207,29 @@ html
       h3
         span.method.delete DELETE
         | /api/libros/:id
-      p Elimina un libro por su ObjectId.
+      p Elimina un libro por su ObjectId. Requiere rol de administrador.
       pre
         code.
           DELETE /api/libros/ID_DEL_LIBRO
+
+      h3
+        span.method.patch PATCH
+        | /api/libros/:id/sumar-stock
+      p Suma 1 unidad al stock de un libro específico. Solo disponible para administradores.
+      pre
+        code.
+          PATCH /api/libros/ID_DEL_LIBRO/sumar-stock
+      p Respuesta exitosa (200):
+      pre
+        code.
+          {
+            "mensaje": "Stock actualizado",
+            "libro": {
+              "_id": "ID_DEL_LIBRO",
+              "nombre": "Nombre del libro",
+              "stock": 11
+            }
+          }
 
     .endpoint
       h2 Proveedores API
@@ -142,7 +287,7 @@ html
       h3
         span.method.delete DELETE
         | /api/proveedores/:id
-      p Elimina un proveedor por su ObjectId.
+      p Elimina un proveedor por su ObjectId. Requiere rol de administrador.
       pre
         code.
           DELETE /api/proveedores/ID_DEL_PROVEEDOR
@@ -153,7 +298,7 @@ html
       h3
         span.method.get GET
         | /api/usuarios
-      p Obtiene una lista de todos los usuarios del sistema.
+      p Obtiene una lista de todos los usuarios del sistema. Requiere rol de administrador.
       pre
         code.
           GET /api/usuarios
@@ -174,8 +319,28 @@ html
 
       h3
         span.method.get GET
+        | /api/usuarios/me
+      p Obtiene los datos del usuario actualmente autenticado. No requiere parámetros adicionales.
+      pre
+        code.
+          GET /api/usuarios/me
+      p Respuesta de ejemplo:
+      pre
+        code.
+          {
+            "_id": "ID_DEL_USUARIO",
+            "nombre": "Juan Pérez",
+            "email": "juan@ejemplo.com",
+            "rol": "empleado",
+            "telefono": "11-1234-5678",
+            "activo": true,
+            "fechaCreacion": "2025-06-25T10:30:21.893Z"
+          }
+
+      h3
+        span.method.get GET
         | /api/usuarios/:id
-      p Obtiene un usuario específico por su ObjectId.
+      p Obtiene un usuario específico por su ObjectId. Los empleados solo pueden acceder a su propio perfil, los administradores pueden acceder a cualquier usuario.
       pre
         code.
           GET /api/usuarios/ID_DEL_USUARIO
@@ -183,7 +348,7 @@ html
       h3
         span.method.post POST
         | /api/usuarios
-      p Crea un nuevo usuario. Los campos <code>nombre</code>, <code>email</code> y <code>password</code> son obligatorios. La contraseña se cifra automáticamente con bcrypt.
+      p Crea un nuevo usuario. Solo disponible para administradores. Los campos <code>nombre</code>, <code>email</code> y <code>password</code> son obligatorios. La contraseña se cifra automáticamente con bcrypt.
       pre
         code.
           POST /api/usuarios
@@ -216,7 +381,7 @@ html
       h3
         span.method.put PUT
         | /api/usuarios/:id
-      p Actualiza un usuario existente. Si se proporciona el campo <code>password</code>, se cifra automáticamente. No es necesario enviar todos los campos, solo los que se desean actualizar.
+      p Actualiza un usuario existente. Los empleados solo pueden actualizar su propio perfil, los administradores pueden actualizar cualquier usuario. Si se proporciona el campo <code>password</code>, se cifra automáticamente. No es necesario enviar todos los campos, solo los que se desean actualizar.
       pre
         code.
           PUT /api/usuarios/ID_DEL_USUARIO
@@ -256,7 +421,7 @@ html
       h3
         span.method.delete DELETE
         | /api/usuarios/:id
-      p Elimina un usuario por su ObjectId.
+      p Elimina un usuario por su ObjectId. Solo disponible para administradores.
       pre
         code.
           DELETE /api/usuarios/ID_DEL_USUARIO
@@ -428,7 +593,7 @@ html
       h3
         span.method.delete DELETE
         | /api/ventas/:id
-      p Elimina una venta por su ObjectId.
+      p Elimina una venta por su ObjectId. Solo disponible para administradores.
       pre
         code.
           DELETE /api/ventas/ID_VENTA
@@ -455,7 +620,7 @@ html
       h3
         span.method.post POST
         | /api/utileria
-      p Crea un nuevo producto de utilería. El campo <code>proveedor</code> es obligatorio y debe ser el ObjectId de un proveedor de tipo "utileria".
+      p Crea un nuevo producto de utilería. Solo disponible para administradores. El campo <code>proveedor</code> es obligatorio y debe ser el ObjectId de un proveedor de tipo "utileria".
       pre
         code.
           POST /api/utileria
@@ -472,7 +637,7 @@ html
       h3
         span.method.patch PATCH
         | /api/utileria/:id
-      p Edita un producto de utilería existente.
+      p Edita un producto de utilería existente. Solo disponible para administradores.
       pre
         code.
           PATCH /api/utileria/ID_DEL_PRODUCTO
@@ -489,10 +654,29 @@ html
       h3
         span.method.delete DELETE
         | /api/utileria/:id
-      p Elimina un producto de utilería por su ObjectId.
+      p Elimina un producto de utilería por su ObjectId. Solo disponible para administradores.
       pre
         code.
           DELETE /api/utileria/ID_DEL_PRODUCTO
+
+      h3
+        span.method.patch PATCH
+        | /api/utileria/:id/sumar-stock
+      p Suma 1 unidad al stock de un producto de utilería específico. Solo disponible para administradores.
+      pre
+        code.
+          PATCH /api/utileria/ID_DEL_PRODUCTO/sumar-stock
+      p Respuesta exitosa (200):
+      pre
+        code.
+          {
+            "mensaje": "Stock actualizado",
+            "producto": {
+              "_id": "ID_DEL_PRODUCTO",
+              "nombre": "Cuaderno A4",
+              "stock": 26
+            }
+          }
 
       h3
         span.method.post POST
@@ -545,7 +729,7 @@ html
       h3
         span.method.post POST
         | /api/cafeteria
-      p Crea un nuevo producto de cafetería. El campo <code>proveedor</code> es obligatorio y debe ser el ObjectId de un proveedor de tipo "cafeteria".
+      p Crea un nuevo producto de cafetería. Solo disponible para administradores. El campo <code>proveedor</code> es obligatorio y debe ser el ObjectId de un proveedor de tipo "cafeteria".
       pre
         code.
           POST /api/cafeteria
@@ -562,7 +746,7 @@ html
       h3
         span.method.patch PATCH
         | /api/cafeteria/:id
-      p Edita un producto de cafetería existente.
+      p Edita un producto de cafetería existente. Solo disponible para administradores.
       pre
         code.
           PATCH /api/cafeteria/ID_DEL_PRODUCTO
@@ -579,7 +763,7 @@ html
       h3
         span.method.delete DELETE
         | /api/cafeteria/:id
-      p Elimina un producto de cafetería por su ObjectId.
+      p Elimina un producto de cafetería por su ObjectId. Solo disponible para administradores.
       pre
         code.
           DELETE /api/cafeteria/ID_DEL_PRODUCTO
@@ -626,7 +810,33 @@ html
 
     .endpoint
       h2 Autenticación y Seguridad
-      p La API implementa las siguientes medidas de seguridad:
+      p La API implementa un sistema completo de autenticación y autorización basado en roles:
+      
+      h4 Sistema de Sesiones
+      ul
+        li
+          strong Express Session
+          | : El sistema utiliza sesiones del lado del servidor
+        li
+          strong Cookies seguras
+          | : Las sesiones se almacenan en cookies HTTP-only
+        li
+          strong Middleware de autenticación
+          | : Todos los endpoints protegidos requieren sesión activa
+
+      h4 Middleware de Seguridad Implementados
+      ul
+        li
+          strong requireAuth
+          | : Verifica que el usuario esté autenticado
+        li
+          strong requireRole(['admin'])
+          | : Verifica que el usuario tenga rol de administrador
+        li
+          strong requireOwnerOrAdmin
+          | : Permite acceso al propietario del recurso o a administradores
+
+      h4 Medidas de Seguridad Adicionales
       ul
         li
           strong Cifrado de contraseñas
@@ -639,16 +849,32 @@ html
           | : Se validan los campos obligatorios antes de crear/actualizar
         li
           strong Manejo de errores robusto
-          | : Códigos de estado HTTP apropiados (200, 201, 400, 404, 500)
+          | : Códigos de estado HTTP apropiados (200, 201, 400, 401, 403, 404, 500)
+        li
+          strong Validación de ObjectIds
+          | : Se verifican los IDs de MongoDB antes de procesar
+
+      h4 Códigos de Estado de Autenticación
+      ul
+        li
+          strong 401 Unauthorized
+          | : Usuario no autenticado o credenciales inválidas
+        li
+          strong 403 Forbidden
+          | : Usuario autenticado pero sin permisos suficientes
+        li
+          strong 200 OK
+          | : Operación exitosa con autenticación válida
+
       p
         strong Recomendaciones para producción:
       ul
-        li Implementar autenticación JWT o sesiones para proteger endpoints sensibles
-        li Proteger los endpoints POST, PUT y DELETE con middleware de autenticación
-        li Considerar agregar middleware de autorización basado en roles
+        li Configurar HTTPS para proteger las cookies de sesión
         li Implementar rate limiting para prevenir ataques de fuerza bruta
-        li Agregar validación de complejidad de contraseñas
+        li Configurar variables de entorno seguras para SESSION_SECRET
         li Implementar logs de auditoría para operaciones sensibles
+        li Considerar implementar JWT para APIs distribuidas
+        li Agregar validación de complejidad de contraseñas
 
     .endpoint
       h2 Ejemplo de Respuesta de Error

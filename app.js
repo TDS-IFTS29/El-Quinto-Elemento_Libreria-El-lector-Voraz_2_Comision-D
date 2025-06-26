@@ -70,7 +70,7 @@ app.use('/api/usuarios', requireAuth, require('./routes/api/usuarios')); // API 
 // app.use('/api/debug', require('./routes/debug'));
 
 // Puerto
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Utileria = require('../../../models/Utileria');
+const { requireRole } = require('../../../middleware/auth');
 
 // Obtener todos los productos de utilería
 router.get('/', async (req, res) => {
@@ -12,8 +13,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Crear producto de utilería
-router.post('/', async (req, res) => {
+// Crear producto de utilería - Solo administradores
+router.post('/', requireRole(['admin']), async (req, res) => {
   try {
     const { nombre, descripcion, precio, stock, stockMinimo, proveedor } = req.body;
     const util = await Utileria.create({ nombre, descripcion, precio, stock, stockMinimo, proveedor });
@@ -23,8 +24,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Sumar 1 al stock de un producto de utilería
-router.patch('/:id/sumar-stock', async (req, res) => {
+// Sumar 1 al stock de un producto de utilería - Solo administradores
+router.patch('/:id/sumar-stock', requireRole(['admin']), async (req, res) => {
   try {
     const util = await Utileria.findById(req.params.id);
     if (!util) return res.status(404).json({ error: 'No encontrado' });
@@ -36,8 +37,8 @@ router.patch('/:id/sumar-stock', async (req, res) => {
   }
 });
 
-// Eliminar producto de utilería
-router.delete('/:id', async (req, res) => {
+// Eliminar producto de utilería - Solo administradores
+router.delete('/:id', requireRole(['admin']), async (req, res) => {
   try {
     await Utileria.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
@@ -57,8 +58,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Editar producto de utilería
-router.patch('/:id', async (req, res) => {
+// Editar producto de utilería - Solo administradores
+router.patch('/:id', requireRole(['admin']), async (req, res) => {
   try {
     const { nombre, descripcion, precio, stock, stockMinimo, proveedor } = req.body;
     const util = await Utileria.findByIdAndUpdate(

@@ -4,7 +4,7 @@ const Libro = require('../models/Libro');
 // Obtener todas las ventas
 exports.getAllVentas = async (req, res) => {
   try {
-    const ventas = await Venta.find().populate('libro');
+    const ventas = await Venta.find().populate('libro').populate('utileria');
     res.json(ventas);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener las ventas' });
@@ -14,7 +14,7 @@ exports.getAllVentas = async (req, res) => {
 // Obtener una venta por ID
 exports.getVentaById = async (req, res) => {
   try {
-    const venta = await Venta.findById(req.params.id).populate('libro');
+    const venta = await Venta.findById(req.params.id).populate('libro').populate('utileria');
     if (!venta) return res.status(404).json({ error: 'Venta no encontrada' });
     res.json(venta);
   } catch (error) {

@@ -6,12 +6,25 @@ document.addEventListener('DOMContentLoaded', async function() {
     const userResponse = await fetch('/api/usuarios/me');
     if (userResponse.ok) {
       currentUser = await userResponse.json();
+    } else {
+      throw new Error('No se pudo obtener información del usuario actual');
+    }
+
+    let usuarios = [];
+    
+    // Si es admin, obtener todos los usuarios. Si es empleado, solo mostrar su propio perfil
+    if (currentUser.rol === 'admin') {
+      const response = await fetch('/api/usuarios');
+      if (!response.ok) throw new Error('Error al cargar usuarios');
+      usuarios = await response.json();
+    } else {
+      // Para empleados, solo mostrar su propio perfil
+      const response = await fetch(`/api/usuarios/${currentUser._id}`);
+      if (!response.ok) throw new Error('Error al cargar información del usuario');
+      const usuario = await response.json();
+      usuarios = [usuario]; // Convertir a array para el resto del código
     }
     
-    const response = await fetch('/api/usuarios');
-    if (!response.ok) throw new Error('Error al cargar usuarios');
-    
-    const usuarios = await response.json();
     const tbody = document.getElementById('tabla-usuarios');
     
     if (usuarios.length === 0) {
@@ -72,9 +85,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     }).join('');
     
   } catch (error) {
-    console.error('Error:', error);
-    document.getElementById('tabla-usuarios').innerHTML = 
-      '<tr><td colspan="7">Error al cargar usuarios</td></tr>';
+    console.error('Error al cargar usuarios:', error);
+    const tbody = document.getElementById('tabla-usuarios');
+    if (tbody) {
+      tbody.innerHTML = 
+        '<tr><td colspan="7" style="text-align:center;color:#dc3545;padding:20px;">Error al cargar información de usuarios. Verifique que tenga los permisos necesarios.</td></tr>';
+    }
   }
 });
 

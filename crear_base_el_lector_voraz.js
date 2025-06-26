@@ -194,12 +194,100 @@ async function crearBaseDeDatos() {
       await new Venta({ ...ventas[i], fecha: fechaVenta }).save();
     }
 
+    // Ventas de utilería del día de hoy (2 items)
+    const ventasUtileria = [
+      { 
+        utileria: utileriaInsertada[5]._id, // Regla 30cm
+        nombreUtileria: utileriaInsertada[5].nombre,
+        precioUtileria: utileriaInsertada[5].precio,
+        cantidad: 2,
+        fecha: new Date(hoy)
+      },
+      { 
+        utileria: utileriaInsertada[6]._id, // Tijera escolar
+        nombreUtileria: utileriaInsertada[6].nombre,
+        precioUtileria: utileriaInsertada[6].precio,
+        cantidad: 1,
+        fecha: new Date(hoy)
+      }
+    ];
+
+    // Ventas de utilería de otros meses (6 adicionales)
+    const ventasUtileriaOtrosMeses = [
+      {
+        utileria: utileriaInsertada[0]._id, // Lápiz HB
+        nombreUtileria: utileriaInsertada[0].nombre,
+        precioUtileria: utileriaInsertada[0].precio,
+        cantidad: 5,
+        fecha: new Date(2025, 4, 15, 14, 30) // 15 de mayo 2025
+      },
+      {
+        utileria: utileriaInsertada[1]._id, // Goma de borrar
+        nombreUtileria: utileriaInsertada[1].nombre,
+        precioUtileria: utileriaInsertada[1].precio,
+        cantidad: 3,
+        fecha: new Date(2025, 4, 22, 10, 15) // 22 de mayo 2025
+      },
+      {
+        utileria: utileriaInsertada[2]._id, // Cuaderno A4
+        nombreUtileria: utileriaInsertada[2].nombre,
+        precioUtileria: utileriaInsertada[2].precio,
+        cantidad: 2,
+        fecha: new Date(2025, 3, 18, 16, 45) // 18 de abril 2025
+      },
+      {
+        utileria: utileriaInsertada[3]._id, // Marcador negro
+        nombreUtileria: utileriaInsertada[3].nombre,
+        precioUtileria: utileriaInsertada[3].precio,
+        cantidad: 4,
+        fecha: new Date(2025, 3, 25, 11, 20) // 25 de abril 2025
+      },
+      {
+        utileria: utileriaInsertada[4]._id, // Pegamento en barra
+        nombreUtileria: utileriaInsertada[4].nombre,
+        precioUtileria: utileriaInsertada[4].precio,
+        cantidad: 1,
+        fecha: new Date(2025, 2, 12, 13, 0) // 12 de marzo 2025
+      },
+      {
+        utileria: utileriaInsertada[7]._id, // Resaltador amarillo
+        nombreUtileria: utileriaInsertada[7].nombre,
+        precioUtileria: utileriaInsertada[7].precio,
+        cantidad: 3,
+        fecha: new Date(2025, 2, 28, 15, 30) // 28 de marzo 2025
+      }
+    ];
+
+    // Insertar ventas de utilería del día de hoy
+    for (const ventaUtileria of ventasUtileria) {
+      await new Venta(ventaUtileria).save();
+    }
+
+    // Insertar ventas de utilería de otros meses
+    for (const ventaUtileria of ventasUtileriaOtrosMeses) {
+      await new Venta(ventaUtileria).save();
+    }
+
+    // Actualizar la ultimaVenta de los items de utilería vendidos hoy
+    await Utileria.findByIdAndUpdate(utileriaInsertada[5]._id, { ultimaVenta: new Date(hoy) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[6]._id, { ultimaVenta: new Date(hoy) });
+
+    // Actualizar la ultimaVenta de los items vendidos en otros meses
+    await Utileria.findByIdAndUpdate(utileriaInsertada[0]._id, { ultimaVenta: new Date(2025, 4, 22) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[1]._id, { ultimaVenta: new Date(2025, 4, 22) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[2]._id, { ultimaVenta: new Date(2025, 3, 18) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[3]._id, { ultimaVenta: new Date(2025, 3, 25) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[4]._id, { ultimaVenta: new Date(2025, 2, 12) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[7]._id, { ultimaVenta: new Date(2025, 2, 28) });
+    await Utileria.findByIdAndUpdate(utileriaInsertada[6]._id, { ultimaVenta: new Date(hoy) });
+
     console.log('Base de datos el-lector-voraz creada exitosamente con:');
     console.log(`   Libros: ${librosInsertados.length}`);
     console.log(`   Utilería: ${utileriaInsertada.length}`);
     console.log(`   Proveedores: ${proveedoresInsertados.length}`);
     console.log(`   Usuarios: ${usuariosInsertados.length}`);
-    console.log(`   Ventas de ejemplo: ${ventas.length}`);
+    console.log(`   Ventas de libros: ${ventas.length}`);
+    console.log(`   Ventas de utilería: ${ventasUtileria.length + ventasUtileriaOtrosMeses.length} (${ventasUtileria.length} del día de hoy, ${ventasUtileriaOtrosMeses.length} de otros meses)`);
     console.log('');
     console.log('Usuarios creados (TODAS LAS CONTRASEÑAS: 1234):');
     console.log('   Admin: Juan Perez (juan.perez@lectorvoraz.com)');

@@ -745,15 +745,15 @@ a.button.active, button.active {
 }
 .stock-cero {
   background: #ffebee;
-  color: #e57373;
+  color: #E57373;
 }
 .stock-bajo {
   background: #fff3e0;
-  color: #ffb74d;
+  color: #FFB74D;
 }
 .stock-ok {
   background: #e8f5e9;
-  color: #43a047;
+  color: #4CAF50;
 }
 
 /* Botones de acción con iconos */
@@ -785,4 +785,16 @@ a.button.active, button.active {
 }
 .icon-btn[title="Vender"]:hover {
   background: #e3f2fd;
+}
+
+/* Estilos para botones de carrito deshabilitados */
+.icon-btn[title="Sin stock disponible"] {
+  color: #ccc !important;
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+.icon-btn[title="Sin stock disponible"]:hover {
+  background: none !important;
+  color: #ccc !important;
 }

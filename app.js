@@ -66,8 +66,8 @@ app.use('/api/usuarios', requireAuth, require('./routes/api/usuarios')); // API 
 // app.use('/api/debug', require('./routes/debug'));
 
 // Nueva ruta de utilería
-app.use('/utileria', require('./routes/utileria'));
-app.use('/api/utileria', require('./routes/api/utileria/index.js'));
+app.use('/utileria', requireAuth, require('./routes/utileria')); // requiere autenticación
+app.use('/api/utileria', requireAuth, require('./routes/api/utileria/index.js'));
 
 // Puerto
 const PORT = process.env.PORT || 3000;

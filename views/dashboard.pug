@@ -174,15 +174,23 @@ block content
         .main-header(style="display:flex;justify-content:space-between;align-items:center;")
           h1 Usuarios
           .user-info(style="display:flex;align-items:center;gap:12px;")
-            span Admin
-            button.logout-btn(type="button" onclick="window.location.href='/login'") Cerrar Sesión
+            if user
+              span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+            else
+              span Usuario
+            button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
         .menu-grupo.menu-grupo-horizontal
           .menu-icon
             i.fas.fa-users.fa-2x
           h3 Usuarios
           ul.menu-horizontal
-            li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/usuarios") Catálogo de usuarios
-            li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/usuarios/nuevo") Agregar usuario
+            li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/usuarios") 
+              if user && user.rol === 'admin'
+                | Catálogo de usuarios
+              else
+                | Mi perfil
+            if user && user.rol === 'admin'
+              li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/usuarios/nuevo") Agregar usuario
         if activeMenu === 'nuevo'
           .nuevo-usuario-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
             .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
@@ -273,6 +281,205 @@ block content
             .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
               a.button(href="/inicio") Volver al inicio
             script(src="/js/usuarios/catalogo_usuarios.js")
+      else if utileria
+        .main-header(style="display:flex;justify-content:space-between;align-items:center;")
+          h1 Utilería
+          .user-info(style="display:flex;align-items:center;gap:12px;")
+            if user
+              span #{user.nombre} (#{user.rol === 'admin' ? 'Administrador' : 'Empleado'})
+            else
+              span Usuario
+            button.logout-btn(type="button" onclick="window.location.href='/auth/logout'") Cerrar Sesión
+        .menu-grupo.menu-grupo-horizontal
+          .menu-icon
+            i.fas.fa-pencil-ruler.fa-2x
+          h3 Utilería
+          ul.menu-horizontal
+            li: a.button(class=(activeMenu === 'catalogo' ? 'active' : ''), href="/utileria") Catálogo de utilería
+            if user && user.rol === 'admin'
+              li: a.button(class=(activeMenu === 'nuevo' ? 'active' : ''), href="/utileria/nuevo") Agregar utilería
+            li: a.button(class=(activeMenu === 'vender' ? 'active' : ''), href="/utileria/vender") Registrar venta
+            li: a.button(class=(activeMenu === 'reportes' ? 'active' : ''), href="/utileria/reportes") Reporte de ventas
+        if activeMenu === 'nuevo'
+          .nuevo-utileria-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+            .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+              h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Nueva Utilería
+              form#form-nuevo-utileria(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+                div
+                  label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
+                  input(type="text" name="nombre" id="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="descripcion" style="color:#675858;font-size:1rem;margin-bottom:4px;") Descripción:
+                  textarea(name="descripcion" id="descripcion" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;min-height:80px;")
+                div
+                  label(for="precio" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+                  input(type="number" name="precio" id="precio" required min="0" step="0.01" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="stock" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock:
+                  input(type="number" name="stock" id="stock" required min="0" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="stockMinimo" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock Mínimo:
+                  input(type="number" name="stockMinimo" id="stockMinimo" required min="0" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Proveedor:
+                  select(name="proveedor" id="proveedor" required class="input-lg" style="width:100%;margin-bottom:18px;")
+                    option(value="") Seleccione un proveedor
+                    if proveedoresUtileria
+                      each proveedor in proveedoresUtileria
+                        option(value=proveedor._id) #{proveedor.nombre}
+                div
+                  button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar
+            .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+              a.button(href="/inicio") Volver al inicio
+            script(src="/js/utileria/nuevo_utileria.js")
+        else if activeMenu === 'editar'
+          .editar-utileria-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+            .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+              h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Editar Utilería
+              form#form-editar-utileria(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+                div
+                  label(for="nombre" style="color:#675858;font-size:1rem;margin-bottom:4px;") Nombre:
+                  input(type="text" name="nombre" id="nombre" required class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="descripcion" style="color:#675858;font-size:1rem;margin-bottom:4px;") Descripción:
+                  textarea(name="descripcion" id="descripcion" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;min-height:80px;")
+                div
+                  label(for="precio" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio:
+                  input(type="number" name="precio" id="precio" required min="0" step="0.01" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="stock" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock:
+                  input(type="number" name="stock" id="stock" required min="0" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="stockMinimo" style="color:#675858;font-size:1rem;margin-bottom:4px;") Stock Mínimo:
+                  input(type="number" name="stockMinimo" id="stockMinimo" required min="0" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="proveedor" style="color:#675858;font-size:1rem;margin-bottom:4px;") Proveedor:
+                  select(name="proveedor" id="proveedor" required class="input-lg" style="width:100%;margin-bottom:18px;")
+                    if proveedoresUtileria
+                      each proveedor in proveedoresUtileria
+                        option(value=proveedor._id) #{proveedor.nombre}
+                div
+                  button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Guardar cambios
+              script(src="/js/utileria/editar_utileria.js")
+              script.
+                document.addEventListener('DOMContentLoaded', async () => {
+                  const id = window.location.pathname.split('/').pop();
+                  try {
+                    const resp = await fetch(`/api/utileria/${id}`);
+                    if (resp.ok) {
+                      const utileria = await resp.json();
+                      document.getElementById('nombre').value = utileria.nombre || '';
+                      document.getElementById('descripcion').value = utileria.descripcion || '';
+                      document.getElementById('precio').value = utileria.precio || '';
+                      document.getElementById('stock').value = utileria.stock || '';
+                      document.getElementById('stockMinimo').value = utileria.stockMinimo || '';
+                      document.getElementById('proveedor').value = utileria.proveedor || '';
+                    } else {
+                      alert('No se pudo cargar la utilería');
+                    }
+                  } catch (e) {
+                    alert('Error de red al cargar utilería');
+                  }
+                });
+        else if activeMenu === 'vender'
+          .vender-utileria-content(style="background:#F2F0EC;padding:32px 0 24px 0;display:flex;flex-direction:column;align-items:center;")
+            .form-box(style="background:#fff;padding:32px 20px 28px 20px;border-radius:12px;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;")
+              h1(style="color:#675858;font-size:1.4rem;text-align:center;margin-bottom:18px;") Registrar Venta de Utilería
+              form#form-nueva-venta-utileria(method="post" style="width:100%;max-width:320px;display:flex;flex-direction:column;gap:14px;")
+                div
+                  label(for="utileriaId" style="color:#675858;font-size:1rem;margin-bottom:4px;") Utilería:
+                  select(name="utileriaId" id="utileriaId" required class="input-lg" style="width:100%;margin-bottom:10px;")
+                    option(value="") Seleccione una utilería
+                div
+                  label(for="precio-utileria" style="color:#675858;font-size:1rem;margin-bottom:4px;") Precio unitario:
+                  input(type="text" id="precio-utileria" readonly class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;background:#f9f9f9;")
+                div
+                  label(for="cantidad" style="color:#675858;font-size:1rem;margin-bottom:4px;") Cantidad:
+                  input(type="number" name="cantidad" id="cantidad" required min="1" class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:10px;border-radius:6px;border:1px solid #ccc;")
+                div
+                  label(for="total-venta" style="color:#675858;font-size:1rem;margin-bottom:4px;") Total:
+                  input(type="text" id="total-venta" readonly class="input-lg" style="width:100%;padding:10px 12px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;background:#f9f9f9;")
+                div
+                  button(type="submit" class="button button-lg" style="width:100%;margin-top:8px;font-size:1.1rem;padding:10px 0;") Registrar Venta
+            .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+              a.button(href="/inicio") Volver al inicio
+            script(src="/js/utileria/vender_utileria.js")
+            script.
+              document.addEventListener('DOMContentLoaded', async () => {
+                const select = document.getElementById('utileriaId');
+                try {
+                  // Cargar todos los productos de utilería
+                  const resp = await fetch('/api/utileria');
+                  if (resp.ok) {
+                    const utileria = await resp.json();
+                    utileria.forEach(item => {
+                      const option = document.createElement('option');
+                      option.value = item._id;
+                      option.textContent = `${item.nombre} - $${item.precio}`;
+                      option.setAttribute('data-precio', item.precio);
+                      select.appendChild(option);
+                    });
+                    
+                    // Si hay un producto preseleccionado desde la URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const utileriaIdFromUrl = urlParams.get('utileria');
+                    if (utileriaIdFromUrl) {
+                      select.value = utileriaIdFromUrl;
+                      // Disparar el evento change para actualizar precio y total
+                      select.dispatchEvent(new Event('change'));
+                    }
+                  }
+                } catch (e) {
+                  console.error('Error cargando utilería:', e);
+                }
+              });
+        else if activeMenu === 'reportes'
+          .reportes-utileria-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+            h2(style="text-align:center;margin-bottom:24px;color:#675858;") Reportes de Ventas de Utilería
+            .filtros-container(style="display:flex;justify-content:center;margin-bottom:20px;")
+              div(style="display:flex;align-items:center;gap:10px;")
+                label(for="filtro-fecha" style="color:#675858;font-weight:600;") Filtrar por:
+                select#filtro-fecha(style="padding:8px 12px;border:1px solid #ccc;border-radius:6px;background:#fff;")
+                  option(value="todo") Todas las ventas
+                  option(value="dia") Hoy
+                  option(value="semana") Esta semana
+                  option(value="mes") Este mes
+            .tabla-container(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);max-width:1000px;margin:0 auto;")
+              table(style="width:100%;")
+                thead
+                  tr
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;") Fecha
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;") Producto
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;") Descripción
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;") Precio Unit.
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;") Cantidad
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;") Total
+                    th(style="padding:12px;background:#f5f5f5;border-bottom:1px solid #ddd;text-align:center;") Acciones
+                tbody
+                  tr
+                    td(colspan="7" style="padding:20px;text-align:center;color:#888;") Cargando reportes de ventas...
+                tfoot
+            .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+              a.button(href="/inicio") Volver al inicio
+            script(src="/js/utileria/reportes_ventas_utileria.js")
+        else
+          section.catalogo-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+            table(style="background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+              thead
+                tr
+                  th Nombre
+                  th Descripción
+                  th Precio
+                  th Stock
+                  th Stock Mínimo
+                  th Proveedor
+                  th Acciones
+              tbody#tabla-utileria
+                tr
+                  td(colspan="7") Cargando utilería...
+            .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
+              a.button(href="/inicio") Volver al inicio
+            script(src="/js/utileria/catalogo_utileria.js")
       else
         .main-header(style="display:flex;justify-content:space-between;align-items:center;")
           h1 Panel Principal

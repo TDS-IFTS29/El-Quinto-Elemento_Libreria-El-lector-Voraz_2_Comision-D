@@ -23,11 +23,11 @@ PORT=3000
 MONGO_URI=mongodb://localhost:27017/el-lector-voraz
 ```
 
-### 3. Iniciar MongoDB localmente
+### 4. Iniciar MongoDB localmente
 
 Debe tener instalado MongoDB localmente e iniciado.
 
-### 4. Crear la base de datos con datos de ejemplo
+### 5. Crear la base de datos con datos de ejemplo
 
 Para facilitar las pruebas, puedes crear la base de datos `el-lector-voraz` con datos de ejemplo ejecutando el siguiente script:
 
@@ -55,7 +55,7 @@ Esto eliminará los productos, proveedores y el historial de ventas existentes, 
 >
 > **Nota:** Todos los usuarios (administradores y empleados) tienen la misma contraseña: `1234`
 
-### 5. Iniciar el servidor en modo desarrollo (con reinicio automático)
+### 6. Iniciar el servidor en modo desarrollo (con reinicio automático)
 
 ```bash
 npm run dev
@@ -67,17 +67,11 @@ npm run dev
 > npm start
 > ```
 
-### 6. Acceder en el navegador
+### 7. Acceder en el navegador
 
 ```text
 http://localhost:3000
 ```
-
-## Configuración del Proyecto
-
-### Variables de Entorno (.env)
-
-> **Nota:** En este proyecto estudiantil, el archivo `.env` se incluye en el repositorio solo con fines prácticos y educativos. En proyectos reales, nunca se debe subir `.env` a un repositorio público.
 
 ## Objetivo del Proyecto
 
@@ -115,7 +109,6 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 ├── app.js
 ├── package.json
 ├── README.md
-├── SISTEMA_PERMISOS.md
 ├── jest.config.js
 ├── jest.setup.js
 ├── crear_base_el_lector_voraz.js
@@ -196,7 +189,7 @@ Desarrollar una solución backend integral con Node.js y Express que permita dig
 | Método | Ruta                              | Descripción                              |
 |--------|------------------------------------|------------------------------------------|
 | GET    | /                                | Página principal                         |
-| GET    | /libros/catalogo                 | Vista de catálogo de libros (Pug)        |
+| GET    | /libros/catalogo_libros          | Vista de catálogo de libros (Pug)        |
 | GET    | /libros/nuevo                    | Formulario nuevo libro                   |
 | GET    | /libros/editar/:id               | Formulario de edición de libro           |
 | GET    | /proveedores/catalogo_proveedores  | Vista de proveedores con acciones        |
@@ -361,7 +354,7 @@ El sistema está listo para producción y cumple con todos los requisitos de seg
 |                         | MODULO LOGIN CON SESION Y CIFRADO                                   |
 |-------------------------|---------------------------------------------------------------------|
 | César Antonio Gill      | MODULO UTILERIA CON REPORTES                                        |
-|                         | MONGO ATLAS Y VERCEL                                                |
+|                         | MONGO ATLAS Y RENDER                                                |
 
 - [Google drive](https://drive.google.com/open?id=1RJ1bpW4hxbWAr_X6nghFqo8siL7cDsBN&usp=drive_fs)
 - [Github](https://github.com/TDS-IFTS29/El-Quinto-Elemento_Libreria-El-lector-Voraz_2_Comision-D)

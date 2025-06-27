@@ -798,3 +798,26 @@ a.button.active, button.active {
   background: none !important;
   color: #ccc !important;
 }
+
+/* Estilos para contenedor de reportes de ventas */
+.reportes-ventas-content {
+  padding-bottom: 120px !important; /* Espacio extra para el footer fijo */
+  min-height: calc(100vh - 300px); /* Altura mínima para evitar problemas de espaciado */
+}
+
+/* Asegurar que las tablas en reportes tengan espacio suficiente */
+.reportes-ventas-content table {
+  margin-bottom: 80px;
+}
+
+/* Estilos para las filas de total en reportes */
+tfoot tr {
+  font-weight: bold;
+  background: #f8f9fa;
+  border-top: 2px solid #dee2e6;
+}
+
+tfoot td {
+  font-weight: bold;
+  padding: 12px;
+}

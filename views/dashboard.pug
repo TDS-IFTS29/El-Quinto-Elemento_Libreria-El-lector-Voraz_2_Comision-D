@@ -558,16 +558,8 @@ block content
               else
                 li.venta Sin alertas de stock
           .card.card-ventas
-            if hayVentasDelDia
-              h3 Últimas 6 Ventas + Ventas de Hoy
-                i.fas.fa-shopping-cart(style="margin-left:8px;color:#000;")
-              p(style="font-size:0.9em;color:#666;margin:4px 0 8px 0;") 
-                | Mostrando #{cantidadUltimasVentas} últimas ventas + #{cantidadVentasDelDia} ventas del día actual
-            else
-              h3 Últimas 6 Ventas
-                i.fas.fa-shopping-cart(style="margin-left:8px;color:#000;")
-              p(style="font-size:0.9em;color:#666;margin:4px 0 8px 0;") 
-                | Mostrando las #{cantidadUltimasVentas} ventas más recientes
+            h3 Últimas Ventas
+              i.fas.fa-shopping-cart(style="margin-left:8px;color:#000;")
             ul#ventas-recientes(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas

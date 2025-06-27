@@ -124,41 +124,78 @@ exports.formVender = async (req, res) => {
 exports.vender = async (req, res) => {
   try {
     const { utileriaId, cantidad } = req.body;
-    const util = await Utileria.findById(utileriaId);
-    if (!util) {
-      if (req.headers['content-type'] === 'application/json') {
-        return res.status(404).json({ error: 'Utilería no encontrada' });
-      }
-      return res.status(404).send('Utilería no encontrada');
-    }
-    if (parseInt(cantidad) > util.stock) {
-      const msg = 'No hay suficiente stock disponible para realizar la venta.';
-      if (req.headers['content-type'] === 'application/json') {
+    
+    // Validar que utileriaId y cantidad existan
+    if (!utileriaId || !cantidad) {
+      const msg = 'Datos de venta incompletos';
+      if (req.headers['content-type']?.includes('application/json')) {
         return res.status(400).json({ error: msg });
       }
       return res.status(400).send(msg);
     }
-    util.stock = (util.stock || 0) - parseInt(cantidad);
+    
+    const util = await Utileria.findById(utileriaId);
+    if (!util) {
+      const msg = 'Utilería no encontrada';
+      if (req.headers['content-type']?.includes('application/json')) {
+        return res.status(404).json({ error: msg });
+      }
+      return res.status(404).send(msg);
+    }
+    
+    const cantidadVenta = parseInt(cantidad);
+    if (isNaN(cantidadVenta) || cantidadVenta <= 0) {
+      const msg = 'La cantidad debe ser un número positivo';
+      if (req.headers['content-type']?.includes('application/json')) {
+        return res.status(400).json({ error: msg });
+      }
+      return res.status(400).send(msg);
+    }
+    
+    if (cantidadVenta > util.stock) {
+      const msg = 'No hay suficiente stock disponible para realizar la venta.';
+      if (req.headers['content-type']?.includes('application/json')) {
+        return res.status(400).json({ error: msg });
+      }
+      return res.status(400).send(msg);
+    }
+    
+    // Actualizar stock y fecha de última venta
+    util.stock = (util.stock || 0) - cantidadVenta;
     util.ultimaVenta = new Date();
     await util.save();
-    await Venta.create({ 
+    
+    // Crear registro de venta
+    const nuevaVenta = await Venta.create({ 
+      tipo: 'utileria',
       utileria: util._id, 
       nombreUtileria: util.nombre, 
-      precioUtileria: util.precio, 
-      cantidad, 
+      precioUtileria: util.precio,
+      precioUnitario: util.precio,
+      cantidad: cantidadVenta,
+      total: util.precio * cantidadVenta,
+      vendedor: req.usuario?.nombre || 'Sistema',
       fecha: new Date() 
     });
+    
     // Si es AJAX/fetch, responder con JSON
-    if (req.headers['content-type'] === 'application/json') {
-      return res.json({ exito: true });
+    if (req.headers['content-type']?.includes('application/json')) {
+      return res.json({ 
+        exito: true, 
+        mensaje: 'Venta registrada correctamente',
+        venta: nuevaVenta 
+      });
     }
+    
     // Si es submit tradicional, redirigir
     res.redirect('/utileria/vender?exito=1');
   } catch (err) {
-    if (req.headers['content-type'] === 'application/json') {
-      return res.status(500).json({ error: 'Error al registrar la venta' });
+    console.error('Error en venta de utilería:', err);
+    const msg = 'Error al registrar la venta: ' + err.message;
+    if (req.headers['content-type']?.includes('application/json')) {
+      return res.status(500).json({ error: msg });
     }
-    res.status(500).send('Error al registrar la venta');
+    res.status(500).send(msg);
   }
 };
 

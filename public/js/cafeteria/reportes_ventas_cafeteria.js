@@ -8,19 +8,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let ventas = [];
   try {
+    console.log('Cargando ventas...'); // Debug
     const res = await fetch('/api/ventas');
     if (!res.ok) throw new Error('Error al cargar ventas');
     const todasLasVentas = await res.json();
+    console.log('Todas las ventas cargadas:', todasLasVentas.length); // Debug
+    
     // Filtrar solo las ventas de cafetería
-    ventas = todasLasVentas.filter(venta => venta.cafeteria || venta.nombreCafeteria);
+    ventas = todasLasVentas.filter(venta => venta.cafeteria || venta.nombreCafeteria || venta.tipo === 'cafeteria');
+    console.log('Ventas de cafetería filtradas:', ventas.length); // Debug
+    console.log('Ejemplo de venta de cafetería:', ventas[0]); // Debug
   } catch (error) {
+    console.error('Error al cargar ventas:', error); // Debug
     tbody.innerHTML = '<tr><td colspan="7">Error al cargar reportes de ventas de cafetería.</td></tr>';
     if (tfoot) tfoot.innerHTML = '';
-    console.error(error);
     return;
   }
 
   function renderTabla(filtroValor) {
+    console.log('Renderizando tabla con filtro:', filtroValor); // Debug
+    
     // Filtrar ventas según el filtro seleccionado
     const hoy = new Date();
     let ventasFiltradas = ventas.filter(venta => {
@@ -39,13 +46,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       return true; // todo
     });
 
+    console.log('Ventas filtradas para mostrar:', ventasFiltradas.length); // Debug
+
     // Crear resumen de ventas de cafetería
     const resumen = ventasFiltradas.map(venta => {
       const nombre = (venta.cafeteria && venta.cafeteria.nombre) || venta.nombreCafeteria || 'Sin nombre';
       const categoria = (venta.cafeteria && venta.cafeteria.categoria) || venta.categoriaCafeteria || 'Sin categoría';
-      const precio = parseFloat((venta.cafeteria && venta.cafeteria.precio) || venta.precioCafeteria || 0);
+      const precio = parseFloat((venta.cafeteria && venta.cafeteria.precio) || venta.precioCafeteria || venta.precioUnitario || 0);
       const cantidad = parseInt(venta.cantidad || 0);
-      const ingresos = precio * cantidad;
+      const total = parseFloat(venta.total || (precio * cantidad));
       
       return {
         id: venta._id,
@@ -53,10 +62,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         categoria: categoria,
         precio: precio,
         cantidad_vendida: cantidad,
-        ingresos: ingresos,
-        fecha: new Date(venta.fecha).toLocaleDateString()
+        ingresos: total,
+        fecha: new Date(venta.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'})
       };
     });
+
+    console.log('Resumen procesado:', resumen.length, 'items'); // Debug
 
     // Renderizar filas
     let totalCantidad = 0;
@@ -64,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     tbody.innerHTML = '';
     
     if (resumen.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;">No hay ventas de cafetería en el período seleccionado</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;padding:20px;">No hay ventas de cafetería en el período seleccionado</td></tr>';
       if (tfoot) tfoot.innerHTML = '';
       return;
     }
@@ -72,12 +83,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     resumen.forEach(item => {
       totalCantidad += item.cantidad_vendida;
       totalIngresos += item.ingresos;
-      // Convertir fecha a dd/mm/yyyy
-      let fechaParts = item.fecha.split('/');
-      let fechaFormateada = fechaParts.length === 3 ? `${fechaParts[1].padStart(2, '0')}/${fechaParts[0].padStart(2, '0')}/${fechaParts[2]}` : item.fecha;
+      
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${fechaFormateada}</td>
+        <td>${item.fecha}</td>
         <td>${item.nombre}</td>
         <td style="text-transform:capitalize;">${item.categoria}</td>
         <td>$${item.precio.toFixed(2)}</td>
@@ -93,7 +102,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     if (tfoot) {
-      tfoot.innerHTML = `<tr><td colspan="5"><strong>Total</strong></td><td><strong>$${totalIngresos.toFixed(2)}</strong></td><td></td></tr>`;
+      tfoot.innerHTML = `
+        <tr style="background:#f8f9fa;font-weight:bold;">
+          <td colspan="4" style="text-align:right;"><strong>Total:</strong></td>
+          <td><strong>${totalCantidad}</strong></td>
+          <td><strong>$${totalIngresos.toFixed(2)}</strong></td>
+          <td></td>
+        </tr>
+      `;
     }
   }
 

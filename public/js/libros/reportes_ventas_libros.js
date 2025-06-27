@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       tbody.appendChild(tr);
     });
     if (tfoot) {
-      tfoot.innerHTML = `<tr><td colspan="6">Total</td><td>$${totalIngresos}</td></tr>`;
+      tfoot.innerHTML = `<tr style="font-weight:bold;background:#f8f9fa;"><td colspan="6" style="font-weight:bold;">Total</td><td style="font-weight:bold;">$${totalIngresos}</td></tr>`;
     }
   }
 

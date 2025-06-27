@@ -15,10 +15,14 @@ afterAll(async () => {
     if (mongoose.connection.readyState !== 0) {
       await mongoose.connection.close();
     }
+    
+    // Force close all mongoose connections
+    await mongoose.disconnect();
+    
   } catch (error) {
     console.log('Error closing mongoose connection:', error);
   }
   
   // Give time for cleanup
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 });

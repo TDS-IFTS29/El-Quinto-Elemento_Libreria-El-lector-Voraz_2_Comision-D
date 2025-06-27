@@ -8,6 +8,9 @@ module.exports = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   
+  // Set NODE_ENV to test
+  setupFiles: ['<rootDir>/jest.env.js'],
+  
   // Test timeout (increased for slower sequential runs)
   testTimeout: 10000,
   

@@ -57,28 +57,30 @@ block content
           li: a.button(href="/cafeteria/nuevo") Agregar producto
           li: a.button(href="/cafeteria/vender") Registrar venta
           li: a.button.active(href="/cafeteria/reportes") Reporte de ventas
-      .reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 24px 0;")
+      .reportes-ventas-content(style="background:#F2F0EC;padding:32px 0 60px 0;")
         .filtros-container(style="text-align:center;margin-bottom:24px;")
-          label(for="filtro-fecha" style="margin-right:8px;font-weight:600;") Filtrar por:
-          select#filtro-fecha(style="padding:8px 12px;border:1px solid #ddd;border-radius:4px;")
+          label(for="filtro-fecha" style="margin-right:8px;font-weight:600;color:#675858;") Filtrar por:
+          select#filtro-fecha(style="padding:8px 12px;border:1px solid #ddd;border-radius:4px;background:#fff;")
             option(value="todo") Todo
             option(value="dia") Hoy
             option(value="semana") Esta semana
             option(value="mes") Este mes
-        table(style="width:100%;max-width:900px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
+        table(style="width:100%;max-width:900px;margin:0 auto 40px auto;background:#fff;border-radius:8px;box-shadow:0 2px 12px rgba(60,60,60,0.07);")
           thead
             tr
               th Fecha
               th Producto
               th Categoría
-              th Precio
+              th Precio Unit.
               th Cantidad
               th Total
-              th Factura
+              th Acciones
           tbody
-            // Esto será poblado por JavaScript
+            tr
+              td(colspan="7" style="padding:20px;text-align:center;color:#888;") Cargando reportes de ventas...
           tfoot
-            // Footer será agregado por JavaScript
+        .catalogo-actions(style="display:flex;justify-content:center;margin:20px 0 40px 0;")
+          a.button(href="/cafeteria") Volver a Cafetería
     footer
       hr
       p Trabajo Integrador 2° entrega  – Desarrollo Web Backend – IFTS 29

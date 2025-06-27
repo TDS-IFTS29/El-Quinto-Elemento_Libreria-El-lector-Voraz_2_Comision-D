@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     
     if (tfoot) {
-      tfoot.innerHTML = `<tr><td colspan="5"><strong>Total</strong></td><td><strong>$${totalIngresos.toFixed(2)}</strong></td><td></td></tr>`;
+      tfoot.innerHTML = `<tr style="background:#f8f9fa;font-weight:bold;"><td colspan="5" style="font-weight:bold;"><strong>Total</strong></td><td style="font-weight:bold;"><strong>$${totalIngresos.toFixed(2)}</strong></td><td></td></tr>`;
     }
   }
 

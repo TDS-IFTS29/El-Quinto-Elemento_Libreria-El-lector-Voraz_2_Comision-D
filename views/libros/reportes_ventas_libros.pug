@@ -86,9 +86,9 @@ block content
                   a(href=`/libros/ventas/factura/${libro.id || idx}` title="Imprimir")
                     i.fas.fa-print(style="color:#675858;font-size:1.2em;")
           tfoot
-            tr
-              td(colspan="6") Total
-              td $#{total_ingresos}
+            tr(style="font-weight:bold;background:#f8f9fa;")
+              td(colspan="6" style="font-weight:bold;") Total
+              td(style="font-weight:bold;") $#{total_ingresos}
         .catalogo-actions(style="display:flex;justify-content:center;margin-top:18px;")
           a.button(href="/inicio") Volver al inicio
     script(src="/js/libros/reportes_ventas_libros.js")

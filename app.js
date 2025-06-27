@@ -65,4 +65,14 @@ app.use('/api/cafeteria', requireAuth, require('./routes/api/cafeteria'));
 app.use('/api/ventas', requireAuth, require('./routes/api/ventas'));
 app.use('/api/usuarios', requireAuth, require('./routes/api/usuarios')); // API de usuarios
 
+// Puerto
+const PORT = process.env.PORT || 3000;
+
+// Solo iniciar el servidor si no estamos en un entorno de test
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  });
+}
+
 module.exports = app;

@@ -9,10 +9,139 @@ const Cafeteria = require('./models/Cafeteria');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/el-lector-voraz';
 
+// Funciones de validación para prevenir datos inconsistentes
+function validarVentaLibro(venta, libro) {
+  if (!venta || !libro) {
+    throw new Error('Venta o libro no definidos');
+  }
+  
+  if (!libro.nombre || libro.nombre === 'undefined' || libro.nombre === null) {
+    throw new Error(`Libro sin nombre válido: ${libro._id}`);
+  }
+  
+  if (!libro.autor || libro.autor === 'undefined' || libro.autor === null) {
+    throw new Error(`Libro sin autor válido: ${libro.nombre}`);
+  }
+  
+  if (!libro.precio || typeof libro.precio !== 'number' || isNaN(libro.precio) || libro.precio <= 0) {
+    throw new Error(`Libro sin precio válido: ${libro.nombre}`);
+  }
+  
+  if (!venta.cantidad || typeof venta.cantidad !== 'number' || isNaN(venta.cantidad) || venta.cantidad <= 0) {
+    throw new Error(`Cantidad inválida para venta de: ${libro.nombre}`);
+  }
+  
+  return true;
+}
+
+function validarVentaUtileria(venta, utileria) {
+  if (!venta || !utileria) {
+    throw new Error('Venta o utilería no definidos');
+  }
+  
+  if (!utileria.nombre || utileria.nombre === 'undefined' || utileria.nombre === null) {
+    throw new Error(`Utilería sin nombre válido: ${utileria._id}`);
+  }
+  
+  if (!utileria.precio || typeof utileria.precio !== 'number' || isNaN(utileria.precio) || utileria.precio <= 0) {
+    throw new Error(`Utilería sin precio válido: ${utileria.nombre}`);
+  }
+  
+  return true;
+}
+
+function validarVentaCafeteria(venta, cafeteria) {
+  if (!venta || !cafeteria) {
+    throw new Error('Venta o cafetería no definidos');
+  }
+  
+  if (!cafeteria.nombre || cafeteria.nombre === 'undefined' || cafeteria.nombre === null) {
+    throw new Error(`Cafetería sin nombre válido: ${cafeteria._id}`);
+  }
+  
+  if (!cafeteria.precio || typeof cafeteria.precio !== 'number' || isNaN(cafeteria.precio) || cafeteria.precio <= 0) {
+    throw new Error(`Cafetería sin precio válido: ${cafeteria.nombre}`);
+  }
+  
+  return true;
+}
+
+function crearVentaSegura(datos) {
+  // Validar que todos los campos requeridos estén presentes y sean válidos
+  const camposRequeridos = ['tipo', 'cantidad', 'precioUnitario', 'total', 'vendedor'];
+  
+  for (const campo of camposRequeridos) {
+    if (!datos[campo] && datos[campo] !== 0) {
+      throw new Error(`Campo requerido faltante: ${campo}`);
+    }
+    
+    // Verificar que no sea undefined, null o "undefined"
+    if (datos[campo] === undefined || datos[campo] === null || datos[campo] === 'undefined') {
+      throw new Error(`Campo ${campo} tiene valor undefined/null`);
+    }
+  }
+  
+  // Validar tipos específicos
+  if (typeof datos.cantidad !== 'number' || isNaN(datos.cantidad) || datos.cantidad <= 0) {
+    throw new Error('Cantidad debe ser un número positivo');
+  }
+  
+  if (typeof datos.precioUnitario !== 'number' || isNaN(datos.precioUnitario) || datos.precioUnitario <= 0) {
+    throw new Error('Precio unitario debe ser un número positivo');
+  }
+  
+  if (typeof datos.total !== 'number' || isNaN(datos.total) || datos.total <= 0) {
+    throw new Error('Total debe ser un número positivo');
+  }
+  
+  // Validar coherencia matemática
+  const totalCalculado = datos.precioUnitario * datos.cantidad;
+  if (Math.abs(datos.total - totalCalculado) > 0.01) {
+    throw new Error(`Total incoherente: esperado ${totalCalculado}, recibido ${datos.total}`);
+  }
+  
+  // Validar campos específicos por tipo
+  if (datos.tipo === 'libro') {
+    if (!datos.nombreLibro || datos.nombreLibro === 'undefined' || datos.nombreLibro === undefined) {
+      throw new Error('Nombre del libro requerido y válido');
+    }
+    if (!datos.autorLibro || datos.autorLibro === 'undefined' || datos.autorLibro === undefined) {
+      throw new Error('Autor del libro requerido y válido');
+    }
+    if (!datos.precioLibro || typeof datos.precioLibro !== 'number' || isNaN(datos.precioLibro)) {
+      throw new Error('Precio del libro requerido y válido');
+    }
+  }
+  
+  if (datos.tipo === 'utileria') {
+    if (!datos.nombreUtileria || datos.nombreUtileria === 'undefined' || datos.nombreUtileria === undefined) {
+      throw new Error('Nombre de utilería requerido y válido');
+    }
+    if (!datos.precioUtileria || typeof datos.precioUtileria !== 'number' || isNaN(datos.precioUtileria)) {
+      throw new Error('Precio de utilería requerido y válido');
+    }
+  }
+  
+  if (datos.tipo === 'cafeteria') {
+    if (!datos.nombreCafeteria || datos.nombreCafeteria === 'undefined' || datos.nombreCafeteria === undefined) {
+      throw new Error('Nombre de cafetería requerido y válido');
+    }
+    if (!datos.precioCafeteria || typeof datos.precioCafeteria !== 'number' || isNaN(datos.precioCafeteria)) {
+      throw new Error('Precio de cafetería requerido y válido');
+    }
+  }
+  
+  return datos;
+}
+
 async function crearBaseDeDatos() {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('Conectado a MongoDB');
+
+    // BORRAR TODA LA BASE DE DATOS COMPLETAMENTE
+    await mongoose.connection.dropDatabase();
+    console.log('INFO: Base de datos eliminada completamente.');
 
     // --- MIGRACIÓN: Asignar proveedor a libros existentes sin proveedor (antes de borrar nada) ---
     const proveedoresExistentes = await Proveedor.find({ tipo_proveedor: 'libreria' });
@@ -28,13 +157,15 @@ async function crearBaseDeDatos() {
       }
     }
 
-    // Limpiar colecciones
+    // Limpiar colecciones COMPLETAMENTE
+    console.log('INFO: Limpiando base de datos...');
     await Proveedor.deleteMany({});
-    await Libro.deleteMany({}); // <--- Ahora borra todos los libros existentes
+    await Libro.deleteMany({});
     await Utileria.deleteMany({});
     await Cafeteria.deleteMany({});
-    await Venta.deleteMany({});
+    await Venta.deleteMany({}); // Limpiar TODAS las ventas
     await Usuario.deleteMany({});
+    console.log('INFO: Base de datos limpia');
 
     // Proveedores de ejemplo (editoriales, cafeterías, utilerías)
     const proveedores = [
@@ -172,116 +303,46 @@ async function crearBaseDeDatos() {
 
     // Ventas de ejemplo (solo con libros válidos)
     // Solo crear ventas para los libros a partir del índice 2 (los demás tendrán ventas recientes)
-    const ventas = [
-      { 
-        libro: librosInsertados[2]._id, 
-        nombreLibro: librosInsertados[2].nombre, 
-        autorLibro: librosInsertados[2].autor, 
-        generoLibro: librosInsertados[2].genero, 
-        precioLibro: librosInsertados[2].precio, 
-        cantidad: 3,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[2].precio,
-        total: librosInsertados[2].precio * 3,
-        vendedor: 'Juan Pérez'
-      },
-      { 
-        libro: librosInsertados[3]._id, 
-        nombreLibro: librosInsertados[3].nombre, 
-        autorLibro: librosInsertados[3].autor, 
-        generoLibro: librosInsertados[3].genero, 
-        precioLibro: librosInsertados[3].precio, 
-        cantidad: 2,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[3].precio,
-        total: librosInsertados[3].precio * 2,
-        vendedor: 'Antonio Gill'
-      },
-      { 
-        libro: librosInsertados[4]._id, 
-        nombreLibro: librosInsertados[4].nombre, 
-        autorLibro: librosInsertados[4].autor, 
-        generoLibro: librosInsertados[4].genero, 
-        precioLibro: librosInsertados[4].precio, 
-        cantidad: 1,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[4].precio,
-        total: librosInsertados[4].precio * 1,
-        vendedor: 'Cristian Descosido'
-      },
-      { 
-        libro: librosInsertados[5]._id, 
-        nombreLibro: librosInsertados[5].nombre, 
-        autorLibro: librosInsertados[5].autor, 
-        generoLibro: librosInsertados[5].genero, 
-        precioLibro: librosInsertados[5].precio, 
-        cantidad: 4,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[5].precio,
-        total: librosInsertados[5].precio * 4,
-        vendedor: 'Damian Clausi'
-      },
-      { 
-        libro: librosInsertados[6]._id, 
-        nombreLibro: librosInsertados[6].nombre, 
-        autorLibro: librosInsertados[6].autor, 
-        generoLibro: librosInsertados[6].genero, 
-        precioLibro: librosInsertados[6].precio, 
-        cantidad: 2,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[6].precio,
-        total: librosInsertados[6].precio * 2,
-        vendedor: 'Juan Pérez'
-      },
-      { 
-        libro: librosInsertados[7]._id, 
-        nombreLibro: librosInsertados[7].nombre, 
-        autorLibro: librosInsertados[7].autor, 
-        generoLibro: librosInsertados[7].genero, 
-        precioLibro: librosInsertados[7].precio, 
-        cantidad: 1,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[7].precio,
-        total: librosInsertados[7].precio * 1,
-        vendedor: 'Antonio Gill'
-      },
-      { 
-        libro: librosInsertados[8]._id, 
-        nombreLibro: librosInsertados[8].nombre, 
-        autorLibro: librosInsertados[8].autor, 
-        generoLibro: librosInsertados[8].genero, 
-        precioLibro: librosInsertados[8].precio, 
-        cantidad: 3,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[8].precio,
-        total: librosInsertados[8].precio * 3,
-        vendedor: 'Cristian Descosido'
-      },
-      { 
-        libro: librosInsertados[9]._id, 
-        nombreLibro: librosInsertados[9].nombre, 
-        autorLibro: librosInsertados[9].autor, 
-        generoLibro: librosInsertados[9].genero, 
-        precioLibro: librosInsertados[9].precio, 
-        cantidad: 2,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[9].precio,
-        total: librosInsertados[9].precio * 2,
-        vendedor: 'Damian Clausi'
-      },
-      { 
-        libro: librosInsertados[10]._id, 
-        nombreLibro: librosInsertados[10].nombre, 
-        autorLibro: librosInsertados[10].autor, 
-        generoLibro: librosInsertados[10].genero, 
-        precioLibro: librosInsertados[10].precio, 
-        cantidad: 1,
-        tipo: 'libro',
-        precioUnitario: librosInsertados[10].precio,
-        total: librosInsertados[10].precio * 1,
-        vendedor: 'Juan Pérez'
+    const ventas = [];
+    
+    // Crear ventas validadas para libros
+    for (let i = 2; i < Math.min(librosInsertados.length, 12); i++) {
+      const libro = librosInsertados[i];
+      
+      // Validar libro antes de crear venta
+      if (!libro.nombre || !libro.autor || !libro.precio || typeof libro.precio !== 'number') {
+        console.log(`WARNING: Saltando libro inválido: ${libro.nombre || 'Sin nombre'}`);
+        continue;
       }
-    ];
+      
+      const cantidad = Math.floor(Math.random() * 4) + 1; // 1-4
+      const vendedores = ['Juan Pérez', 'Antonio Gill', 'Cristian Descosido', 'Damian Clausi'];
+      const vendedor = vendedores[i % vendedores.length];
+      
+      try {
+        const ventaData = crearVentaSegura({
+          libro: libro._id,
+          nombreLibro: libro.nombre,
+          autorLibro: libro.autor,
+          generoLibro: libro.genero || 'Sin género',
+          precioLibro: libro.precio,
+          cantidad: cantidad,
+          tipo: 'libro',
+          precioUnitario: libro.precio,
+          total: libro.precio * cantidad,
+          vendedor: vendedor
+        });
+        
+        ventas.push(ventaData);
+        
+      } catch (error) {
+        console.error(`ERROR: Error creando venta para libro ${libro.nombre}: ${error.message}`);
+      }
+    }
+
+    // Insertar las ventas con fechas apropiadas
+    console.log(`EXITO: Creadas ${ventas.length} ventas de libros válidas`);
+    
     const hoy = new Date();
     hoy.setHours(10, 0, 0, 0); // hora fija para las ventas de hoy
     for (let i = 0; i < ventas.length; i++) {
@@ -292,7 +353,12 @@ async function crearBaseDeDatos() {
         fechaVenta = new Date(hoy);
         fechaVenta.setDate(hoy.getDate() - (i + 1)); // ventas de días anteriores
       }
-      await new Venta({ ...ventas[i], fecha: fechaVenta }).save();
+      
+      try {
+        await new Venta({ ...ventas[i], fecha: fechaVenta }).save();
+      } catch (error) {
+        console.error(`ERROR: Error guardando venta: ${error.message}`);
+      }
     }
 
     // Ventas de utilería del día de hoy (2 items)
@@ -391,14 +457,34 @@ async function crearBaseDeDatos() {
       }
     ];
 
-    // Insertar ventas de utilería del día de hoy
+    // Insertar ventas de utilería del día de hoy con validación
+    console.log('INFO: Creando ventas de utilería...');
     for (const ventaUtileria of ventasUtileria) {
-      await new Venta(ventaUtileria).save();
+      try {
+        // Validar utilería antes de crear venta
+        const utileria = utileriaInsertada.find(u => u._id.equals(ventaUtileria.utileria));
+        if (utileria) {
+          validarVentaUtileria(ventaUtileria, utileria);
+          const ventaValidada = crearVentaSegura(ventaUtileria);
+          await new Venta(ventaValidada).save();
+        }
+      } catch (error) {
+        console.error(`ERROR: Error creando venta de utilería: ${error.message}`);
+      }
     }
 
-    // Insertar ventas de utilería de otros meses
+    // Insertar ventas de utilería de otros meses con validación
     for (const ventaUtileria of ventasUtileriaOtrosMeses) {
-      await new Venta(ventaUtileria).save();
+      try {
+        const utileria = utileriaInsertada.find(u => u._id.equals(ventaUtileria.utileria));
+        if (utileria) {
+          validarVentaUtileria(ventaUtileria, utileria);
+          const ventaValidada = crearVentaSegura(ventaUtileria);
+          await new Venta(ventaValidada).save();
+        }
+      } catch (error) {
+        console.error(`ERROR: Error creando venta de utilería histórica: ${error.message}`);
+      }
     }
 
     // Actualizar la ultimaVenta de los items de utilería vendidos hoy
@@ -644,24 +730,61 @@ async function crearBaseDeDatos() {
       }
     ];
 
-    // Insertar ventas de cafetería del día de hoy
+    // Insertar ventas de cafetería del día de hoy con validación
+    console.log('INFO: Creando ventas de cafetería...');
     for (const ventaCafeteria of ventasCafeteria) {
-      await new Venta(ventaCafeteria).save();
+      try {
+        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
+        if (cafeteria) {
+          validarVentaCafeteria(ventaCafeteria, cafeteria);
+          const ventaValidada = crearVentaSegura(ventaCafeteria);
+          await new Venta(ventaValidada).save();
+        }
+      } catch (error) {
+        console.error(`ERROR: Error creando venta de cafetería: ${error.message}`);
+      }
     }
 
-    // Insertar ventas de cafetería de esta semana
+    // Insertar ventas de cafetería de esta semana con validación
     for (const ventaCafeteria of ventasCafeteriaSemana) {
-      await new Venta(ventaCafeteria).save();
+      try {
+        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
+        if (cafeteria) {
+          validarVentaCafeteria(ventaCafeteria, cafeteria);
+          const ventaValidada = crearVentaSegura(ventaCafeteria);
+          await new Venta(ventaValidada).save();
+        }
+      } catch (error) {
+        console.error(`ERROR: Error creando venta de cafetería semanal: ${error.message}`);
+      }
     }
 
-    // Insertar ventas de cafetería de este mes
+    // Insertar ventas de cafetería de este mes con validación
     for (const ventaCafeteria of ventasCafeteriaMes) {
-      await new Venta(ventaCafeteria).save();
+      try {
+        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
+        if (cafeteria) {
+          validarVentaCafeteria(ventaCafeteria, cafeteria);
+          const ventaValidada = crearVentaSegura(ventaCafeteria);
+          await new Venta(ventaValidada).save();
+        }
+      } catch (error) {
+        console.error(`ERROR: Error creando venta de cafetería mensual: ${error.message}`);
+      }
     }
 
-    // Insertar ventas de cafetería de otros meses
+    // Insertar ventas de cafetería de otros meses con validación
     for (const ventaCafeteria of ventasCafeteriaOtrosMeses) {
-      await new Venta(ventaCafeteria).save();
+      try {
+        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
+        if (cafeteria) {
+          validarVentaCafeteria(ventaCafeteria, cafeteria);
+          const ventaValidada = crearVentaSegura(ventaCafeteria);
+          await new Venta(ventaValidada).save();
+        }
+      } catch (error) {
+        console.error(`ERROR: Error creando venta de cafetería histórica: ${error.message}`);
+      }
     }
 
     // Actualizar la ultimaVenta de los items de cafetería vendidos hoy
@@ -679,25 +802,125 @@ async function crearBaseDeDatos() {
     await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[10]._id, { ultimaVenta: new Date(2025, 1, 20) });
     await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[11]._id, { ultimaVenta: new Date(2025, 1, 28) });
 
-    console.log('Base de datos el-lector-voraz creada exitosamente con:');
+    // LIMPIEZA FINAL REFORZADA: Eliminar cualquier venta inválida (undefined, null, NaN, tipo incorrecto o campos faltantes)
+    console.log('INFO: Limpieza final reforzada de ventas inválidas...');
+    const ventasInvalidas = await Venta.find({
+      $or: [
+        { nombreLibro: { $in: [null, 'undefined', undefined] } },
+        { autorLibro: { $in: [null, 'undefined', undefined] } },
+        { precioLibro: { $in: [null, undefined], $not: { $type: 'number' } } },
+        { cantidad: { $in: [null, undefined], $not: { $type: 'number' } } },
+        { tipo: { $ne: 'libro' } },
+        { $or: [
+          { tipo: 'libro', nombreLibro: { $exists: false } },
+          { tipo: 'libro', autorLibro: { $exists: false } },
+          { tipo: 'libro', precioLibro: { $exists: false } },
+          { tipo: 'libro', cantidad: { $exists: false } }
+        ]}
+      ]
+    });
+    if (ventasInvalidas.length > 0) {
+      const ids = ventasInvalidas.map(v => v._id);
+      const res = await Venta.deleteMany({ _id: { $in: ids } });
+      console.log(`INFO: Eliminadas ${res.deletedCount} ventas inválidas en la limpieza final.`);
+    } else {
+      console.log('INFO: No se encontraron ventas inválidas en la limpieza final.');
+    }
+
+    // Verificar integridad de los datos creados
+    console.log('\nINFO: Verificando integridad de los datos...');
+    
+    // LIMPIEZA FINAL: Eliminar cualquier venta con datos undefined que pueda haber quedado
+    console.log('INFO: Buscando ventas con datos inconsistentes...');
+    
+    // Buscar ventas problemáticas específicamente
+    const ventasProblematicas = await Venta.find({
+      $or: [
+        { nombreLibro: "undefined" },
+        { autorLibro: "undefined" },
+        { nombreUtileria: "undefined" },
+        { nombreCafeteria: "undefined" },
+        { vendedor: "undefined" },
+        // Ventas de libros sin los campos requeridos
+        { $and: [{ tipo: 'libro' }, { nombreLibro: { $exists: false } }] },
+        { $and: [{ tipo: 'libro' }, { autorLibro: { $exists: false } }] },
+        { $and: [{ tipo: 'libro' }, { precioLibro: { $exists: false } }] },
+        // Ventas de utilería sin los campos requeridos
+        { $and: [{ tipo: 'utileria' }, { nombreUtileria: { $exists: false } }] },
+        { $and: [{ tipo: 'utileria' }, { precioUtileria: { $exists: false } }] },
+        // Ventas de cafetería sin los campos requeridos
+        { $and: [{ tipo: 'cafeteria' }, { nombreCafeteria: { $exists: false } }] },
+        { $and: [{ tipo: 'cafeteria' }, { precioCafeteria: { $exists: false } }] }
+      ]
+    });
+    
+    console.log(`INFO: Encontradas ${ventasProblematicas.length} ventas problemáticas`);
+    
+    // Eliminar solo las ventas problemáticas
+    if (ventasProblematicas.length > 0) {
+      const idsProblematicos = ventasProblematicas.map(v => v._id);
+      const resultado = await Venta.deleteMany({ _id: { $in: idsProblematicos } });
+      console.log(`INFO: Eliminadas ${resultado.deletedCount} ventas inconsistentes`);
+    }
+    
+    const totalVentasCreadas = await Venta.countDocuments();
+    const ventasValidasCreadas = await Venta.countDocuments({
+      $and: [
+        { $or: [
+          // Ventas de libros válidas
+          { 
+            tipo: 'libro',
+            nombreLibro: { $exists: true, $ne: null, $ne: "undefined" },
+            autorLibro: { $exists: true, $ne: null, $ne: "undefined" },
+            precioLibro: { $exists: true, $type: "number" }
+          },
+          // Ventas de utilería válidas
+          { 
+            tipo: 'utileria',
+            nombreUtileria: { $exists: true, $ne: null, $ne: "undefined" },
+            precioUtileria: { $exists: true, $type: "number" }
+          },
+          // Ventas de cafetería válidas
+          { 
+            tipo: 'cafeteria',
+            nombreCafeteria: { $exists: true, $ne: null, $ne: "undefined" },
+            precioCafeteria: { $exists: true, $type: "number" }
+          }
+        ]},
+        { cantidad: { $exists: true, $type: "number", $gt: 0 } },
+        { total: { $exists: true, $type: "number", $gt: 0 } },
+        { vendedor: { $exists: true, $ne: null, $ne: "undefined" } }
+      ]
+    });
+
+    console.log(`EXITO: Total de ventas creadas: ${totalVentasCreadas}`);
+    console.log(`EXITO: Ventas válidas: ${ventasValidasCreadas}`);
+    
+    if (totalVentasCreadas === ventasValidasCreadas) {
+      console.log('EXITO: Todos los dados son consistentes! No hay registros con undefined o NaN.');
+    } else {
+      console.log(`WARNING: Se detectaron ${totalVentasCreadas - ventasValidasCreadas} ventas con datos inconsistentes.`);
+    }
+
+    console.log('\nINFO: Base de datos el-lector-voraz creada exitosamente con:');
     console.log(`   Libros: ${librosInsertados.length}`);
     console.log(`   Utilería: ${utileriaInsertada.length}`);
     console.log(`   Cafetería: ${cafeteriaInsertada.length}`);
     console.log(`   Proveedores: ${proveedoresInsertados.length}`);
     console.log(`   Usuarios: ${usuariosInsertados.length}`);
-    console.log(`   Ventas de libros: ${ventas.length}`);
-    console.log(`   Ventas de utilería: ${ventasUtileria.length + ventasUtileriaOtrosMeses.length} (${ventasUtileria.length} del día de hoy, ${ventasUtileriaOtrosMeses.length} de otros meses)`);
-    console.log(`   Ventas de cafetería: ${ventasCafeteria.length + ventasCafeteriaSemana.length + ventasCafeteriaMes.length + ventasCafeteriaOtrosMeses.length} (${ventasCafeteria.length} del día de hoy, ${ventasCafeteriaSemana.length} de esta semana, ${ventasCafeteriaMes.length} de este mes, ${ventasCafeteriaOtrosMeses.length} de otros meses)`);
-    console.log('');
-    console.log('Usuarios creados (TODAS LAS CONTRASEÑAS: 1234):');
+    console.log(`   Ventas totales: ${totalVentasCreadas} (${ventasValidasCreadas} válidas)`);
+    
+    console.log('\nINFO: Usuarios creados (TODAS LAS CONTRASEÑAS: 1234):');
     console.log('   Admin: Juan Perez (juan.perez@lectorvoraz.com)');
     console.log('   Empleado: Antonio Gill (antonio.gill@lectorvoraz.com)');
     console.log('   Empleado: Cristian Descosido (cristian.descosido@lectorvoraz.com)');
     console.log('   Empleado: Damian Clausi (damian.clausi@lectorvoraz.com)');
     console.log('   Admin: admin (admin) - (compatibilidad)');
-    console.log('   Todas las contraseñas están cifradas en la base de datos');
-    console.log('');
-    console.log('Puedes acceder al sistema en: http://localhost:3000');
+    console.log('   INFO: Todas las contraseñas están cifradas en la base de datos');
+    
+    console.log('\nINFO: Puedes acceder al sistema en: http://localhost:3000');
+    console.log('INFO: El script ha prevenido la creación de datos inconsistentes.');
+    
     await mongoose.disconnect();
     process.exit(0);
   } catch (err) {

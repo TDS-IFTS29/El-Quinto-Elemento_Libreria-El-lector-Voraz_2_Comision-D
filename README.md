@@ -447,7 +447,7 @@ El sistema está listo para producción y cumple con todos los requisitos de seg
 
 | Integrante               | Rol                                                                |
 |-------------------------|---------------------------------------------------------------------|
-| Clausi Damián Andrés    | FRONTEND                                                            |
+| Clausi Damián Andrés    | DISEÑO DE BASE DE DATOS                                                            |
 |                         | MODULO LIBRERIA CON REPORTES                                        |
 |-------------------------|---------------------------------------------------------------------|
 | Descosido Cristian      | MODULO COFFEE CON REPORTES                                          |

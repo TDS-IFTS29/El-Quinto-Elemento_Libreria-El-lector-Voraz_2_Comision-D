@@ -137,27 +137,65 @@ async function listarVentas(req, res) {
 }
 
 async function registrarVenta(req, res) {
-  const libroId = req.body.libro || req.body.libroId;
-  const libro = await Libro.findById(libroId);
-  if (!libro) {
-    return res.status(400).json({ error: 'Libro no encontrado' });
+  try {
+    const libroId = req.body.libro || req.body.libroId;
+    const cantidad = parseInt(req.body.cantidad);
+    
+    // Validaciones de entrada
+    if (!libroId) {
+      return res.status(400).json({ error: 'ID del libro es requerido' });
+    }
+    
+    if (!cantidad || cantidad <= 0) {
+      return res.status(400).json({ error: 'Cantidad debe ser un número positivo' });
+    }
+    
+    const libro = await Libro.findById(libroId);
+    if (!libro) {
+      return res.status(400).json({ error: 'Libro no encontrado' });
+    }
+    
+    // Validar que el libro tenga datos completos
+    if (!libro.nombre || !libro.autor || !libro.precio) {
+      return res.status(400).json({ error: 'El libro no tiene datos completos (nombre, autor, precio)' });
+    }
+    
+    // Validar stock
+    if ((libro.stock || 0) < cantidad) {
+      return res.status(400).json({ error: 'No hay stock suficiente para realizar la venta.' });
+    }
+    
+    const nuevaVenta = new Venta({
+      tipo: 'libro',
+      libro: libroId,
+      nombreLibro: libro.nombre,
+      autorLibro: libro.autor,
+      generoLibro: libro.genero || 'Sin género',
+      precioLibro: libro.precio,
+      cantidad: cantidad,
+      precioUnitario: libro.precio,
+      total: libro.precio * cantidad,
+      vendedor: req.user?.nombre || 'Vendedor genérico',
+      fecha: new Date()
+    });
+    
+    await nuevaVenta.save();
+    
+    // Actualizar stock del libro
+    libro.ultimaVenta = nuevaVenta.fecha;
+    libro.stock = (libro.stock || 0) - cantidad;
+    if (libro.stock < 0) libro.stock = 0;
+    await libro.save();
+    
+    res.status(201).json({ 
+      mensaje: 'Venta registrada correctamente.',
+      venta: nuevaVenta
+    });
+    
+  } catch (error) {
+    console.error('Error al registrar venta:', error);
+    res.status(500).json({ error: 'Error interno del servidor al registrar la venta' });
   }
-  const nuevaVenta = new Venta({
-    libro: libroId,
-    nombreLibro: libro.nombre,
-    autorLibro: libro.autor,
-    cantidad: req.body.cantidad,
-    fecha: new Date()
-  });
-  if ((libro.stock || 0) < nuevaVenta.cantidad) {
-    return res.status(400).json({ error: 'No hay stock suficiente para realizar la venta.' });
-  }
-  await nuevaVenta.save();
-  libro.ultimaVenta = nuevaVenta.fecha;
-  libro.stock = (libro.stock || 0) - nuevaVenta.cantidad;
-  if (libro.stock < 0) libro.stock = 0;
-  await libro.save();
-  res.status(201).json({ mensaje: 'Venta registrada correctamente.' }); // status 201 para creación
 }
 
 async function masVendidos(req, res) {
@@ -198,26 +236,46 @@ async function vistaReportesLibros(req, res) {
 }
 
 async function vistaReportesVentas(req, res) {
-  // Obtener todas las ventas y armar el array para la tabla
-  const ventas = await Venta.find().populate('libro');
-  let total_ingresos = 0;
-  const libros = ventas.map(v => {
-    const precio = v.precioLibro;
-    const cantidad = v.cantidad;
-    const ingresos = precio * cantidad;
-    total_ingresos += ingresos;
-    return {
-      id: v._id,
-      fecha: v.fecha ? new Date(v.fecha).toLocaleDateString() : '',
-      titulo: v.nombreLibro || (v.libro && v.libro.nombre),
-      autor: v.autorLibro || (v.libro && v.libro.autor),
-      genero: v.generoLibro || (v.libro && v.libro.genero),
-      precio: precio,
-      cantidad_vendida: cantidad,
-      ingresos: ingresos
-    };
-  });
-  res.render('libros/reportes_ventas_libros', { libros, total_ingresos });
+  try {
+    // 1. Query mejorada para filtrar datos inválidos desde la BD
+    const ventas = await Venta.find({
+      tipo: 'libro', // Asegurar que solo sean ventas de libros
+      nombreLibro: { $exists: true, $ne: null, $ne: "" },
+      autorLibro: { $exists: true, $ne: null, $ne: "" },
+      precioLibro: { $exists: true, $ne: null, $gt: 0 }, // Precio debe ser número > 0
+      cantidad: { $exists: true, $ne: null, $gt: 0 } // Cantidad debe ser número > 0
+    }).populate('libro').sort({ fecha: -1 }); // Ordenar por fecha
+
+    let total_ingresos = 0;
+
+    // 2. Mapeo robusto con validaciones y valores por defecto
+    const libros = ventas.map(v => {
+      const precio = (v.precioLibro && !isNaN(v.precioLibro)) ? Number(v.precioLibro) : 0;
+      const cantidad = (v.cantidad && !isNaN(v.cantidad)) ? Number(v.cantidad) : 0;
+      const ingresos = precio * cantidad;
+
+      // Acumular solo si el ingreso es válido
+      if (ingresos > 0) {
+        total_ingresos += ingresos;
+      }
+
+      return {
+        id: v._id,
+        fecha: v.fecha ? new Date(v.fecha).toLocaleDateString('es-AR', { timeZone: 'UTC' }) : 'Sin fecha',
+        titulo: v.nombreLibro || (v.libro && v.libro.nombre) || 'Título no disponible',
+        autor: v.autorLibro || (v.libro && v.libro.autor) || 'Autor no disponible',
+        genero: v.generoLibro || (v.libro && v.libro.genero) || 'Sin género',
+        precio: precio,
+        cantidad_vendida: cantidad,
+        ingresos: ingresos
+      };
+    }).filter(libro => libro.ingresos > 0); // 3. Filtrado final simplificado
+
+    res.render('libros/reportes_ventas_libros', { libros, total_ingresos });
+  } catch (error) {
+    console.error("Error al generar el reporte de ventas:", error);
+    res.status(500).render('error', { message: 'Error al generar el reporte de ventas', error });
+  }
 }
 
 async function vistaDashboard(req, res) {

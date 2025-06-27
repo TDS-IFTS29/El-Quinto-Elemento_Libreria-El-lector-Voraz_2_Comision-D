@@ -4,7 +4,15 @@ const Libro = require('../models/Libro');
 // Obtener todas las ventas
 exports.getAllVentas = async (req, res) => {
   try {
-    const ventas = await Venta.find().populate('libro').populate('utileria');
+    // Construir filtro basado en parámetros de consulta
+    let filtro = {};
+    
+    // Filtrar por tipo si se especifica
+    if (req.query.tipo) {
+      filtro.tipo = req.query.tipo;
+    }
+    
+    const ventas = await Venta.find(filtro).populate('libro').populate('utileria').populate('cafeteria');
     res.json(ventas);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener las ventas' });

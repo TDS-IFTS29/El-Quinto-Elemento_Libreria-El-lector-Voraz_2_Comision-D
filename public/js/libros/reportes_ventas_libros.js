@@ -8,9 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   let ventas = [];
   try {
-    const res = await fetch('/api/ventas');
+    const res = await fetch('/api/ventas?tipo=libro');
     if (!res.ok) throw new Error('Error al cargar ventas');
     ventas = await res.json();
+    // Filtrar solo ventas de libros válidas
+    ventas = ventas.filter(venta => venta.tipo === 'libro' && venta.nombreLibro && venta.autorLibro && venta.precioLibro > 0);
   } catch (error) {
     tbody.innerHTML = '<tr><td colspan="7">Error al cargar reportes de ventas.</td></tr>';
     if (tfoot) tfoot.innerHTML = '';

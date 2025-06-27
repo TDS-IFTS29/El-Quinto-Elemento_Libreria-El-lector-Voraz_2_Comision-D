@@ -6,27 +6,41 @@ const Venta = require('../models/Venta');
 // Dashboard con alertas de stock y ventas recientes para libros, utilería y cafetería
 async function vistaDashboard(req, res) {
   try {
-    // Ventas del día (libros, utilería y cafetería)
-    // Usar UTC para evitar problemas de zona horaria en deploy
+    // Obtener las últimas 6 ventas (sin importar la fecha)
+    const ultimasSeisVentas = await Venta.find({})
+      .sort({ fecha: -1 })
+      .limit(6)
+      .populate('libro')
+      .populate('utileria')
+      .populate('cafeteria');
+    
+    // Obtener las ventas del día actual
     const ahora = new Date();
     const hoy = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate(), 0, 0, 0, 0));
     const manana = new Date(Date.UTC(ahora.getUTCFullYear(), ahora.getUTCMonth(), ahora.getUTCDate() + 1, 0, 0, 0, 0));
     
-    const ventas = await Venta.find({
+    const ventasDelDia = await Venta.find({
       fecha: { $gte: hoy, $lt: manana }
     }).populate('libro').populate('utileria').populate('cafeteria');
     
-    // Si no hay ventas del día, buscar las últimas 10 ventas como fallback
-    let ventasFallback = [];
-    if (ventas.length === 0) {
-      ventasFallback = await Venta.find({})
-        .sort({ fecha: -1 })
-        .limit(10)
-        .populate('libro')
-        .populate('utileria')
-        .populate('cafeteria');
-    }
-      const ventasAMostrar = ventas.length > 0 ? ventas : ventasFallback;
+    // Combinar ambas listas evitando duplicados
+    const ventasIds = new Set();
+    const ventasCombinadas = [];
+    
+    // Agregar las últimas 6 ventas
+    ultimasSeisVentas.forEach(venta => {
+      ventasIds.add(venta._id.toString());
+      ventasCombinadas.push(venta);
+    });
+    
+    // Agregar ventas del día que no estén ya incluidas
+    ventasDelDia.forEach(venta => {
+      if (!ventasIds.has(venta._id.toString())) {
+        ventasCombinadas.push(venta);
+      }
+    });
+    
+    const ventasAMostrar = ventasCombinadas;
     
     ventasAMostrar.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
     const ultimas = ventasAMostrar.map(v => {
@@ -90,8 +104,10 @@ async function vistaDashboard(req, res) {
       }
     });
     const total = ultimas.reduce((acc, v) => acc + v.monto, 0);
-    // Siempre mostrar como "Últimas Ventas" sin importar si son del día o no
-    const esVentasDelDia = false;
+    
+    // Determinar si hay ventas del día actual para mostrar el mensaje apropiado
+    const hayVentasDelDia = ventasDelDia.length > 0;
+    const esVentasDelDia = false; // Siempre mostrar como "Últimas Ventas + Ventas del Día"
 
   // Alertas de stock y ventas para libros, utilería y cafetería
   const libros = await Libro.find();
@@ -150,6 +166,9 @@ async function vistaDashboard(req, res) {
     ultimasVentas: ultimas, 
     totalVentas: total, 
     esVentasDelDia: esVentasDelDia,
+    hayVentasDelDia: hayVentasDelDia,
+    cantidadUltimasVentas: ultimasSeisVentas.length,
+    cantidadVentasDelDia: ventasDelDia.length,
     alertasStock: alertasOrdenadas,
     user: req.session.user 
   });

@@ -101,10 +101,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
                 stockSpan.className = `stock-badge ${colorClass}`;
               } else {
-                alert('Error al sumar stock');
+                const errorData = await resp.json().catch(() => ({}));
+                if (resp.status === 401) {
+                  alert('Su sesión ha expirado. Por favor, inicie sesión nuevamente.');
+                  window.location.href = '/login';
+                } else if (resp.status === 403) {
+                  alert('No tiene permisos para realizar esta acción. Solo los administradores pueden modificar el stock.');
+                } else {
+                  alert(errorData.error || 'Error al sumar stock');
+                }
               }
             } catch {
-              alert('Error de red');
+              alert('Error de conexión. Verifique su conexión a internet e intente nuevamente.');
             }
           }
           if (e.target.closest('.delete')) {

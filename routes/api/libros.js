@@ -9,7 +9,7 @@ router.post('/', requireRole(['admin']), librosController.crear); // Solo admin 
 router.patch('/:id', requireRole(['admin']), librosController.guardarEdicion); // Solo admin puede editar
 router.delete('/:id', requireRole(['admin']), librosController.eliminar); // Solo admin puede eliminar
 router.get('/:id', librosController.obtener); // Todos pueden ver un libro específico
-router.patch('/:id/sumar-stock', async (req, res) => {
+router.patch('/:id/sumar-stock', requireRole(['admin']), async (req, res) => {
   const Libro = require('../../models/Libro');
   const id = req.params.id;
   try {

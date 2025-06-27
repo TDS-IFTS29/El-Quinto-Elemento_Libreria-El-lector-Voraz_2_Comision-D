@@ -558,25 +558,28 @@ block content
               else
                 li.venta Sin alertas de stock
           .card.card-ventas
-            h3 Ventas Recientes 
+            h3 Últimas Ventas
               i.fas.fa-shopping-cart(style="margin-left:8px;color:#000;")
             ul#ventas-recientes(style="max-height:260px;overflow-y:auto;padding-right:8px;")
               if ultimasVentas && ultimasVentas.length
                 each v in ultimasVentas
-                  li.venta
-                    if v.tipo === 'libro' || v.tipo === 'Libro' || (v.autor && v.autor !== '-')
-                      i.fas.fa-book(style="margin-right:6px;color:#000;")
-                      | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
-                    else if v.tipo === 'cafeteria' || v.tipo === 'Cafetería'
-                      i.fas.fa-mug-hot(style="margin-right:6px;color:#000;")
-                      | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
-                    else
-                      i.fas.fa-pencil-ruler(style="margin-right:6px;color:#000;")
-                      | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
+                  li.venta(style="margin-bottom:8px;padding:4px 0;")
+                    div(style="display:flex;justify-content:space-between;align-items:flex-start;")
+                      div(style="flex:1;")
+                        if v.tipo === 'libro' || v.tipo === 'Libro' || (v.autor && v.autor !== '-')
+                          i.fas.fa-book(style="margin-right:6px;color:#000;")
+                          | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
+                        else if v.tipo === 'cafeteria' || v.tipo === 'Cafetería'
+                          i.fas.fa-mug-hot(style="margin-right:6px;color:#000;")
+                          | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
+                        else
+                          i.fas.fa-pencil-ruler(style="margin-right:6px;color:#000;")
+                          | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
+                      div(style="font-size:0.85em;color:#666;margin-left:12px;white-space:nowrap;")
+                        if v.fecha
+                          | #{new Date(v.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'})} #{new Date(v.fecha).toLocaleTimeString('es-AR', {hour: '2-digit', minute: '2-digit'})}
               else
                 li.venta No hay ventas recientes
-            .total-ventas Total del día: 
-              span.total#total-ventas $#{totalVentas}
         .dashboard-actions(style="display:flex;flex-direction:row;align-items:center;gap:16px;justify-content:center;margin-top:24px;")
           .dropdown
             button.button#ventaRapidaBtn(type="button") 

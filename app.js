@@ -58,16 +58,12 @@ app.use('/usuarios', requireAuth, require('./routes/usuarios')); // CRUD de usua
 app.use('/api-docs', require('./routes/apiDocs'));
 
 // Rutas API RESTful - requieren autenticación
-// app.use('/api/productos', require('./routes/api/productos'));
 app.use('/api/proveedores', requireAuth, require('./routes/api/proveedores'));
 app.use('/api/libros', requireAuth, require('./routes/api/libros'));
 app.use('/api/utileria', requireAuth, require('./routes/api/utileria'));
 app.use('/api/cafeteria', requireAuth, require('./routes/api/cafeteria'));
 app.use('/api/ventas', requireAuth, require('./routes/api/ventas'));
 app.use('/api/usuarios', requireAuth, require('./routes/api/usuarios')); // API de usuarios
-// app.use('/api/proveedores_libros', require('./routes/api/proveedores_libros'));
-// app.use('/api/ventas', require('./routes/api/ventas'));
-// app.use('/api/debug', require('./routes/debug'));
 
 // Puerto
 const PORT = process.env.PORT || 3000;

@@ -577,7 +577,7 @@ block content
                           | #{v.nombre} ×#{v.cantidad} - #{v.autor || 'N/A'} ($#{v.monto})
                       div(style="font-size:0.85em;color:#666;margin-left:12px;white-space:nowrap;")
                         if v.fecha
-                          | #{new Date(v.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'})} #{new Date(v.fecha).toLocaleTimeString('es-AR', {hour: '2-digit', minute: '2-digit'})}
+                          | #{new Date(v.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'})}
               else
                 li.venta No hay ventas recientes
         .dashboard-actions(style="display:flex;flex-direction:row;align-items:center;gap:16px;justify-content:center;margin-top:24px;")

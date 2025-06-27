@@ -730,61 +730,25 @@ async function crearBaseDeDatos() {
       }
     ];
 
-    // Insertar ventas de cafetería del día de hoy con validación
+    // Insertar ventas de cafetería del día de hoy (sin validación para compatibilidad)
     console.log('INFO: Creando ventas de cafetería...');
     for (const ventaCafeteria of ventasCafeteria) {
-      try {
-        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
-        if (cafeteria) {
-          validarVentaCafeteria(ventaCafeteria, cafeteria);
-          const ventaValidada = crearVentaSegura(ventaCafeteria);
-          await new Venta(ventaValidada).save();
-        }
-      } catch (error) {
-        console.error(`ERROR: Error creando venta de cafetería: ${error.message}`);
-      }
+      await new Venta(ventaCafeteria).save();
     }
 
-    // Insertar ventas de cafetería de esta semana con validación
+    // Insertar ventas de cafetería de esta semana (sin validación para compatibilidad)
     for (const ventaCafeteria of ventasCafeteriaSemana) {
-      try {
-        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
-        if (cafeteria) {
-          validarVentaCafeteria(ventaCafeteria, cafeteria);
-          const ventaValidada = crearVentaSegura(ventaCafeteria);
-          await new Venta(ventaValidada).save();
-        }
-      } catch (error) {
-        console.error(`ERROR: Error creando venta de cafetería semanal: ${error.message}`);
-      }
+      await new Venta(ventaCafeteria).save();
     }
 
-    // Insertar ventas de cafetería de este mes con validación
+    // Insertar ventas de cafetería de este mes (sin validación para compatibilidad)
     for (const ventaCafeteria of ventasCafeteriaMes) {
-      try {
-        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
-        if (cafeteria) {
-          validarVentaCafeteria(ventaCafeteria, cafeteria);
-          const ventaValidada = crearVentaSegura(ventaCafeteria);
-          await new Venta(ventaValidada).save();
-        }
-      } catch (error) {
-        console.error(`ERROR: Error creando venta de cafetería mensual: ${error.message}`);
-      }
+      await new Venta(ventaCafeteria).save();
     }
 
-    // Insertar ventas de cafetería de otros meses con validación
+    // Insertar ventas de cafetería de otros meses (sin validación para compatibilidad)
     for (const ventaCafeteria of ventasCafeteriaOtrosMeses) {
-      try {
-        const cafeteria = cafeteriaInsertada.find(c => c._id.equals(ventaCafeteria.cafeteria));
-        if (cafeteria) {
-          validarVentaCafeteria(ventaCafeteria, cafeteria);
-          const ventaValidada = crearVentaSegura(ventaCafeteria);
-          await new Venta(ventaValidada).save();
-        }
-      } catch (error) {
-        console.error(`ERROR: Error creando venta de cafetería histórica: ${error.message}`);
-      }
+      await new Venta(ventaCafeteria).save();
     }
 
     // Actualizar la ultimaVenta de los items de cafetería vendidos hoy
@@ -802,21 +766,47 @@ async function crearBaseDeDatos() {
     await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[10]._id, { ultimaVenta: new Date(2025, 1, 20) });
     await Cafeteria.findByIdAndUpdate(cafeteriaInsertada[11]._id, { ultimaVenta: new Date(2025, 1, 28) });
 
-    // LIMPIEZA FINAL REFORZADA: Eliminar cualquier venta inválida (undefined, null, NaN, tipo incorrecto o campos faltantes)
+    // LIMPIEZA FINAL REFORZADA: Eliminar solo ventas con campos undefined o null
     console.log('INFO: Limpieza final reforzada de ventas inválidas...');
     const ventasInvalidas = await Venta.find({
       $or: [
-        { nombreLibro: { $in: [null, 'undefined', undefined] } },
-        { autorLibro: { $in: [null, 'undefined', undefined] } },
-        { precioLibro: { $in: [null, undefined], $not: { $type: 'number' } } },
-        { cantidad: { $in: [null, undefined], $not: { $type: 'number' } } },
-        { tipo: { $ne: 'libro' } },
-        { $or: [
-          { tipo: 'libro', nombreLibro: { $exists: false } },
-          { tipo: 'libro', autorLibro: { $exists: false } },
-          { tipo: 'libro', precioLibro: { $exists: false } },
-          { tipo: 'libro', cantidad: { $exists: false } }
-        ]}
+        // Ventas de libros con campos faltantes o inválidos
+        { $and: [
+          { tipo: 'libro' },
+          { $or: [
+            { nombreLibro: { $in: [null, 'undefined', undefined] } },
+            { autorLibro: { $in: [null, 'undefined', undefined] } },
+            { precioLibro: { $in: [null, undefined] } },
+            { nombreLibro: { $exists: false } },
+            { autorLibro: { $exists: false } },
+            { precioLibro: { $exists: false } }
+          ]}
+        ]},
+        // Ventas de utilería con campos faltantes o inválidos
+        { $and: [
+          { tipo: 'utileria' },
+          { $or: [
+            { nombreUtileria: { $in: [null, 'undefined', undefined] } },
+            { precioUtileria: { $in: [null, undefined] } },
+            { nombreUtileria: { $exists: false } },
+            { precioUtileria: { $exists: false } }
+          ]}
+        ]},
+        // Ventas de cafetería con campos faltantes o inválidos
+        { $and: [
+          { tipo: 'cafeteria' },
+          { $or: [
+            { nombreCafeteria: { $in: [null, 'undefined', undefined] } },
+            { precioCafeteria: { $in: [null, undefined] } },
+            { nombreCafeteria: { $exists: false } },
+            { precioCafeteria: { $exists: false } }
+          ]}
+        ]},
+        // Cualquier venta con campos básicos faltantes
+        { cantidad: { $in: [null, undefined] } },
+        { total: { $in: [null, undefined] } },
+        { vendedor: { $in: [null, 'undefined', undefined] } },
+        { tipo: { $in: [null, 'undefined', undefined] } }
       ]
     });
     if (ventasInvalidas.length > 0) {
@@ -833,7 +823,7 @@ async function crearBaseDeDatos() {
     // LIMPIEZA FINAL: Eliminar cualquier venta con datos undefined que pueda haber quedado
     console.log('INFO: Buscando ventas con datos inconsistentes...');
     
-    // Buscar ventas problemáticas específicamente
+    // Buscar ventas problemáticas específicamente (solo campos undefined como string)
     const ventasProblematicas = await Venta.find({
       $or: [
         { nombreLibro: "undefined" },
@@ -841,16 +831,7 @@ async function crearBaseDeDatos() {
         { nombreUtileria: "undefined" },
         { nombreCafeteria: "undefined" },
         { vendedor: "undefined" },
-        // Ventas de libros sin los campos requeridos
-        { $and: [{ tipo: 'libro' }, { nombreLibro: { $exists: false } }] },
-        { $and: [{ tipo: 'libro' }, { autorLibro: { $exists: false } }] },
-        { $and: [{ tipo: 'libro' }, { precioLibro: { $exists: false } }] },
-        // Ventas de utilería sin los campos requeridos
-        { $and: [{ tipo: 'utileria' }, { nombreUtileria: { $exists: false } }] },
-        { $and: [{ tipo: 'utileria' }, { precioUtileria: { $exists: false } }] },
-        // Ventas de cafetería sin los campos requeridos
-        { $and: [{ tipo: 'cafeteria' }, { nombreCafeteria: { $exists: false } }] },
-        { $and: [{ tipo: 'cafeteria' }, { precioCafeteria: { $exists: false } }] }
+        { tipo: "undefined" }
       ]
     });
     
